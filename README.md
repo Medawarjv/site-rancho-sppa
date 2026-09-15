@@ -51,7 +51,7 @@ A Lorena só precisa marcar cada reserva como **evento de dia inteiro** (do chec
 - [x] **Etapa 3** — Os 6 blocos do rancho (fotos + texto)
 - [x] **Etapa 4** — Galeria (15 fotos) + lightbox, responsivo no celular
 - [x] **Etapa 5** — Calendário de disponibilidade (infra pronta; falta plugar a URL do iCal — ver abaixo)
-- [ ] Etapa 6 — Regras + Como chegar
+- [x] **Etapa 6** — Regras principais + Como chegar (mapa)
 - [ ] Etapa 7 — Prova social + CTA
 - [ ] Etapa 8 — Páginas /faq e /politicas
 - [ ] Etapa 9 — SEO, schema.org, revisão final

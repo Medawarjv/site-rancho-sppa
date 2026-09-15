@@ -11,6 +11,8 @@ import naturezaImg from "../assets/bloco-natureza.jpg";
 import represaImg from "../assets/bloco-represa.jpg";
 import Galeria from "../components/Galeria.astro";
 import Calendario from "../components/Calendario.astro";
+import Regras from "../components/Regras.astro";
+import ComoChegar from "../components/ComoChegar.astro";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
@@ -62,8 +64,6 @@ const blocos = [
 
 // Seções ainda em placeholder (próximas etapas).
 const secoes = [
-  { id: "regras", titulo: "Regras principais" },
-  { id: "como-chegar", titulo: "Como chegar" },
   { id: "avaliacoes", titulo: "Avaliações" },
 ];
 ---
@@ -151,6 +151,12 @@ const secoes = [
 
   <!-- DISPONIBILIDADE (calendário via iCal) -->
   <Calendario />
+
+  <!-- REGRAS PRINCIPAIS -->
+  <Regras />
+
+  <!-- COMO CHEGAR (mapa) -->
+  <ComoChegar />
 
   <!-- Esqueleto das seções -->
   <main class="mx-auto max-w-4xl px-6">

@@ -1,0 +1,60 @@
+---
+import site from "../data/site.json";
+
+// Mapa embutido (sem chave de API) apontando pro pin exato do rancho.
+const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}(${encodeURIComponent(site.nome)})&z=13&output=embed`;
+---
+
+<section id="como-chegar" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
+      Como chegar
+    </h2>
+    <p class="mt-3 text-terra">{site.endereco}</p>
+  </div>
+
+  <div class="grid items-center gap-8 lg:grid-cols-2">
+    <!-- Mapa -->
+    <div class="overflow-hidden rounded-2xl shadow-md ring-1 ring-terra/10">
+      <iframe
+        src={embedSrc}
+        title={`Mapa da localização do ${site.nome}`}
+        class="h-72 w-full border-0 sm:h-96"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Texto do caminho -->
+    <div>
+      <p class="text-lg leading-relaxed text-terra">
+        Estamos a cerca de <strong class="text-mata">1 hora de Uberlândia</strong>,
+        às margens da Represa de Miranda.
+      </p>
+      <ul class="mt-6 space-y-3 text-terra">
+        <li class="flex gap-3">
+          <span aria-hidden="true">🛣️</span>
+          <span>O caminho é pela <strong>BR-365</strong>, passando por Indianópolis-MG.</span>
+        </li>
+        <li class="flex gap-3">
+          <span aria-hidden="true">🌱</span>
+          <span>Os últimos <strong>~4,5 km são de estrada de terra</strong> até o rancho.</span>
+        </li>
+        <li class="flex gap-3">
+          <span aria-hidden="true">📍</span>
+          <span>{site.endereco}</span>
+        </li>
+      </ul>
+
+      <a
+        href={site.mapsLink}
+        target="_blank"
+        rel="noopener"
+        class="mt-8 inline-flex items-center gap-2 rounded-full bg-mata px-7 py-3 font-semibold text-areia shadow-md transition hover:scale-105"
+      >
+        📍 Abrir rota no Google Maps
+      </a>
+    </div>
+  </div>
+</section>
