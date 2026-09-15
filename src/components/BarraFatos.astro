@@ -1,0 +1,27 @@
+---
+import Icon from "./Icon.astro";
+
+// Resumo escaneável da estrutura, logo abaixo do hero (escopo comercial).
+const fatos = [
+  { icone: "users", valor: "Até 30 pessoas", detalhe: "grupos e famílias" },
+  { icone: "bed", valor: "10 suítes", detalhe: "com ar-condicionado" },
+  { icone: "waves", valor: "Piscina aquecida", detalhe: "por energia solar" },
+  { icone: "leaf", valor: "7 hectares", detalhe: "de área verde" },
+  { icone: "anchor", valor: "450 m de represa", detalhe: "com píer e pesca" },
+  { icone: "flame", valor: "Quiosque", detalhe: "churrasqueira e forno" },
+];
+---
+
+<section class="border-b border-terra/10 bg-areia">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-6 px-6 py-8 sm:grid-cols-3 lg:grid-cols-6">
+    {
+      fatos.map((f) => (
+        <div class="flex flex-col items-center gap-1 text-center">
+          <Icon name={f.icone} class="h-7 w-7 text-mata" />
+          <span class="text-sm font-semibold text-mata-escura">{f.valor}</span>
+          <span class="text-xs text-terra/70">{f.detalhe}</span>
+        </div>
+      ))
+    }
+  </div>
+</section>

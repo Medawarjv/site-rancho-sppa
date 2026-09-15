@@ -14,8 +14,18 @@ import Calendario from "../components/Calendario.astro";
 import Regras from "../components/Regras.astro";
 import ComoChegar from "../components/ComoChegar.astro";
 import Avaliacoes from "../components/Avaliacoes.astro";
+import BarraFatos from "../components/BarraFatos.astro";
+import Icon from "../components/Icon.astro";
+import avaliacoes from "../data/avaliacoes.json";
 
-const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
+// WhatsApp com mensagem contextual por seção (a mensagem NÃO é enviada
+// sozinha — o usuário confirma; só já dá o contexto pra Lorena).
+const wa = (msg: string) =>
+  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
+const waHero = wa("Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade.");
+const waFinal = wa(
+  "Olá! Quero marcar uma data no Rancho SPPA. Pode me passar a disponibilidade e os valores?",
+);
 
 // Dados estruturados para o Google (rich results).
 const schema = {
@@ -65,7 +75,7 @@ const schema = {
 const blocos = [
   {
     img: piscinaImg,
-    alt: "Piscina do Rancho SPPA em dia de sol",
+    alt: "Piscina azul do Rancho SPPA entre coqueiros, em dia de sol",
     titulo: "Piscina aquecida",
     texto:
       "Piscina aquecida por energia solar, para curtir a água com conforto em qualquer época do ano.",
@@ -86,7 +96,7 @@ const blocos = [
   },
   {
     img: esportesImg,
-    alt: "Sala de jogos com sinuca e ping-pong",
+    alt: "Quadra de areia e playground do rancho em dia de sol",
     titulo: "Esportes & lazer",
     texto:
       "Campo de futebol, quadra de areia para beach tennis, peteca ou vôlei, além de sinuca, ping-pong e playground.",
@@ -146,15 +156,27 @@ const blocos = [
         de Uberlândia. Natureza, água e sossego para a família toda.
       </p>
       <a
-        href={waHref}
+        href={waHero}
         target="_blank"
         rel="noopener"
         class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
       >
         Consultar disponibilidade
       </a>
+
+      <!-- Prova social no primeiro dobra -->
+      <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/90 drop-shadow">
+        <span class="flex text-yellow-400">
+          {[0, 1, 2, 3, 4].map(() => <Icon name="star" class="h-4 w-4" />)}
+        </span>
+        <span><strong>{avaliacoes.resumo.nota}</strong> · {avaliacoes.resumo.total} avaliações no Google</span>
+        <span class="opacity-70">· Recebendo famílias desde 2001</span>
+      </p>
     </div>
   </header>
+
+  <!-- BARRA DE FATOS -->
+  <BarraFatos />
 
   <!-- O RANCHO — 6 blocos -->
   <section id="rancho" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
@@ -214,7 +236,7 @@ const blocos = [
       disponibilidade e passa os valores. Sem compromisso.
     </p>
     <a
-      href={waHref}
+      href={waFinal}
       target="_blank"
       rel="noopener"
       class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"

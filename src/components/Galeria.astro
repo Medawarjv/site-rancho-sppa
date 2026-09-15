@@ -7,23 +7,28 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-// Legendas por nome de arquivo (para alt / SEO). Se faltar, usa genérica.
+// Legendas por nome de arquivo (alt/SEO e legenda no lightbox).
 const legendas: Record<string, string> = {
-  "g01.jpg": "Represa de Miranda vista do píer do rancho",
-  "g02.jpg": "Piscina do rancho em dia de sol",
-  "g03.jpg": "Quiosque com área de estar",
-  "g04.jpg": "Quadra de areia e área de lazer",
-  "g05.jpg": "Cachoeira e riacho na mata do rancho",
-  "g06.jpg": "Suíte com cama de casal",
-  "g07.jpg": "Pôr do sol na Represa de Miranda",
-  "g08.jpg": "Área verde e gramado do rancho",
-  "g09.jpg": "Ipê florido no jardim",
-  "g10.jpg": "Rede no quiosque para descansar",
-  "g11.jpg": "Playground e quadra de esportes",
-  "g12.jpg": "Vista ampla da Represa de Miranda",
-  "g13.jpg": "Coqueiros ao entardecer",
-  "g14.jpg": "Quiosque e piscina",
-  "g15.jpg": "Pôr do sol entre os coqueiros",
+  "g01.jpg": "Represa de Miranda vista do píer",
+  "g02.jpg": "Piscina para refrescar em família",
+  "g03.jpg": "Quiosque com área de estar para relaxar",
+  "g04.jpg": "Suíte com ar-condicionado e cama de casal",
+  "g05.jpg": "Cachoeira dentro da propriedade",
+  "g06.jpg": "Pôr do sol na represa, visto do píer",
+  "g07.jpg": "Rede no quiosque para descansar",
+  "g08.jpg": "Quiosque e piscina, o coração do rancho",
+  "g09.jpg": "Amplo gramado e áreas de sombra",
+  "g10.jpg": "Jardins floridos por toda a propriedade",
+  "g11.jpg": "450 metros de margem na Represa de Miranda",
+  "g12.jpg": "Entardecer entre os coqueiros",
+  "g13.jpg": "Céu de fim de tarde no rancho",
+  "g14.jpg": "Bem-vindo ao Sítio do Pica Pau Amarelo",
+  "g15.jpg": "Clima de sítio para desacelerar",
+  "g16.jpg": "Playground para a criançada",
+  "g17.jpg": "Acomodações confortáveis para até 30 pessoas",
+  "g18.jpg": "Cantos de sossego pela propriedade",
+  "g19.jpg": "Espaços amplos para reunir todo mundo",
+  "g20.jpg": "Quadra de areia para beach tennis",
 };
 
 const fotos = await Promise.all(
@@ -107,7 +112,10 @@ const fotos = await Promise.all(
     >
       ›
     </button>
-    <p id="lb-contador" class="absolute bottom-4 left-0 right-0 text-center text-sm text-white/80"></p>
+    <div class="absolute bottom-4 left-0 right-0 px-6 text-center text-white/90">
+      <p id="lb-legenda" class="text-sm font-medium drop-shadow"></p>
+      <p id="lb-contador" class="mt-1 text-xs text-white/60"></p>
+    </div>
   </div>
 </section>
 
@@ -116,6 +124,7 @@ const fotos = await Promise.all(
   const lb = document.getElementById("lightbox");
   const lbImg = document.getElementById("lb-img") as HTMLImageElement;
   const contador = document.getElementById("lb-contador");
+  const legenda = document.getElementById("lb-legenda");
   const botoes = Array.from(
     grid?.querySelectorAll<HTMLButtonElement>("button[data-full]") ?? [],
   );
@@ -129,6 +138,7 @@ const fotos = await Promise.all(
     atual = (i + fontes.length) % fontes.length;
     lbImg.src = fontes[atual].full;
     lbImg.alt = fontes[atual].alt;
+    if (legenda) legenda.textContent = fontes[atual].alt;
     if (contador) contador.textContent = `${atual + 1} / ${fontes.length}`;
   }
   function abrir(i: number) {
