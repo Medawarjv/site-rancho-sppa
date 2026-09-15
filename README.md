@@ -35,7 +35,7 @@ Exemplo: `553498765432`.
 ## Status das etapas
 
 - [x] **Etapa 1** — Esqueleto + deploy funcionando
-- [ ] Etapa 2 — Hero
+- [x] **Etapa 2** — Hero (foto da represa + frase + CTA)
 - [ ] Etapa 3 — Os 6 blocos do rancho
 - [ ] Etapa 4 — Galeria + lightbox
 - [ ] Etapa 5 — Calendário de disponibilidade (iCal)

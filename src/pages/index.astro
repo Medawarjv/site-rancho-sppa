@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import site from "../data/site.json";
-import heroImg from "../assets/hero-represa.jpg";
+import heroImg from "../assets/hero.jpg";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
@@ -25,7 +25,7 @@ const secoes = [
   >
     <Image
       src={heroImg}
-      alt="Pôr do sol na Represa de Miranda, com lancha atracada no píer do Rancho SPPA"
+      alt="Quadra de beach tennis, piscina e quiosque do Rancho SPPA ao entardecer"
       class="absolute inset-0 h-full w-full object-cover"
       widths={[768, 1280, 1600]}
       sizes="100vw"
