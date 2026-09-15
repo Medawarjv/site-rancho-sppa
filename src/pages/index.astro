@@ -3,12 +3,63 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import site from "../data/site.json";
 import heroImg from "../assets/hero.jpg";
+import piscinaImg from "../assets/bloco-piscina.jpg";
+import quiosqueImg from "../assets/bloco-quiosque.jpg";
+import acomodacoesImg from "../assets/bloco-acomodacoes.jpg";
+import esportesImg from "../assets/bloco-esportes.jpg";
+import naturezaImg from "../assets/bloco-natureza.jpg";
+import represaImg from "../assets/bloco-represa.jpg";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
-// Seções do site (escopo §4). Por enquanto só o esqueleto com placeholder.
+// Os 6 blocos do rancho (escopo §4.2). Texto adaptado do material aprovado.
+const blocos = [
+  {
+    img: piscinaImg,
+    alt: "Piscina do Rancho SPPA em dia de sol",
+    titulo: "Piscina aquecida",
+    texto:
+      "Piscina aquecida por energia solar, para curtir a água com conforto em qualquer época do ano.",
+  },
+  {
+    img: quiosqueImg,
+    alt: "Quiosque com churrasqueira e forno de pizza",
+    titulo: "Quiosque & churrasqueira",
+    texto:
+      "Quiosque com churrasqueira, fogão a lenha e forno de pizza — o ponto de encontro para reunir a família toda.",
+  },
+  {
+    img: acomodacoesImg,
+    alt: "Suíte com cama de casal e ar-condicionado",
+    titulo: "Acomodações",
+    texto:
+      "10 suítes com ar-condicionado e cama de casal. As maiores têm camas de solteiro ou beliches, acomodando até 30 pessoas. Cozinha equipada, Wi-Fi, gás e água potável.",
+  },
+  {
+    img: esportesImg,
+    alt: "Sala de jogos com sinuca e ping-pong",
+    titulo: "Esportes & lazer",
+    texto:
+      "Campo de futebol, quadra de areia para beach tennis, peteca ou vôlei, além de sinuca, ping-pong e playground.",
+  },
+  {
+    img: naturezaImg,
+    alt: "Riacho e cachoeira em meio à mata do rancho",
+    titulo: "Natureza",
+    texto:
+      "70.000 m² de área verde com trilhas, pomar, riacho e cachoeiras para explorar sem pressa.",
+  },
+  {
+    img: represaImg,
+    alt: "Píer do rancho às margens da Represa de Miranda",
+    titulo: "Represa de Miranda",
+    texto:
+      "450 metros de margem, com píer, tablado de pesca e redutor para descer lancha ou jet ski de até 1 tonelada.",
+  },
+];
+
+// Seções ainda em placeholder (próximas etapas).
 const secoes = [
-  { id: "rancho", titulo: "O rancho" },
   { id: "galeria", titulo: "Galeria de fotos" },
   { id: "disponibilidade", titulo: "Disponibilidade" },
   { id: "regras", titulo: "Regras principais" },
@@ -61,6 +112,39 @@ const secoes = [
       </a>
     </div>
   </header>
+
+  <!-- O RANCHO — 6 blocos -->
+  <section id="rancho" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+    <div class="mx-auto mb-12 max-w-2xl text-center">
+      <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
+        O rancho
+      </h2>
+      <p class="mt-3 text-terra">
+        7 hectares de estrutura completa para descansar, se divertir e curtir a
+        represa com quem você ama.
+      </p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        blocos.map((b) => (
+          <article class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl">
+            <Image
+              src={b.img}
+              alt={b.alt}
+              class="h-56 w-full object-cover"
+              width={800}
+              loading="lazy"
+            />
+            <div class="p-6">
+              <h3 class="font-titulo text-xl font-bold text-mata">{b.titulo}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-terra">{b.texto}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
 
   <!-- Esqueleto das seções -->
   <main class="mx-auto max-w-4xl px-6">
