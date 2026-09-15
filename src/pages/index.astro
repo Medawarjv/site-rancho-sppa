@@ -123,56 +123,56 @@ const blocos = [
 <Layout>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <!-- HERO -->
-  <header
-    id="hero"
-    class="relative flex min-h-[88vh] items-center justify-center overflow-hidden"
-  >
-    <Image
-      src={heroImg}
-      alt="Represa de Miranda em dia de sol, vista do píer do Rancho SPPA"
-      class="absolute inset-0 h-full w-full object-cover"
-      widths={[768, 1280, 1600]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <!-- escurece levemente a foto só pra leitura do texto -->
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/50"
-    >
+  <!-- HERO (dividido: foto + texto) -->
+  <header id="hero" class="grid min-h-[85vh] lg:min-h-screen lg:grid-cols-2">
+    <!-- Foto: topo no celular, direita no desktop -->
+    <div class="relative order-1 min-h-[42vh] overflow-hidden lg:order-2 lg:min-h-0">
+      <Image
+        src={heroImg}
+        alt="Área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground e quiosque"
+        class="absolute inset-0 h-full w-full object-cover object-[center_58%]"
+        widths={[480, 768, 960]}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
 
-    <div class="relative z-10 mx-auto max-w-2xl px-6 text-center text-white">
-      <p class="mb-3 text-sm font-medium tracking-widest uppercase drop-shadow">
-        {site.local}
-      </p>
-      <h1
-        class="font-titulo text-4xl font-bold leading-tight drop-shadow-lg sm:text-6xl"
-      >
-        Seu refúgio na Represa de Miranda
-      </h1>
-      <p class="mx-auto mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
-        Rancho para aluguel por temporada em Indianópolis-MG, a cerca de 1&nbsp;hora
-        de Uberlândia. Natureza, água e sossego para a família toda.
-      </p>
-      <a
-        href={waHero}
-        target="_blank"
-        rel="noopener"
-        class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
-      >
-        Consultar disponibilidade
-      </a>
+    <!-- Texto: embaixo no celular, esquerda no desktop -->
+    <div
+      class="order-2 flex items-center bg-mata px-6 py-14 text-areia lg:order-1 lg:px-12 lg:py-16"
+    >
+      <div class="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-areia/70">
+          {site.local}
+        </p>
+        <h1 class="font-titulo text-4xl font-bold leading-tight sm:text-5xl xl:text-6xl">
+          Seu refúgio na Represa de Miranda
+        </h1>
+        <p class="mt-5 text-lg text-areia/85">
+          Rancho para aluguel por temporada em Indianópolis-MG, a cerca de
+          1&nbsp;hora de Uberlândia. Natureza, água e sossego para a família toda.
+        </p>
+        <a
+          href={waHero}
+          target="_blank"
+          rel="noopener"
+          class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
+        >
+          Consultar disponibilidade
+        </a>
 
-      <!-- Prova social no primeiro dobra -->
-      <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/90 drop-shadow">
-        <span class="flex text-yellow-400">
-          {[0, 1, 2, 3, 4].map(() => <Icon name="star" class="h-4 w-4" />)}
-        </span>
-        <span><strong>{avaliacoes.resumo.nota}</strong> · {avaliacoes.resumo.total} avaliações no Google</span>
-        <span class="opacity-70">· Recebendo famílias desde 2001</span>
-      </p>
+        <!-- Prova social -->
+        <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-areia/85 lg:justify-start">
+          <span class="flex text-yellow-400">
+            {[0, 1, 2, 3, 4].map(() => <Icon name="star" class="h-4 w-4" />)}
+          </span>
+          <span>
+            <strong>{avaliacoes.resumo.nota}</strong> · {avaliacoes.resumo.total} avaliações no Google
+          </span>
+          <span class="opacity-70">· Recebendo famílias desde 2001</span>
+        </p>
+      </div>
     </div>
   </header>
 
