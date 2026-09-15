@@ -52,6 +52,6 @@ A Lorena só precisa marcar cada reserva como **evento de dia inteiro** (do chec
 - [x] **Etapa 4** — Galeria (15 fotos) + lightbox, responsivo no celular
 - [x] **Etapa 5** — Calendário de disponibilidade (infra pronta; falta plugar a URL do iCal — ver abaixo)
 - [x] **Etapa 6** — Regras principais + Como chegar (mapa)
-- [ ] Etapa 7 — Prova social + CTA
+- [x] **Etapa 7** — Avaliações (Google 4,7★) + CTA final
 - [ ] Etapa 8 — Páginas /faq e /politicas
 - [ ] Etapa 9 — SEO, schema.org, revisão final

@@ -13,6 +13,7 @@ import Galeria from "../components/Galeria.astro";
 import Calendario from "../components/Calendario.astro";
 import Regras from "../components/Regras.astro";
 import ComoChegar from "../components/ComoChegar.astro";
+import Avaliacoes from "../components/Avaliacoes.astro";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
@@ -62,10 +63,6 @@ const blocos = [
   },
 ];
 
-// Seções ainda em placeholder (próximas etapas).
-const secoes = [
-  { id: "avaliacoes", titulo: "Avaliações" },
-];
 ---
 
 <Layout>
@@ -158,35 +155,27 @@ const secoes = [
   <!-- COMO CHEGAR (mapa) -->
   <ComoChegar />
 
-  <!-- Esqueleto das seções -->
-  <main class="mx-auto max-w-4xl px-6">
-    {
-      secoes.map((s) => (
-        <section id={s.id} class="border-b border-terra/20 py-16">
-          <h2 class="font-titulo text-3xl font-bold text-mata">{s.titulo}</h2>
-          <p class="mt-3 text-terra">
-            Conteúdo placeholder — será preenchido nas próximas etapas.
-          </p>
-        </section>
-      ))
-    }
+  <!-- PROVA SOCIAL -->
+  <Avaliacoes />
 
-    <!-- CTA final -->
-    <section id="contato" class="py-16 text-center">
-      <h2 class="font-titulo text-3xl font-bold text-mata">Fale com a gente</h2>
-      <p class="mt-3 text-terra">
-        Tire dúvidas e consulte datas direto no WhatsApp.
-      </p>
-      <a
-        href={waHref}
-        target="_blank"
-        rel="noopener"
-        class="mt-6 inline-block rounded-full bg-mata px-8 py-4 text-lg font-semibold text-areia shadow-lg transition hover:scale-105"
-      >
-        Chamar no WhatsApp
-      </a>
-    </section>
-  </main>
+  <!-- CTA FINAL -->
+  <section id="contato" class="bg-mata px-6 py-20 text-center text-areia sm:py-24">
+    <h2 class="font-titulo text-3xl font-bold sm:text-4xl">
+      Bora marcar a sua data?
+    </h2>
+    <p class="mx-auto mt-4 max-w-xl text-areia/85">
+      A Lorena responde rapidinho no WhatsApp: tira dúvidas, confirma
+      disponibilidade e passa os valores. Sem compromisso.
+    </p>
+    <a
+      href={waHref}
+      target="_blank"
+      rel="noopener"
+      class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
+    >
+      Consultar disponibilidade
+    </a>
+  </section>
 
   <footer class="bg-mata-escura py-8 text-center text-sm text-areia/70">
     <p>{site.nomeCompleto} · {site.local}</p>

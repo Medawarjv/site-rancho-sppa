@@ -1,0 +1,49 @@
+---
+import site from "../data/site.json";
+import avaliacoes from "../data/avaliacoes.json";
+
+const { resumo, lista } = avaliacoes;
+---
+
+<section id="avaliacoes" class="bg-white/60 py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="mx-auto mb-12 max-w-2xl text-center">
+      <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
+        Quem já veio, ama
+      </h2>
+      <p class="mt-4 flex flex-wrap items-center justify-center gap-2 text-terra">
+        <span class="text-2xl font-bold text-mata">{resumo.nota}</span>
+        <span class="text-yellow-500" aria-hidden="true">★★★★★</span>
+        <span>· {resumo.total} avaliações no {resumo.fonte}</span>
+      </p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        lista.map((a) => (
+          <figure class="flex h-full flex-col rounded-2xl bg-areia p-6 shadow-sm ring-1 ring-terra/10">
+            <div class="mb-3 text-yellow-500" aria-label="5 de 5 estrelas">★★★★★</div>
+            <blockquote class="flex-1 text-sm leading-relaxed text-mata-escura/80">
+              “{a.texto}”
+            </blockquote>
+            <figcaption class="mt-4 border-t border-terra/10 pt-3">
+              <span class="block font-semibold text-mata">{a.nome}</span>
+              <span class="text-xs text-terra/70">{a.quando}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 text-center">
+      <a
+        href={site.mapsLink}
+        target="_blank"
+        rel="noopener"
+        class="text-sm font-medium text-agua underline underline-offset-4 hover:text-mata"
+      >
+        Ver todas as avaliações no Google →
+      </a>
+    </div>
+  </div>
+</section>

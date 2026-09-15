@@ -1,0 +1,39 @@
+{
+  "resumo": {
+    "nota": "4,7",
+    "total": 68,
+    "fonte": "Google"
+  },
+  "lista": [
+    {
+      "nome": "Larissa Gomes Petrucci",
+      "quando": "6 meses atrás",
+      "texto": "O Rancho SPPA foi uma experiência maravilhosa para nossa família! A cachoeira de fácil acesso é linda e perfeita para aproveitar com tranquilidade. Curtimos muito a beira da represa, as crianças amaram o parquinho, e ainda é petfriendly. Um lugar acolhedor, cheio de paz e perfeito para criar memórias especiais. Com certeza voltaremos! 💛"
+    },
+    {
+      "nome": "Marcos Marques",
+      "quando": "cliente há vários anos",
+      "texto": "Um lugar sensacional. Frequentamos o rancho há vários anos, sempre somos surpreendidos pela bela natureza e tranquilidade do local. Se você procura um tempo de paz com a família em um lugar maravilhoso, o SPPA é o local. Parabéns ao Erlaine e toda a equipe!"
+    },
+    {
+      "nome": "Elizabelle Fezzani",
+      "quando": "5 meses atrás",
+      "texto": "Excelente lugar para desfrutar e curtir com a família! Super recomendo."
+    },
+    {
+      "nome": "Denise Silva",
+      "quando": "avaliação no Google",
+      "texto": "Lugar calmo e lindo, ótimo para descansar em família ou para desfrutar com um grupo de amigos. Paisagens belíssimas e águas cristalinas. Perfeito!"
+    },
+    {
+      "nome": "Clayton Dias",
+      "quando": "7 meses atrás",
+      "texto": "Lugar excelente para passar com familiares e amigos. Sossego, boa comida e de fácil acesso. Vale a pena para passar um fim de semana."
+    },
+    {
+      "nome": "Debora Cruz",
+      "quando": "1 ano atrás",
+      "texto": "Lugar surreal, não tem como descrever a sensação de passar o tempo lá."
+    }
+  ]
+}
