@@ -53,5 +53,5 @@ A Lorena só precisa marcar cada reserva como **evento de dia inteiro** (do chec
 - [x] **Etapa 5** — Calendário de disponibilidade (infra pronta; falta plugar a URL do iCal — ver abaixo)
 - [x] **Etapa 6** — Regras principais + Como chegar (mapa)
 - [x] **Etapa 7** — Avaliações (Google 4,7★) + CTA final
-- [ ] Etapa 8 — Páginas /faq e /politicas
+- [x] **Etapa 8** — Páginas /faq (10 perguntas) e /politicas
 - [ ] Etapa 9 — SEO, schema.org, revisão final

@@ -29,6 +29,17 @@ const {
   </head>
   <body class="text-mata-escura antialiased">
     <slot />
+
+    <footer class="bg-mata-escura py-10 text-center text-sm text-areia/70">
+      <nav class="mb-4 flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <a href="/" class="hover:text-areia">Início</a>
+        <a href="/faq" class="hover:text-areia">Perguntas frequentes</a>
+        <a href="/politicas" class="hover:text-areia">Políticas e regras</a>
+      </nav>
+      <p>{site.nomeCompleto} · {site.local}</p>
+      <p class="mt-1">Desde 2001 · Aluguel por temporada</p>
+    </footer>
+
     <WhatsAppFloat />
   </body>
 </html>
