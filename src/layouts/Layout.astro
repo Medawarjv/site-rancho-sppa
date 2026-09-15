@@ -6,12 +6,17 @@ import WhatsAppFloat from "../components/WhatsAppFloat.astro";
 interface Props {
   titulo?: string;
   descricao?: string;
+  imagem?: string;
 }
 
 const {
   titulo = `${site.nome} — Aluguel por temporada em Indianópolis-MG`,
   descricao = "Rancho para aluguel por temporada às margens da Represa de Miranda, a ~1h de Uberlândia. Piscina aquecida, 10 suítes, natureza e represa.",
+  imagem = "/og.jpg",
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImagem = new URL(imagem, Astro.site).href;
 ---
 
 <!doctype html>
@@ -20,11 +25,27 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#2f5d3a" />
+    <link rel="canonical" href={canonical} />
+
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
+
+    <!-- Open Graph (WhatsApp, Facebook, Instagram) -->
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImagem} />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descricao} />
+    <meta name="twitter:image" content={ogImagem} />
+
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="text-mata-escura antialiased">

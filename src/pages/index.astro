@@ -17,6 +17,50 @@ import Avaliacoes from "../components/Avaliacoes.astro";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
+// Dados estruturados para o Google (rich results).
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  name: site.nome,
+  alternateName: site.nomeCompleto,
+  description:
+    "Rancho para aluguel por temporada às margens da Represa de Miranda, em Indianópolis-MG, a cerca de 1 hora de Uberlândia.",
+  url: "https://sppa.com.br",
+  image: "https://sppa.com.br/og.jpg",
+  telephone: `+${site.whatsapp}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Indianópolis",
+    addressRegion: "MG",
+    postalCode: "38490-000",
+    addressCountry: "BR",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: Number(site.mapsLat),
+    longitude: Number(site.mapsLng),
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.7",
+    reviewCount: "68",
+    bestRating: "5",
+  },
+  amenityFeature: [
+    "Piscina aquecida",
+    "Churrasqueira e forno de pizza",
+    "Wi-Fi",
+    "Acesso à represa e píer",
+    "Quadra de beach tennis",
+    "Pet friendly",
+  ].map((nome) => ({
+    "@type": "LocationFeatureSpecification",
+    name: nome,
+    value: true,
+  })),
+  sameAs: [site.mapsLink],
+};
+
 // Os 6 blocos do rancho (escopo §4.2). Texto adaptado do material aprovado.
 const blocos = [
   {
@@ -66,6 +110,8 @@ const blocos = [
 ---
 
 <Layout>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <!-- HERO -->
   <header
     id="hero"

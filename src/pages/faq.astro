@@ -4,12 +4,24 @@ import site from "../data/site.json";
 import faq from "../data/faq.json";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.p,
+    acceptedAnswer: { "@type": "Answer", text: item.r },
+  })),
+};
 ---
 
 <Layout
   titulo={`Perguntas frequentes — ${site.nome}`}
   descricao="Tire suas dúvidas sobre o Rancho SPPA: valores, reservas, cancelamento, horários, o que está incluso, pets e como chegar."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <main class="mx-auto max-w-3xl px-6 py-16 sm:py-24">
     <a href="/" class="text-sm font-medium text-agua hover:text-mata">← Voltar ao site</a>
 
