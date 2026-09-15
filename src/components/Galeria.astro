@@ -164,14 +164,17 @@ const primeira = temas[0].id;
 
   let visiveis: HTMLButtonElement[] = [];
   let atual = 0;
-  let galeriaVista = false;
 
+  // Carrega as fotos da aba ativa na hora (não depende de lazy/observer, que
+  // não dispara de forma confiável para itens que começam escondidos).
   function carregarVisiveis() {
     visiveis.forEach((b) => {
       const img = b.querySelector("img");
       if (img && !img.complete) {
+        const src = img.getAttribute("src") || img.src;
         img.loading = "eager";
-        img.src = img.src; // dispara o load (lazy em display:none não carrega)
+        img.removeAttribute("src");
+        img.src = src;
       }
     });
   }
@@ -189,7 +192,7 @@ const primeira = temas[0].id;
       .filter((li) => li.dataset.cat === id)
       .map((li) => li.querySelector<HTMLButtonElement>("button[data-full]")!);
     visiveis.forEach((b, i) => (b.dataset.pos = String(i)));
-    if (galeriaVista) carregarVisiveis();
+    carregarVisiveis();
   }
 
   function mostrar(i: number) {
@@ -241,20 +244,4 @@ const primeira = temas[0].id;
 
   // começa na primeira aba
   selecionarTab(tabs[0].dataset.tab!);
-
-  // carrega as fotos só quando a galeria chega perto da tela
-  const secao = document.getElementById("galeria");
-  if (secao) {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          galeriaVista = true;
-          carregarVisiveis();
-          obs.disconnect();
-        }
-      },
-      { rootMargin: "300px" },
-    );
-    obs.observe(secao);
-  }
 </script>
