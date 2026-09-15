@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Paleta do rancho — tons de terra, verde e água.
+   Trocar aqui muda o site inteiro. */
+@theme {
+  --color-mata: #2f5d3a;
+  --color-mata-escura: #1e3f27;
+  --color-terra: #7c5a3c;
+  --color-agua: #3b7ea1;
+  --color-areia: #f5efe4;
+  --font-titulo: "Georgia", "Times New Roman", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-areia);
+}

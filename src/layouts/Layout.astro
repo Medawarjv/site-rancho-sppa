@@ -1,0 +1,34 @@
+---
+import "../styles/global.css";
+import site from "../data/site.json";
+import WhatsAppFloat from "../components/WhatsAppFloat.astro";
+
+interface Props {
+  titulo?: string;
+  descricao?: string;
+}
+
+const {
+  titulo = `${site.nome} — Aluguel por temporada em Indianópolis-MG`,
+  descricao = "Rancho para aluguel por temporada às margens da Represa de Miranda, a ~1h de Uberlândia. Piscina aquecida, 10 suítes, natureza e represa.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:type" content="website" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="text-mata-escura antialiased">
+    <slot />
+    <WhatsAppFloat />
+  </body>
+</html>

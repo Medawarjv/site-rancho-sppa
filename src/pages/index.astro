@@ -1,0 +1,78 @@
+---
+import Layout from "../layouts/Layout.astro";
+import site from "../data/site.json";
+
+const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
+
+// Seções do site (escopo §4). Por enquanto só o esqueleto com placeholder.
+const secoes = [
+  { id: "rancho", titulo: "O rancho" },
+  { id: "galeria", titulo: "Galeria de fotos" },
+  { id: "disponibilidade", titulo: "Disponibilidade" },
+  { id: "regras", titulo: "Regras principais" },
+  { id: "como-chegar", titulo: "Como chegar" },
+  { id: "avaliacoes", titulo: "Avaliações" },
+];
+---
+
+<Layout>
+  <!-- HERO (placeholder) -->
+  <header
+    id="hero"
+    class="flex min-h-[80vh] flex-col items-center justify-center bg-mata px-6 text-center text-areia"
+  >
+    <p class="mb-2 text-sm tracking-widest uppercase opacity-80">
+      {site.local}
+    </p>
+    <h1 class="font-titulo text-4xl font-bold sm:text-6xl">
+      {site.nome}
+    </h1>
+    <p class="mt-4 max-w-xl text-lg opacity-90">
+      Aluguel por temporada às margens da Represa de Miranda.
+      <span class="opacity-70">(texto placeholder — etapa 2)</span>
+    </p>
+    <a
+      href={waHref}
+      target="_blank"
+      rel="noopener"
+      class="mt-8 rounded-full bg-areia px-8 py-4 text-lg font-semibold text-mata-escura shadow-lg transition hover:scale-105"
+    >
+      Consultar disponibilidade
+    </a>
+  </header>
+
+  <!-- Esqueleto das seções -->
+  <main class="mx-auto max-w-4xl px-6">
+    {
+      secoes.map((s) => (
+        <section id={s.id} class="border-b border-terra/20 py-16">
+          <h2 class="font-titulo text-3xl font-bold text-mata">{s.titulo}</h2>
+          <p class="mt-3 text-terra">
+            Conteúdo placeholder — será preenchido nas próximas etapas.
+          </p>
+        </section>
+      ))
+    }
+
+    <!-- CTA final -->
+    <section id="contato" class="py-16 text-center">
+      <h2 class="font-titulo text-3xl font-bold text-mata">Fale com a gente</h2>
+      <p class="mt-3 text-terra">
+        Tire dúvidas e consulte datas direto no WhatsApp.
+      </p>
+      <a
+        href={waHref}
+        target="_blank"
+        rel="noopener"
+        class="mt-6 inline-block rounded-full bg-mata px-8 py-4 text-lg font-semibold text-areia shadow-lg transition hover:scale-105"
+      >
+        Chamar no WhatsApp
+      </a>
+    </section>
+  </main>
+
+  <footer class="bg-mata-escura py-8 text-center text-sm text-areia/70">
+    <p>{site.nomeCompleto} · {site.local}</p>
+    <p class="mt-1">Desde 2001 · Aluguel por temporada</p>
+  </footer>
+</Layout>

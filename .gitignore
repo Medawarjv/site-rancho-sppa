@@ -1,0 +1,18 @@
+# dependências
+node_modules/
+
+# build
+dist/
+.astro/
+
+# ambiente / segredos (NUNCA versionar a URL do iCal)
+.env
+.env.production
+.env.*.local
+
+# vercel
+.vercel/
+
+# sistema
+.DS_Store
+Thumbs.db
