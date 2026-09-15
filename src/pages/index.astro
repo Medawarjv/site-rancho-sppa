@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
 import site from "../data/site.json";
+import heroImg from "../assets/hero-represa.jpg";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
@@ -16,29 +18,48 @@ const secoes = [
 ---
 
 <Layout>
-  <!-- HERO (placeholder) -->
+  <!-- HERO -->
   <header
     id="hero"
-    class="flex min-h-[80vh] flex-col items-center justify-center bg-mata px-6 text-center text-areia"
+    class="relative flex min-h-[88vh] items-center justify-center overflow-hidden"
   >
-    <p class="mb-2 text-sm tracking-widest uppercase opacity-80">
-      {site.local}
-    </p>
-    <h1 class="font-titulo text-4xl font-bold sm:text-6xl">
-      {site.nome}
-    </h1>
-    <p class="mt-4 max-w-xl text-lg opacity-90">
-      Aluguel por temporada às margens da Represa de Miranda.
-      <span class="opacity-70">(texto placeholder — etapa 2)</span>
-    </p>
-    <a
-      href={waHref}
-      target="_blank"
-      rel="noopener"
-      class="mt-8 rounded-full bg-areia px-8 py-4 text-lg font-semibold text-mata-escura shadow-lg transition hover:scale-105"
+    <Image
+      src={heroImg}
+      alt="Pôr do sol na Represa de Miranda, com lancha atracada no píer do Rancho SPPA"
+      class="absolute inset-0 h-full w-full object-cover"
+      widths={[768, 1280, 1600]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <!-- escurece a foto pra leitura do texto -->
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/65"
     >
-      Consultar disponibilidade
-    </a>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-2xl px-6 text-center text-white">
+      <p class="mb-3 text-sm font-medium tracking-widest uppercase drop-shadow">
+        {site.local}
+      </p>
+      <h1
+        class="font-titulo text-4xl font-bold leading-tight drop-shadow-lg sm:text-6xl"
+      >
+        Seu refúgio na Represa de Miranda
+      </h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
+        Rancho para aluguel por temporada em Indianópolis-MG, a cerca de 1&nbsp;hora
+        de Uberlândia. Natureza, água e sossego para a família toda.
+      </p>
+      <a
+        href={waHref}
+        target="_blank"
+        rel="noopener"
+        class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
+      >
+        Consultar disponibilidade
+      </a>
+    </div>
   </header>
 
   <!-- Esqueleto das seções -->
