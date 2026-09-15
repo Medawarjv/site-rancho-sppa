@@ -1,33 +1,35 @@
 ---
+import Icon from "./Icon.astro";
+
 // Regras principais (escopo §4.5) — sem valores. Quem informa preço é a Lorena.
 const regras = [
   {
-    icone: "🗓️",
+    icone: "calendar",
     titulo: "Diária por pessoa",
     texto: "O valor é informado pela nossa equipe no WhatsApp, conforme o período.",
   },
   {
-    icone: "🌙",
+    icone: "moon",
     titulo: "Mínimo de 2 diárias",
     texto: "Para pernoite, a reserva é de no mínimo duas diárias.",
   },
   {
-    icone: "💠",
+    icone: "percent",
     titulo: "Sinal de 50% via PIX",
     texto: "A data é garantida com um sinal de 50% por PIX; o restante na chegada.",
   },
   {
-    icone: "🔑",
+    icone: "key",
     titulo: "Caução na chegada",
     texto: "Um valor de caução é deixado na chegada e devolvido ao fim da estadia.",
   },
   {
-    icone: "⏰",
+    icone: "clock",
     titulo: "Horários flexíveis",
     texto: "Permanência de 24 horas a partir da sua chegada. Som ambiente até 22h.",
   },
   {
-    icone: "🐾",
+    icone: "paw",
     titulo: "Pets são bem-vindos",
     texto: "Com algumas regras: não subir nos móveis, necessidades fora das casas e sem entrar na piscina.",
   },
@@ -52,7 +54,9 @@ const regras = [
       {
         regras.map((r) => (
           <li class="flex gap-4 rounded-2xl bg-areia p-5 ring-1 ring-terra/10">
-            <span class="text-2xl" aria-hidden="true">{r.icone}</span>
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-mata/10 text-mata">
+              <Icon name={r.icone} class="h-5 w-5" />
+            </span>
             <div>
               <h3 class="font-semibold text-mata">{r.titulo}</h3>
               <p class="mt-1 text-sm leading-relaxed text-terra">{r.texto}</p>

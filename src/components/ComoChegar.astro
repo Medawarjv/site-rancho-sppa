@@ -1,5 +1,6 @@
 ---
 import site from "../data/site.json";
+import Icon from "./Icon.astro";
 
 // Mapa embutido (sem chave de API) apontando pro pin exato do rancho.
 const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}(${encodeURIComponent(site.nome)})&z=13&output=embed`;
@@ -34,15 +35,15 @@ const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}
       </p>
       <ul class="mt-6 space-y-3 text-terra">
         <li class="flex gap-3">
-          <span aria-hidden="true">🛣️</span>
+          <Icon name="route" class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
           <span>O caminho é pela <strong>BR-365</strong>, passando por Indianópolis-MG.</span>
         </li>
         <li class="flex gap-3">
-          <span aria-hidden="true">🌱</span>
+          <Icon name="mountain" class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
           <span>Os últimos <strong>~4,5 km são de estrada de terra</strong> até o rancho.</span>
         </li>
         <li class="flex gap-3">
-          <span aria-hidden="true">📍</span>
+          <Icon name="map-pin" class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
           <span>{site.endereco}</span>
         </li>
       </ul>
@@ -53,7 +54,8 @@ const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}
         rel="noopener"
         class="mt-8 inline-flex items-center gap-2 rounded-full bg-mata px-7 py-3 font-semibold text-areia shadow-md transition hover:scale-105"
       >
-        📍 Abrir rota no Google Maps
+        <Icon name="map-pin" class="h-5 w-5" />
+        Abrir rota no Google Maps
       </a>
     </div>
   </div>
