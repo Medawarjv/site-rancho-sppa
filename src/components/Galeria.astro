@@ -9,7 +9,7 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
 
 // Legendas por nome de arquivo (alt/SEO e legenda no lightbox).
 const legendas: Record<string, string> = {
-  "g01.jpg": "Represa de Miranda vista do píer",
+  "g01.jpg": "Fim de tarde na quadra de areia",
   "g02.jpg": "Piscina para refrescar em família",
   "g03.jpg": "Quiosque com área de estar para relaxar",
   "g04.jpg": "Suíte com ar-condicionado e cama de casal",
@@ -46,8 +46,9 @@ const fotos = await Promise.all(
 );
 ---
 
-<section id="galeria" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
-  <div class="mx-auto mb-12 max-w-2xl text-center">
+<section id="galeria" class="bg-white py-14 sm:py-20">
+  <div class="mx-auto max-w-6xl px-6">
+  <div class="mx-auto mb-10 max-w-2xl text-center">
     <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">Galeria</h2>
     <p class="mt-3 text-terra">Um pouco do que espera por você. Toque para ampliar.</p>
   </div>
@@ -78,6 +79,7 @@ const fotos = await Promise.all(
       ))
     }
   </ul>
+  </div>
 
   {/* Lightbox */}
   <div

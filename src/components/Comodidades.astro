@@ -1,0 +1,90 @@
+---
+import site from "../data/site.json";
+import Icon from "./Icon.astro";
+
+const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Quero saber sobre as comodidades e os serviços parceiros para a minha estadia no Rancho SPPA.")}`;
+
+// Itens que o próprio rancho oferece para deixar a estadia mais completa.
+const comodidades = [
+  { icone: "bed", titulo: "Cama, mesa e banho", texto: "Mais conforto e praticidade, sem precisar levar de casa." },
+  { icone: "wine", titulo: "Taças", texto: "Tudo pronto para os seus brindes e momentos especiais." },
+  { icone: "utensils", titulo: "Travessas", texto: "Mais praticidade para servir as refeições e confraternizações." },
+  { icone: "check", titulo: "Tábuas", texto: "Perfeitas para servir petiscos, frios e compartilhar bons momentos." },
+  { icone: "wine", titulo: "Adega", texto: "Para manter suas bebidas na temperatura ideal." },
+];
+
+// Serviços indicados por parceiros independentes (sem vínculo com o rancho).
+const parceiros = [
+  { icone: "check", titulo: "Padaria", texto: "Indicações para um café da manhã mais prático e completo." },
+  { icone: "sparkles", titulo: "Bolos e doces", texto: "Opções para aniversários e comemorações especiais." },
+  { icone: "utensils", titulo: "Chef particular", texto: "Profissionais para uma experiência gastronômica na estadia." },
+  { icone: "car", titulo: "Transporte", texto: "Indicações para facilitar a chegada e o deslocamento do grupo." },
+  { icone: "anchor", titulo: "Lancha e flutuante", texto: "Contatos para aproveitar ainda mais a Represa de Miranda." },
+];
+---
+
+<section id="comodidades" class="bg-white py-14 sm:py-20">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="mx-auto mb-10 max-w-2xl text-center">
+      <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
+        Deixe sua estadia ainda mais completa
+      </h2>
+      <p class="mt-3 text-terra">
+        Comodidades do rancho e contatos de parceiros para o que você precisar.
+        Tudo combinado com a gente pelo WhatsApp.
+      </p>
+    </div>
+
+    <!-- Comodidades do rancho -->
+    <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-terra/70">
+      Comodidades do rancho
+    </h3>
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        comodidades.map((c) => (
+          <li class="flex items-start gap-3 rounded-xl bg-areia p-4 ring-1 ring-terra/10">
+            <Icon name={c.icone} class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
+            <div>
+              <span class="font-semibold text-mata">{c.titulo}</span>
+              <p class="mt-0.5 text-sm text-terra">{c.texto}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Parceiros -->
+    <h3 class="mb-4 mt-10 text-sm font-semibold uppercase tracking-wide text-terra/70">
+      Precisa de algo a mais? Indicamos parceiros
+    </h3>
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        parceiros.map((p) => (
+          <li class="flex items-start gap-3 rounded-xl bg-areia p-4 ring-1 ring-terra/10">
+            <Icon name={p.icone} class="mt-0.5 h-5 w-5 shrink-0 text-agua" />
+            <div>
+              <span class="font-semibold text-mata">{p.titulo}</span>
+              <p class="mt-0.5 text-sm text-terra">{p.texto}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-6 text-xs text-terra/60">
+      Os serviços de parceiros são prestados por profissionais e empresas
+      independentes, sem vínculo com o Sítio do Pica Pau Amarelo.
+    </p>
+
+    <div class="mt-8 text-center">
+      <a
+        href={waHref}
+        target="_blank"
+        rel="noopener"
+        class="inline-block rounded-full bg-mata px-7 py-3 font-semibold text-areia shadow-md transition hover:scale-105"
+      >
+        Pedir indicações no WhatsApp
+      </a>
+    </div>
+  </div>
+</section>

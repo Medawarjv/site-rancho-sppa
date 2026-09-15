@@ -6,8 +6,9 @@ import Icon from "./Icon.astro";
 const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}(${encodeURIComponent(site.nome)})&z=13&output=embed`;
 ---
 
-<section id="como-chegar" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
-  <div class="mx-auto mb-12 max-w-2xl text-center">
+<section id="como-chegar" class="bg-areia py-14 sm:py-20">
+  <div class="mx-auto max-w-6xl px-6">
+  <div class="mx-auto mb-10 max-w-2xl text-center">
     <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
       Como chegar
     </h2>
@@ -58,5 +59,6 @@ const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}
         Abrir rota no Google Maps
       </a>
     </div>
+  </div>
   </div>
 </section>
