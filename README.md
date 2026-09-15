@@ -37,7 +37,7 @@ Exemplo: `553498765432`.
 - [x] **Etapa 1** — Esqueleto + deploy funcionando
 - [x] **Etapa 2** — Hero (foto da propriedade + frase + CTA)
 - [x] **Etapa 3** — Os 6 blocos do rancho (fotos + texto)
-- [ ] Etapa 4 — Galeria + lightbox
+- [x] **Etapa 4** — Galeria (15 fotos) + lightbox, responsivo no celular
 - [ ] Etapa 5 — Calendário de disponibilidade (iCal)
 - [ ] Etapa 6 — Regras + Como chegar
 - [ ] Etapa 7 — Prova social + CTA

@@ -9,6 +9,7 @@ import acomodacoesImg from "../assets/bloco-acomodacoes.jpg";
 import esportesImg from "../assets/bloco-esportes.jpg";
 import naturezaImg from "../assets/bloco-natureza.jpg";
 import represaImg from "../assets/bloco-represa.jpg";
+import Galeria from "../components/Galeria.astro";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMensagem)}`;
 
@@ -60,7 +61,6 @@ const blocos = [
 
 // Seções ainda em placeholder (próximas etapas).
 const secoes = [
-  { id: "galeria", titulo: "Galeria de fotos" },
   { id: "disponibilidade", titulo: "Disponibilidade" },
   { id: "regras", titulo: "Regras principais" },
   { id: "como-chegar", titulo: "Como chegar" },
@@ -145,6 +145,9 @@ const secoes = [
       }
     </div>
   </section>
+
+  <!-- GALERIA -->
+  <Galeria />
 
   <!-- Esqueleto das seções -->
   <main class="mx-auto max-w-4xl px-6">

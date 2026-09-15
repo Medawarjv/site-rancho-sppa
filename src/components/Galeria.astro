@@ -1,0 +1,169 @@
+---
+import { Image, getImage } from "astro:assets";
+
+// Carrega todas as fotos de src/assets/galeria (ordenadas por nome: g01, g02, ...)
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/galeria/*.{jpg,jpeg,png}",
+  { eager: true },
+);
+
+// Legendas por nome de arquivo (para alt / SEO). Se faltar, usa genérica.
+const legendas: Record<string, string> = {
+  "g01.jpg": "Represa de Miranda vista do píer do rancho",
+  "g02.jpg": "Piscina do rancho em dia de sol",
+  "g03.jpg": "Quiosque com área de estar",
+  "g04.jpg": "Quadra de areia e área de lazer",
+  "g05.jpg": "Cachoeira e riacho na mata do rancho",
+  "g06.jpg": "Suíte com cama de casal",
+  "g07.jpg": "Pôr do sol na Represa de Miranda",
+  "g08.jpg": "Área verde e gramado do rancho",
+  "g09.jpg": "Ipê florido no jardim",
+  "g10.jpg": "Rede no quiosque para descansar",
+  "g11.jpg": "Playground e quadra de esportes",
+  "g12.jpg": "Vista ampla da Represa de Miranda",
+  "g13.jpg": "Coqueiros ao entardecer",
+  "g14.jpg": "Quiosque e piscina",
+  "g15.jpg": "Pôr do sol entre os coqueiros",
+};
+
+const fotos = await Promise.all(
+  Object.entries(modules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(async ([path, mod]) => {
+      const nome = path.split("/").pop()!;
+      const cheia = await getImage({ src: mod.default, width: 1200, format: "webp" });
+      return {
+        thumb: mod.default,
+        full: cheia.src,
+        alt: legendas[nome] ?? "Foto do Rancho SPPA",
+      };
+    }),
+);
+---
+
+<section id="galeria" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">Galeria</h2>
+    <p class="mt-3 text-terra">Um pouco do que espera por você. Toque para ampliar.</p>
+  </div>
+
+  <ul
+    id="galeria-grid"
+    class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+  >
+    {
+      fotos.map((f, i) => (
+        <li>
+          <button
+            type="button"
+            class="group block w-full overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-mata"
+            data-full={f.full}
+            data-index={i}
+            aria-label={`Ampliar: ${f.alt}`}
+          >
+            <Image
+              src={f.thumb}
+              alt={f.alt}
+              class="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
+              width={600}
+              loading="lazy"
+            />
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+
+  {/* Lightbox */}
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/90 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Foto ampliada"
+  >
+    <button
+      id="lb-fechar"
+      type="button"
+      aria-label="Fechar"
+      class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl text-white hover:bg-white/25"
+    >
+      ✕
+    </button>
+    <button
+      id="lb-ant"
+      type="button"
+      aria-label="Foto anterior"
+      class="absolute left-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-6"
+    >
+      ‹
+    </button>
+    <img id="lb-img" src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain" />
+    <button
+      id="lb-prox"
+      type="button"
+      aria-label="Próxima foto"
+      class="absolute right-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-6"
+    >
+      ›
+    </button>
+    <p id="lb-contador" class="absolute bottom-4 left-0 right-0 text-center text-sm text-white/80"></p>
+  </div>
+</section>
+
+<script>
+  const grid = document.getElementById("galeria-grid");
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lb-img") as HTMLImageElement;
+  const contador = document.getElementById("lb-contador");
+  const botoes = Array.from(
+    grid?.querySelectorAll<HTMLButtonElement>("button[data-full]") ?? [],
+  );
+  const fontes = botoes.map((b) => ({
+    full: b.dataset.full!,
+    alt: b.querySelector("img")?.alt ?? "",
+  }));
+  let atual = 0;
+
+  function mostrar(i: number) {
+    atual = (i + fontes.length) % fontes.length;
+    lbImg.src = fontes[atual].full;
+    lbImg.alt = fontes[atual].alt;
+    if (contador) contador.textContent = `${atual + 1} / ${fontes.length}`;
+  }
+  function abrir(i: number) {
+    mostrar(i);
+    lb?.classList.remove("hidden");
+    lb?.classList.add("flex");
+    document.body.style.overflow = "hidden";
+  }
+  function fechar() {
+    lb?.classList.add("hidden");
+    lb?.classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+
+  botoes.forEach((b, i) => b.addEventListener("click", () => abrir(i)));
+  document.getElementById("lb-fechar")?.addEventListener("click", fechar);
+  document.getElementById("lb-prox")?.addEventListener("click", () => mostrar(atual + 1));
+  document.getElementById("lb-ant")?.addEventListener("click", () => mostrar(atual - 1));
+  lb?.addEventListener("click", (e) => {
+    if (e.target === lb) fechar();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (lb?.classList.contains("hidden")) return;
+    if (e.key === "Escape") fechar();
+    if (e.key === "ArrowRight") mostrar(atual + 1);
+    if (e.key === "ArrowLeft") mostrar(atual - 1);
+  });
+
+  // Swipe no celular
+  let x0: number | null = null;
+  lb?.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
+  lb?.addEventListener("touchend", (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) mostrar(atual + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+</script>
