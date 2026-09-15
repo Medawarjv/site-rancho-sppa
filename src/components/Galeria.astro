@@ -164,6 +164,17 @@ const primeira = temas[0].id;
 
   let visiveis: HTMLButtonElement[] = [];
   let atual = 0;
+  let galeriaVista = false;
+
+  function carregarVisiveis() {
+    visiveis.forEach((b) => {
+      const img = b.querySelector("img");
+      if (img && !img.complete) {
+        img.loading = "eager";
+        img.src = img.src; // dispara o load (lazy em display:none não carrega)
+      }
+    });
+  }
 
   function selecionarTab(id: string) {
     tabs.forEach((t) => {
@@ -178,6 +189,7 @@ const primeira = temas[0].id;
       .filter((li) => li.dataset.cat === id)
       .map((li) => li.querySelector<HTMLButtonElement>("button[data-full]")!);
     visiveis.forEach((b, i) => (b.dataset.pos = String(i)));
+    if (galeriaVista) carregarVisiveis();
   }
 
   function mostrar(i: number) {
@@ -229,4 +241,20 @@ const primeira = temas[0].id;
 
   // começa na primeira aba
   selecionarTab(tabs[0].dataset.tab!);
+
+  // carrega as fotos só quando a galeria chega perto da tela
+  const secao = document.getElementById("galeria");
+  if (secao) {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          galeriaVista = true;
+          carregarVisiveis();
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    obs.observe(secao);
+  }
 </script>
