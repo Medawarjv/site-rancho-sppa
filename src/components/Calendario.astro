@@ -1,0 +1,184 @@
+---
+import site from "../data/site.json";
+---
+
+<section id="disponibilidade" class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+  <div class="mx-auto mb-8 max-w-2xl text-center">
+    <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
+      Disponibilidade
+    </h2>
+    <p class="mt-3 text-terra">
+      Datas ocupadas atualizadas pela nossa equipe. A confirmação é sempre pelo
+      WhatsApp.
+    </p>
+  </div>
+
+  <!-- Legenda -->
+  <div
+    id="calendario-legenda"
+    class="mb-8 hidden items-center justify-center gap-6 text-sm text-terra"
+  >
+    <span class="flex items-center gap-2">
+      <span class="inline-block h-4 w-4 rounded bg-mata/15 ring-1 ring-mata/30"></span>
+      Disponível
+    </span>
+    <span class="flex items-center gap-2">
+      <span class="inline-block h-4 w-4 rounded bg-stone-300"></span>
+      Ocupado
+    </span>
+  </div>
+
+  <!-- Estado de carregamento -->
+  <p id="calendario-loading" class="text-center text-terra">
+    Carregando disponibilidade…
+  </p>
+
+  <!-- Grade de meses (preenchida via JS) -->
+  <div
+    id="calendario-meses"
+    class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+    data-whatsapp={site.whatsapp}
+  >
+  </div>
+
+  <!-- Fallback: some se a leitura do calendário falhar -->
+  <div id="calendario-fallback" class="hidden text-center">
+    <p class="mx-auto max-w-md text-terra">
+      No momento não é possível mostrar o calendário aqui. Sem problema — é só
+      consultar as datas direto com a gente pelo WhatsApp.
+    </p>
+    <a
+      id="calendario-fallback-wa"
+      href="#"
+      target="_blank"
+      rel="noopener"
+      class="mt-6 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-[#1ebe57]"
+    >
+      Consultar no WhatsApp
+    </a>
+  </div>
+</section>
+
+<script>
+  const wrap = document.getElementById("calendario-meses")!;
+  const loading = document.getElementById("calendario-loading")!;
+  const legenda = document.getElementById("calendario-legenda")!;
+  const fallback = document.getElementById("calendario-fallback")!;
+  const whatsapp = wrap.dataset.whatsapp ?? "";
+
+  const MESES_A_MOSTRAR = 6;
+  const NOMES_DIAS = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const chave = (a: number, m: number, d: number) => `${a}-${pad(m + 1)}-${pad(d)}`;
+
+  function linkWhatsApp(dataBr: string) {
+    const msg = `Olá! Quero consultar a disponibilidade do Rancho SPPA para o dia ${dataBr}.`;
+    return `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
+  }
+
+  function mostrarFallback() {
+    loading.classList.add("hidden");
+    wrap.classList.add("hidden");
+    legenda.classList.add("hidden");
+    fallback.classList.remove("hidden");
+    const a = document.getElementById("calendario-fallback-wa") as HTMLAnchorElement;
+    const msg = "Olá! Vim pelo site e quero consultar a disponibilidade do Rancho SPPA.";
+    a.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
+  }
+
+  function renderMeses(ocupados: Set<string>) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const base = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+    for (let i = 0; i < MESES_A_MOSTRAR; i++) {
+      const mes = new Date(base.getFullYear(), base.getMonth() + i, 1);
+      wrap.appendChild(montarMes(mes, hoje, ocupados));
+    }
+
+    loading.classList.add("hidden");
+    legenda.classList.remove("hidden");
+    legenda.classList.add("flex");
+    wrap.classList.remove("hidden");
+  }
+
+  function montarMes(mes: Date, hoje: Date, ocupados: Set<string>) {
+    const ano = mes.getFullYear();
+    const m = mes.getMonth();
+    const primeiroDiaSemana = new Date(ano, m, 1).getDay();
+    const totalDias = new Date(ano, m + 1, 0).getDate();
+
+    const card = document.createElement("div");
+
+    const titulo = document.createElement("h3");
+    titulo.className = "mb-3 text-center font-semibold capitalize text-mata";
+    titulo.textContent = mes.toLocaleDateString("pt-BR", {
+      month: "long",
+      year: "numeric",
+    });
+    card.appendChild(titulo);
+
+    const grade = document.createElement("div");
+    grade.className = "grid grid-cols-7 gap-1 text-center text-sm";
+
+    for (const d of NOMES_DIAS) {
+      const h = document.createElement("div");
+      h.className = "py-1 text-xs font-medium text-terra/60";
+      h.textContent = d;
+      grade.appendChild(h);
+    }
+
+    for (let b = 0; b < primeiroDiaSemana; b++) {
+      grade.appendChild(document.createElement("div"));
+    }
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+      const data = new Date(ano, m, dia);
+      const k = chave(ano, m, dia);
+      const passado = data < hoje;
+      const ocupado = ocupados.has(k);
+
+      const base =
+        "flex h-9 items-center justify-center rounded text-sm transition";
+
+      if (passado) {
+        const cel = document.createElement("div");
+        cel.className = `${base} text-stone-300`;
+        cel.textContent = String(dia);
+        grade.appendChild(cel);
+      } else if (ocupado) {
+        const cel = document.createElement("div");
+        cel.className = `${base} bg-stone-300 text-stone-500`;
+        cel.textContent = String(dia);
+        cel.setAttribute("aria-label", `Dia ${dia}: ocupado`);
+        grade.appendChild(cel);
+      } else {
+        const dataBr = `${pad(dia)}/${pad(m + 1)}/${ano}`;
+        const a = document.createElement("a");
+        a.href = linkWhatsApp(dataBr);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.className = `${base} bg-mata/10 font-medium text-mata ring-1 ring-mata/20 hover:bg-mata hover:text-white`;
+        a.textContent = String(dia);
+        a.setAttribute("aria-label", `Dia ${dia}: disponível, consultar no WhatsApp`);
+        grade.appendChild(a);
+      }
+    }
+
+    card.appendChild(grade);
+    return card;
+  }
+
+  // no-store: o navegador nunca guarda a disponibilidade (evita mostrar dado
+  // velho). O cache de verdade fica no edge da Vercel (s-maxage no endpoint).
+  fetch("/api/disponibilidade", { cache: "no-store" })
+    .then((r) => r.json())
+    .then((data) => {
+      if (!data || !data.ok || !Array.isArray(data.ocupados)) {
+        mostrarFallback();
+        return;
+      }
+      renderMeses(new Set<string>(data.ocupados));
+    })
+    .catch(() => mostrarFallback());
+</script>

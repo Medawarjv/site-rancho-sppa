@@ -30,6 +30,18 @@ Exemplo: `553498765432`.
 ### Trocar um texto
 *(chega nas próximas etapas)* Os textos ficam em `src/content/`.
 
+### Ativar / trocar o calendário de disponibilidade
+O site lê os dias ocupados de um Google Calendar. **Enquanto a URL não for configurada, o site mostra só o botão de WhatsApp** (nunca marca "disponível" por engano).
+
+Para ativar:
+1. No Google Calendar → **Configurações** → clique no calendário das reservas → **"Integrar agenda"** → copie o **"Endereço secreto no formato iCal"** (termina em `.ics`).
+2. No painel da **Vercel** → projeto → **Settings → Environment Variables** → adicione:
+   - **Name:** `ICAL_URL`
+   - **Value:** a URL secreta do iCal
+3. **Redeploy** (Deployments → ⋯ → Redeploy). Pronto, o calendário passa a mostrar os dias ocupados.
+
+A Lorena só precisa marcar cada reserva como **evento de dia inteiro** (do check-in ao check-out). A URL secreta fica só na Vercel — **nunca aparece no site**.
+
 ---
 
 ## Status das etapas
@@ -38,7 +50,7 @@ Exemplo: `553498765432`.
 - [x] **Etapa 2** — Hero (foto da propriedade + frase + CTA)
 - [x] **Etapa 3** — Os 6 blocos do rancho (fotos + texto)
 - [x] **Etapa 4** — Galeria (15 fotos) + lightbox, responsivo no celular
-- [ ] Etapa 5 — Calendário de disponibilidade (iCal)
+- [x] **Etapa 5** — Calendário de disponibilidade (infra pronta; falta plugar a URL do iCal — ver abaixo)
 - [ ] Etapa 6 — Regras + Como chegar
 - [ ] Etapa 7 — Prova social + CTA
 - [ ] Etapa 8 — Páginas /faq e /politicas
