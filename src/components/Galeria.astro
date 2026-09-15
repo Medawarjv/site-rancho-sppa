@@ -1,84 +1,131 @@
 ---
 import { Image, getImage } from "astro:assets";
 
-// Carrega todas as fotos de src/assets/galeria (ordenadas por nome: g01, g02, ...)
+// Temas da galeria (ordem das abas).
+const temas = [
+  { id: "lazer", nome: "Áreas de lazer" },
+  { id: "esportes", nome: "Jogos & quadras" },
+  { id: "natureza", nome: "Natureza & represa" },
+  { id: "quiosque", nome: "Quiosque & churrasqueira" },
+  { id: "acomodacoes", nome: "Acomodações" },
+];
+
+// Legendas por tema/arquivo (aparecem no hover e no lightbox).
+const legendas: Record<string, string> = {
+  "lazer/01.jpg": "Piscina para refrescar em família",
+  "lazer/02.jpg": "Piscina em dia de sol",
+  "lazer/03.jpg": "Piscina e área de convivência",
+  "lazer/04.jpg": "Deck com piscina",
+  "lazer/05.jpg": "Rede no quiosque para descansar",
+  "lazer/06.jpg": "Espaço de estar ao ar livre",
+  "esportes/01.jpg": "Quadra de areia e playground",
+  "esportes/02.jpg": "Beach tennis em dia de sol",
+  "esportes/03.jpg": "Sala de jogos: sinuca e ping-pong",
+  "esportes/04.jpg": "Playground para a criançada",
+  "esportes/05.jpg": "Beach tennis ao entardecer",
+  "esportes/06.jpg": "Diversão garantida para os pequenos",
+  "natureza/01.jpg": "Represa de Miranda, vista do píer",
+  "natureza/02.jpg": "Píer às margens da represa",
+  "natureza/03.jpg": "450 metros de margem na represa",
+  "natureza/04.jpg": "Pôr do sol na represa",
+  "natureza/05.jpg": "Entardecer entre os coqueiros",
+  "natureza/06.jpg": "Cachoeira dentro da propriedade",
+  "natureza/07.jpg": "Riacho e cachoeira na mata",
+  "natureza/08.jpg": "Jardins floridos pelo rancho",
+  "quiosque/01.jpg": "Forno de pizza e churrasqueira",
+  "quiosque/02.jpg": "Churrasqueira completa",
+  "quiosque/03.jpg": "Quiosque amplo para reunir todos",
+  "quiosque/04.jpg": "Grande mesa para as refeições",
+  "quiosque/05.jpg": "Quiosque com vista para a piscina",
+  "quiosque/06.jpg": "Fogão a lenha e forno",
+  "acomodacoes/01.jpg": "Suíte com ar-condicionado",
+  "acomodacoes/02.jpg": "Suíte aconchegante",
+  "acomodacoes/03.jpg": "Cama de casal e conforto",
+  "acomodacoes/04.jpg": "Acomodações para até 30 pessoas",
+  "acomodacoes/05.jpg": "Sítio do Pica Pau Amarelo",
+};
+
 const modules = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/galeria/*.{jpg,jpeg,png}",
+  "../assets/galeria/*/*.{jpg,jpeg,png}",
   { eager: true },
 );
-
-// Legendas por nome de arquivo (alt/SEO e legenda no lightbox).
-const legendas: Record<string, string> = {
-  "g01.jpg": "Fim de tarde na quadra de areia",
-  "g02.jpg": "Piscina para refrescar em família",
-  "g03.jpg": "Quiosque com área de estar para relaxar",
-  "g04.jpg": "Suíte com ar-condicionado e cama de casal",
-  "g05.jpg": "Cachoeira dentro da propriedade",
-  "g06.jpg": "Pôr do sol na represa, visto do píer",
-  "g07.jpg": "Rede no quiosque para descansar",
-  "g08.jpg": "Quiosque e piscina, o coração do rancho",
-  "g09.jpg": "Amplo gramado e áreas de sombra",
-  "g10.jpg": "Jardins floridos por toda a propriedade",
-  "g11.jpg": "450 metros de margem na Represa de Miranda",
-  "g12.jpg": "Entardecer entre os coqueiros",
-  "g13.jpg": "Céu de fim de tarde no rancho",
-  "g14.jpg": "Bem-vindo ao Sítio do Pica Pau Amarelo",
-  "g15.jpg": "Clima de sítio para desacelerar",
-  "g16.jpg": "Playground para a criançada",
-  "g17.jpg": "Acomodações confortáveis para até 30 pessoas",
-  "g18.jpg": "Cantos de sossego pela propriedade",
-  "g19.jpg": "Espaços amplos para reunir todo mundo",
-  "g20.jpg": "Quadra de areia para beach tennis",
-};
 
 const fotos = await Promise.all(
   Object.entries(modules)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(async ([path, mod]) => {
-      const nome = path.split("/").pop()!;
-      const cheia = await getImage({ src: mod.default, width: 1200, format: "webp" });
+      const partes = path.split("/");
+      const chave = partes.slice(-2).join("/"); // ex.: "lazer/01.jpg"
+      const cat = partes[partes.length - 2];
+      const cheia = await getImage({ src: mod.default, width: 1400, format: "webp" });
       return {
         thumb: mod.default,
         full: cheia.src,
-        alt: legendas[nome] ?? "Foto do Rancho SPPA",
+        cat,
+        alt: legendas[chave] ?? "Foto do Rancho SPPA",
       };
     }),
 );
+
+const primeira = temas[0].id;
 ---
 
-<section id="galeria" class="bg-white py-14 sm:py-20">
+<section id="galeria" class="bg-white py-16 sm:py-24">
   <div class="mx-auto max-w-6xl px-6">
-  <div class="mx-auto mb-10 max-w-2xl text-center">
-    <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">Galeria</h2>
-    <p class="mt-3 text-terra">Um pouco do que espera por você. Toque para ampliar.</p>
-  </div>
+    <div class="mx-auto mb-8 max-w-2xl text-center">
+      <p class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-terra">
+        Galeria
+      </p>
+      <h2 class="font-titulo text-3xl font-semibold text-mata-escura sm:text-4xl">
+        Um passeio pelo rancho
+      </h2>
+      <p class="mt-4 leading-relaxed text-tinta/70">
+        Explore por tema. Toque em qualquer foto para ampliar.
+      </p>
+    </div>
 
-  <ul
-    id="galeria-grid"
-    class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
-  >
-    {
-      fotos.map((f, i) => (
-        <li>
+    <!-- Abas de tema -->
+    <div class="mb-8 flex flex-wrap justify-center gap-2" role="tablist">
+      {
+        temas.map((t) => (
           <button
             type="button"
-            class="group block w-full overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-mata"
-            data-full={f.full}
-            data-index={i}
-            aria-label={`Ampliar: ${f.alt}`}
+            class="galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition"
+            data-tab={t.id}
           >
-            <Image
-              src={f.thumb}
-              alt={f.alt}
-              class="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
-              width={600}
-              loading="lazy"
-            />
+            {t.nome}
           </button>
-        </li>
-      ))
-    }
-  </ul>
+        ))
+      }
+    </div>
+
+    <!-- Grade -->
+    <ul id="galeria-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+      {
+        fotos.map((f, i) => (
+          <li class="galeria-item" data-cat={f.cat}>
+            <button
+              type="button"
+              class="group relative block w-full overflow-hidden rounded-xl ring-1 ring-terra/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-mata"
+              data-full={f.full}
+              data-index={i}
+              aria-label={`Ampliar: ${f.alt}`}
+            >
+              <Image
+                src={f.thumb}
+                alt={f.alt}
+                class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
+                width={600}
+                loading="lazy"
+              />
+              <span class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/70 to-transparent p-3 text-left text-xs font-medium text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                {f.alt}
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 
   {/* Lightbox */}
@@ -89,31 +136,13 @@ const fotos = await Promise.all(
     aria-modal="true"
     aria-label="Foto ampliada"
   >
-    <button
-      id="lb-fechar"
-      type="button"
-      aria-label="Fechar"
-      class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl text-white hover:bg-white/25"
-    >
-      ✕
-    </button>
-    <button
-      id="lb-ant"
-      type="button"
-      aria-label="Foto anterior"
-      class="absolute left-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-6"
-    >
-      ‹
-    </button>
+    <button id="lb-fechar" type="button" aria-label="Fechar"
+      class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl text-white hover:bg-white/25">✕</button>
+    <button id="lb-ant" type="button" aria-label="Foto anterior"
+      class="absolute left-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-6">‹</button>
     <img id="lb-img" src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain" />
-    <button
-      id="lb-prox"
-      type="button"
-      aria-label="Próxima foto"
-      class="absolute right-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-6"
-    >
-      ›
-    </button>
+    <button id="lb-prox" type="button" aria-label="Próxima foto"
+      class="absolute right-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-6">›</button>
     <div class="absolute bottom-4 left-0 right-0 px-6 text-center text-white/90">
       <p id="lb-legenda" class="text-sm font-medium drop-shadow"></p>
       <p id="lb-contador" class="mt-1 text-xs text-white/60"></p>
@@ -122,26 +151,43 @@ const fotos = await Promise.all(
 </section>
 
 <script>
-  const grid = document.getElementById("galeria-grid");
+  const grid = document.getElementById("galeria-grid")!;
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>(".galeria-tab"));
+  const itens = Array.from(document.querySelectorAll<HTMLLIElement>(".galeria-item"));
   const lb = document.getElementById("lightbox");
   const lbImg = document.getElementById("lb-img") as HTMLImageElement;
   const contador = document.getElementById("lb-contador");
   const legenda = document.getElementById("lb-legenda");
-  const botoes = Array.from(
-    grid?.querySelectorAll<HTMLButtonElement>("button[data-full]") ?? [],
-  );
-  const fontes = botoes.map((b) => ({
-    full: b.dataset.full!,
-    alt: b.querySelector("img")?.alt ?? "",
-  }));
+
+  const ativoOn = "bg-mata text-white border-mata";
+  const ativoOff = "border-terra/25 text-terra hover:border-mata/40";
+
+  let visiveis: HTMLButtonElement[] = [];
   let atual = 0;
 
+  function selecionarTab(id: string) {
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === id;
+      t.className = "galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition " + (on ? ativoOn : ativoOff);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    itens.forEach((li) => {
+      li.classList.toggle("hidden", li.dataset.cat !== id);
+    });
+    visiveis = itens
+      .filter((li) => li.dataset.cat === id)
+      .map((li) => li.querySelector<HTMLButtonElement>("button[data-full]")!);
+    visiveis.forEach((b, i) => (b.dataset.pos = String(i)));
+  }
+
   function mostrar(i: number) {
-    atual = (i + fontes.length) % fontes.length;
-    lbImg.src = fontes[atual].full;
-    lbImg.alt = fontes[atual].alt;
-    if (legenda) legenda.textContent = fontes[atual].alt;
-    if (contador) contador.textContent = `${atual + 1} / ${fontes.length}`;
+    atual = (i + visiveis.length) % visiveis.length;
+    const b = visiveis[atual];
+    lbImg.src = b.dataset.full!;
+    const alt = b.querySelector("img")?.alt ?? "";
+    lbImg.alt = alt;
+    if (legenda) legenda.textContent = alt;
+    if (contador) contador.textContent = `${atual + 1} / ${visiveis.length}`;
   }
   function abrir(i: number) {
     mostrar(i);
@@ -155,7 +201,11 @@ const fotos = await Promise.all(
     document.body.style.overflow = "";
   }
 
-  botoes.forEach((b, i) => b.addEventListener("click", () => abrir(i)));
+  tabs.forEach((t) => t.addEventListener("click", () => selecionarTab(t.dataset.tab!)));
+  grid.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-full]");
+    if (btn && btn.dataset.pos !== undefined) abrir(Number(btn.dataset.pos));
+  });
   document.getElementById("lb-fechar")?.addEventListener("click", fechar);
   document.getElementById("lb-prox")?.addEventListener("click", () => mostrar(atual + 1));
   document.getElementById("lb-ant")?.addEventListener("click", () => mostrar(atual - 1));
@@ -168,8 +218,6 @@ const fotos = await Promise.all(
     if (e.key === "ArrowRight") mostrar(atual + 1);
     if (e.key === "ArrowLeft") mostrar(atual - 1);
   });
-
-  // Swipe no celular
   let x0: number | null = null;
   lb?.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
   lb?.addEventListener("touchend", (e) => {
@@ -178,4 +226,7 @@ const fotos = await Promise.all(
     if (Math.abs(dx) > 50) mostrar(atual + (dx < 0 ? 1 : -1));
     x0 = null;
   });
+
+  // começa na primeira aba
+  selecionarTab(tabs[0].dataset.tab!);
 </script>

@@ -16,6 +16,7 @@ import ComoChegar from "../components/ComoChegar.astro";
 import Avaliacoes from "../components/Avaliacoes.astro";
 import Comodidades from "../components/Comodidades.astro";
 import BarraFatos from "../components/BarraFatos.astro";
+import TituloSecao from "../components/TituloSecao.astro";
 import Icon from "../components/Icon.astro";
 import avaliacoes from "../data/avaliacoes.json";
 
@@ -123,54 +124,62 @@ const blocos = [
 <Layout>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <!-- HERO (dividido: foto + texto) -->
-  <header id="hero" class="grid min-h-[85vh] lg:min-h-screen lg:grid-cols-2">
-    <!-- Foto: topo no celular, direita no desktop -->
-    <div class="relative order-1 min-h-[42vh] overflow-hidden lg:order-2 lg:min-h-0">
-      <Image
-        src={heroImg}
-        alt="Área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground e quiosque"
-        class="absolute inset-0 h-full w-full object-cover object-[center_58%]"
-        widths={[480, 768, 960]}
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
+  <!-- HERO (full-bleed) -->
+  <header
+    id="hero"
+    class="relative flex min-h-[80vh] items-end overflow-hidden sm:min-h-[90vh]"
+  >
+    <Image
+      src={heroImg}
+      alt="Vista da área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground, quiosque e coqueiros"
+      class="animate-kenburns absolute inset-0 h-full w-full object-cover"
+      widths={[768, 1280, 1600]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <!-- scrim de baixo pra cima (mais escuro onde fica o texto) -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5"></div>
 
-    <!-- Texto: embaixo no celular, esquerda no desktop -->
-    <div
-      class="order-2 flex items-center bg-mata px-6 py-14 text-areia lg:order-1 lg:px-12 lg:py-16"
-    >
-      <div class="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-areia/70">
-          {site.local}
+    <div class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-14 sm:pb-20">
+      <div class="max-w-2xl text-white">
+        <p class="mb-4 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-white/85">
+          <span class="h-px w-8 bg-dourado"></span>
+          Indianópolis · MG · Represa de Miranda
         </p>
-        <h1 class="font-titulo text-4xl font-bold leading-tight sm:text-5xl xl:text-6xl">
+        <h1 class="font-titulo text-4xl font-semibold leading-[1.05] drop-shadow-md sm:text-6xl xl:text-7xl">
           Seu refúgio na Represa de Miranda
         </h1>
-        <p class="mt-5 text-lg text-areia/85">
+        <p class="mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
           Rancho para aluguel por temporada em Indianópolis-MG, a cerca de
           1&nbsp;hora de Uberlândia. Natureza, água e sossego para a família toda.
         </p>
-        <a
-          href={waHero}
-          target="_blank"
-          rel="noopener"
-          class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
-        >
-          Consultar disponibilidade
-        </a>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href={waHero}
+            target="_blank"
+            rel="noopener"
+            class="inline-block rounded-full bg-[#25D366] px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-[#1ebe57]"
+          >
+            Consultar disponibilidade
+          </a>
+          <a
+            href="#rancho"
+            class="inline-block rounded-full border border-white/50 px-7 py-4 text-base font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
+          >
+            Conhecer o rancho
+          </a>
+        </div>
 
         <!-- Prova social -->
-        <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-areia/85 lg:justify-start">
-          <span class="flex text-yellow-400">
+        <p class="mt-7 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/85">
+          <span class="flex text-dourado">
             {[0, 1, 2, 3, 4].map(() => <Icon name="star" class="h-4 w-4" />)}
           </span>
           <span>
             <strong>{avaliacoes.resumo.nota}</strong> · {avaliacoes.resumo.total} avaliações no Google
           </span>
-          <span class="opacity-70">· Recebendo famílias desde 2001</span>
+          <span class="opacity-70">· recebendo famílias desde 2001</span>
         </p>
       </div>
     </div>
@@ -182,30 +191,28 @@ const blocos = [
   <!-- O RANCHO — 6 blocos -->
   <section id="rancho" class="bg-areia py-14 sm:py-20">
     <div class="mx-auto max-w-6xl px-6">
-    <div class="mx-auto mb-10 max-w-2xl text-center">
-      <h2 class="font-titulo text-3xl font-bold text-mata sm:text-4xl">
-        O rancho
-      </h2>
-      <p class="mt-3 text-terra">
-        7 hectares de estrutura completa para descansar, se divertir e curtir a
-        represa com quem você ama.
-      </p>
-    </div>
+    <TituloSecao
+      kicker="A estrutura"
+      titulo="Tudo que o rancho oferece"
+      sub="7 hectares de estrutura completa para descansar, se divertir e curtir a represa com quem você ama."
+    />
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         blocos.map((b) => (
-          <article class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl">
-            <Image
-              src={b.img}
-              alt={b.alt}
-              class="h-56 w-full object-cover"
-              width={800}
-              loading="lazy"
-            />
+          <article class="group overflow-hidden rounded-2xl bg-white ring-1 ring-terra/10 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-18px_rgba(30,63,39,0.35)]">
+            <div class="overflow-hidden">
+              <Image
+                src={b.img}
+                alt={b.alt}
+                class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+                width={800}
+                loading="lazy"
+              />
+            </div>
             <div class="p-6">
-              <h3 class="font-titulo text-xl font-bold text-mata">{b.titulo}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-terra">{b.texto}</p>
+              <h3 class="font-titulo text-xl font-semibold text-mata-escura">{b.titulo}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-tinta/70">{b.texto}</p>
             </div>
           </article>
         ))

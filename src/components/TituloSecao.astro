@@ -1,0 +1,23 @@
+---
+// Cabeçalho de seção padronizado (eyebrow + título + subtítulo).
+interface Props {
+  kicker: string;
+  titulo: string;
+  sub?: string;
+}
+const { kicker, titulo, sub } = Astro.props;
+---
+
+<div class="mx-auto mb-12 max-w-2xl text-center">
+  <p class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-terra">
+    {kicker}
+  </p>
+  <h2 class="font-titulo text-3xl font-semibold text-mata-escura sm:text-4xl">
+    {titulo}
+  </h2>
+  {
+    sub && (
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-tinta/70">{sub}</p>
+    )
+  }
+</div>
