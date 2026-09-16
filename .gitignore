@@ -16,3 +16,7 @@ dist/
 # sistema
 .DS_Store
 Thumbs.db
+
+# acervo bruto de fotos (250 MB): fica só no PC, o site usa src/assets/
+imagens/
+Imagens/
