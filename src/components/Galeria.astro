@@ -95,7 +95,7 @@ const primeira = temas[0].id;
           <button
             type="button"
             role="tab"
-            aria-controls="galeria-grid"
+            aria-controls="galeria-painel"
             class="galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition"
             data-tab={t.id}
           >
@@ -106,7 +106,8 @@ const primeira = temas[0].id;
     </div>
 
     <!-- Grade -->
-    <ul id="galeria-grid" role="tabpanel" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+    <div id="galeria-painel" role="tabpanel" aria-label="Fotos do tema selecionado">
+    <ul id="galeria-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
       {
         fotos.map((f, i) => (
           <li class="galeria-item" data-cat={f.cat}>
@@ -123,7 +124,7 @@ const primeira = temas[0].id;
                 src={f.thumb}
                 alt=""
                 class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
-                widths={[300, 600]}
+                widths={[320, 480, 640]}
                 sizes="(min-width: 1088px) 340px, (min-width: 640px) 33vw, 50vw"
                 loading="lazy"
               />
@@ -135,6 +136,7 @@ const primeira = temas[0].id;
         ))
       }
     </ul>
+    </div>
   </div>
 
   {/* Lightbox */}

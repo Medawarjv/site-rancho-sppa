@@ -111,6 +111,15 @@ Esse endereço é uma senha: nunca coloque em arquivo do site nem mande para cli
 
 ---
 
+## O que o site tem
+
+Home (página única): hero com marca e WhatsApp · barra de fatos · 6 blocos da estrutura · galeria
+por tema com lightbox · calendário de disponibilidade (Google Calendar → iCal) com seleção de
+período e pedido pelo WhatsApp · regras principais · como chegar (mapa) · comodidades e parceiros
+indicados · avaliações do Google · CTA final. Páginas de apoio: `/faq`, `/politicas`, `/404`.
+Botão flutuante de WhatsApp em todas. SEO: title/description, Open Graph, schema.org
+(LodgingBusiness, FAQPage, BreadcrumbList), sitemap, robots. Sem cookies, sem rastreamento.
+
 ## Para quem programa
 
 Astro 5 + Tailwind CSS 4, hospedado na Vercel (`@astrojs/vercel` v8 — não subir para v11, exige
