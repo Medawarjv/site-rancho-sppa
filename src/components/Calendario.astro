@@ -293,8 +293,9 @@ import Icon from "./Icon.astro";
     btnProx.disabled = pagina >= max;
   }
 
-  btnAnt.addEventListener("click", () => { pagina = Math.max(0, pagina - porPagina()); mostrarPagina(); });
-  btnProx.addEventListener("click", () => { pagina = pagina + porPagina(); mostrarPagina(); });
+  // As setas andam 1 mês por vez (no desktop a janela de 2 meses desliza).
+  btnAnt.addEventListener("click", () => { pagina = Math.max(0, pagina - 1); mostrarPagina(); });
+  btnProx.addEventListener("click", () => { pagina = pagina + 1; mostrarPagina(); });
   mqDesktop.addEventListener("change", () => cards.length && mostrarPagina());
 
   function montarMes(mes: Date, hoje: Date) {
