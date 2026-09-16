@@ -78,7 +78,7 @@ const schema = {
     name: nome,
     value: true,
   })),
-  sameAs: [site.mapsLink].filter(Boolean),
+  sameAs: [site.mapsLink, site.instagram, site.facebook].filter(Boolean),
 };
 
 // Os 6 blocos do rancho (escopo §4.2). Texto adaptado do material aprovado.
@@ -140,7 +140,7 @@ const blocos = [
     <Image
       src={heroImg}
       alt="Vista da área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground, quiosque e coqueiros"
-      class="animate-kenburns absolute inset-0 h-full w-full object-cover"
+      class="animate-kenburns absolute inset-0 h-full w-full object-cover object-[center_78%]"
       widths={[768, 1280, 1600]}
       sizes="100vw"
       loading="eager"

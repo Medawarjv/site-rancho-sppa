@@ -6,7 +6,17 @@ import Icon from "./Icon.astro";
 const { resumo, lista } = avaliacoes;
 const estrelas = [0, 1, 2, 3, 4];
 
-// Avatar com a inicial + cor por pessoa (dá cara de gente sem precisar de foto).
+// Foto de perfil do Google por pessoa (com fallback para a inicial).
+const fotos: Record<string, string> = {
+  "Larissa Gomes Petrucci": "/avatars/larissa.png",
+  "Marcos Marques": "/avatars/marcos.png",
+  "Elizabelle Fezzani": "/avatars/elizabelle.png",
+  "Denise Silva": "/avatars/denise.png",
+  "Clayton Dias": "/avatars/clayton.png",
+  "Debora Cruz": "/avatars/debora.png",
+};
+
+// Avatar com a inicial + cor por pessoa (fallback caso a foto não carregue).
 const cores = ["bg-mata", "bg-agua", "bg-terra", "bg-mata-escura"];
 const inicial = (nome: string) => nome.trim().charAt(0).toUpperCase();
 const corDe = (nome: string) => {
@@ -46,10 +56,20 @@ const corDe = (nome: string) => {
             </blockquote>
             <figcaption class="mt-4 flex items-center gap-3 border-t border-terra/10 pt-4">
               <span
-                class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${corDe(a.nome)} text-base font-bold text-areia`}
-                aria-hidden="true"
+                class={`relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full ${corDe(a.nome)} text-base font-bold text-areia`}
               >
                 {inicial(a.nome)}
+                {
+                  fotos[a.nome] && (
+                    <img
+                      src={fotos[a.nome]}
+                      alt={`Foto de ${a.nome}`}
+                      class="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
+                      onerror="this.remove()"
+                    />
+                  )
+                }
               </span>
               <span class="min-w-0">
                 <span class="block font-semibold text-mata">{a.nome}</span>

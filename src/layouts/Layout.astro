@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import site from "../data/site.json";
 import WhatsAppFloat from "../components/WhatsAppFloat.astro";
+import Icon from "../components/Icon.astro";
 
 interface Props {
   titulo?: string;
@@ -62,7 +63,21 @@ const ogImagem = new URL(imagem, Astro.site).href;
   <body class="text-mata-escura antialiased">
     <slot />
 
-    <footer class="bg-mata-escura py-10 text-center text-sm text-areia/70">
+    <footer class="bg-mata-escura py-12 text-center text-sm text-areia/70">
+      {
+        site.instagram && (
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram do Rancho SPPA"
+            class="mb-6 inline-flex items-center gap-2 rounded-full border border-areia/20 px-5 py-2 font-medium text-areia transition hover:border-dourado hover:text-dourado"
+          >
+            <Icon name="instagram" class="h-5 w-5" />
+            @ranchopicapaumg
+          </a>
+        )
+      }
       <nav class="mb-4 flex flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="/" class="hover:text-areia">Início</a>
         <a href="/faq" class="hover:text-areia">Perguntas frequentes</a>

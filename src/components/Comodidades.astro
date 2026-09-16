@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import site from "../data/site.json";
 import Icon from "./Icon.astro";
 import TituloSecao from "./TituloSecao.astro";
+import bannerImg from "../assets/comodidades.jpg";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Quero saber sobre as comodidades e os serviços parceiros para a minha estadia no Rancho SPPA.")}`;
 
@@ -31,6 +33,22 @@ const parceiros = [
       titulo="Deixe sua estadia ainda mais completa"
       sub="Comodidades do rancho e contatos de parceiros para o que você precisar. Tudo combinado com a gente pelo WhatsApp."
     />
+
+    <!-- Banner visual da seção -->
+    <div class="relative mb-12 overflow-hidden rounded-2xl shadow-[0_18px_40px_-18px_rgba(30,63,39,0.35)] ring-1 ring-terra/10">
+      <Image
+        src={bannerImg}
+        alt="Área de estar aconchegante no quiosque do Rancho SPPA"
+        class="h-52 w-full object-cover object-center sm:h-72"
+        widths={[768, 1280]}
+        sizes="(min-width: 1152px) 1088px, 100vw"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-mata-escura/70 to-transparent"></div>
+      <p class="absolute bottom-5 left-6 max-w-md font-titulo text-xl font-medium text-white drop-shadow sm:text-2xl">
+        Conforto de casa, no meio da natureza.
+      </p>
+    </div>
 
     <!-- Comodidades do rancho -->
     <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-terra/70">
