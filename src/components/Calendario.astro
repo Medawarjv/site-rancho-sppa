@@ -37,7 +37,7 @@ import Icon from "./Icon.astro";
   </p>
 
   <!-- Navegação: 1 mês por vez no celular, 2 no desktop -->
-  <div id="calendario-nav" class="mx-auto mb-6 hidden max-w-xl items-center justify-between">
+  <div id="calendario-nav" class="mx-auto mb-6 hidden max-w-xl items-center justify-between lg:max-w-5xl">
     <button
       id="cal-ant"
       type="button"
@@ -56,7 +56,7 @@ import Icon from "./Icon.astro";
   <!-- Grade de meses (preenchida via JS; só a "página" atual fica visível) -->
   <div
     id="calendario-meses"
-    class="mx-auto grid max-w-xl gap-8 sm:grid-cols-2"
+    class="mx-auto grid max-w-xl gap-8 sm:grid-cols-2 lg:max-w-5xl lg:grid-cols-3"
     data-whatsapp={site.whatsapp}
   >
   </div>
@@ -131,10 +131,12 @@ import Icon from "./Icon.astro";
   const btnProx = document.getElementById("cal-prox") as HTMLButtonElement;
   const rotulo = document.getElementById("cal-rotulo")!;
 
-  // Quantos meses ficam à frente e quantos aparecem por vez (1 no celular, 2 no desktop).
+  // Quantos meses ficam à frente e quantos aparecem por vez
+  // (1 no celular, 2 no tablet, 3 no desktop — acompanha as colunas da grade).
   const MESES_A_MOSTRAR = 6;
-  const mqDesktop = window.matchMedia("(min-width: 640px)");
-  const porPagina = () => (mqDesktop.matches ? 2 : 1);
+  const mqTablet = window.matchMedia("(min-width: 640px)");
+  const mqDesktop = window.matchMedia("(min-width: 1024px)");
+  const porPagina = () => (mqDesktop.matches ? 3 : mqTablet.matches ? 2 : 1);
   let pagina = 0; // índice do primeiro mês visível
   const cards: HTMLElement[] = [];
   const NOMES_DIAS = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -283,8 +285,9 @@ import Icon from "./Icon.astro";
     const max = Math.max(0, MESES_A_MOSTRAR - n);
     pagina = Math.min(pagina, max);
     cards.forEach((c, i) => c.classList.toggle("hidden", i < pagina || i >= pagina + n));
-    const [a, b] = cards.slice(pagina, pagina + n).map((c) => c.dataset);
-    rotulo.textContent = !b
+    const janela = cards.slice(pagina, pagina + n).map((c) => c.dataset);
+    const a = janela[0], b = janela[janela.length - 1];
+    rotulo.textContent = janela.length === 1
       ? `${a.mes} de ${a.ano}`
       : a.ano === b.ano
         ? `${a.mes} – ${b.mes} de ${a.ano}`
@@ -296,6 +299,7 @@ import Icon from "./Icon.astro";
   // As setas andam 1 mês por vez (no desktop a janela de 2 meses desliza).
   btnAnt.addEventListener("click", () => { pagina = Math.max(0, pagina - 1); mostrarPagina(); });
   btnProx.addEventListener("click", () => { pagina = pagina + 1; mostrarPagina(); });
+  mqTablet.addEventListener("change", () => cards.length && mostrarPagina());
   mqDesktop.addEventListener("change", () => cards.length && mostrarPagina());
 
   function montarMes(mes: Date, hoje: Date) {
