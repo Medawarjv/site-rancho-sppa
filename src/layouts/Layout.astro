@@ -3,6 +3,9 @@ import "../styles/global.css";
 import site from "../data/site.json";
 import WhatsAppFloat from "../components/WhatsAppFloat.astro";
 import Icon from "../components/Icon.astro";
+// Pré-carrega as duas fontes que aparecem acima da dobra (título e corpo).
+import fonteTituloUrl from "@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url";
+import fonteCorpoUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 
 interface Props {
   titulo?: string;
@@ -29,13 +32,10 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Tipografia: Fraunces (títulos) + Inter (corpo) + Bebas Neue (só a marca) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Tipografia: Fraunces (títulos) + Inter (corpo) + Bebas Neue (só a marca),
+         hospedadas no próprio site (ver global.css). Preload das duas principais. -->
+    <link rel="preload" href={fonteTituloUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fonteCorpoUrl} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#2f5d3a" />
     <link rel="canonical" href={canonical} />
 
@@ -72,7 +72,7 @@ const ogImagem = new URL(imagem, Astro.site).href;
             href={site.instagram}
             target="_blank"
             rel="noopener"
-            aria-label="Instagram do Rancho SPPA"
+            aria-label="@ranchopicapaumg no Instagram"
             class="mb-6 inline-flex items-center gap-2 rounded-full border border-areia/20 px-5 py-2 font-medium text-areia transition hover:border-dourado hover:text-dourado"
           >
             <Icon name="instagram" class="h-5 w-5" />

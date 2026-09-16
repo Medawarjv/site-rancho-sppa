@@ -94,6 +94,8 @@ const primeira = temas[0].id;
         temas.map((t) => (
           <button
             type="button"
+            role="tab"
+            aria-controls="galeria-grid"
             class="galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition"
             data-tab={t.id}
           >
@@ -104,7 +106,7 @@ const primeira = temas[0].id;
     </div>
 
     <!-- Grade -->
-    <ul id="galeria-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+    <ul id="galeria-grid" role="tabpanel" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
       {
         fotos.map((f, i) => (
           <li class="galeria-item" data-cat={f.cat}>
@@ -113,13 +115,16 @@ const primeira = temas[0].id;
               class="group relative block w-full overflow-hidden rounded-xl ring-1 ring-terra/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-mata"
               data-full={f.full}
               data-index={i}
+              data-legenda={f.alt}
               aria-label={`Ampliar: ${f.alt}`}
             >
+              {/* alt vazio de propósito: o botão já descreve a foto (evita leitura duplicada) */}
               <Image
                 src={f.thumb}
-                alt={f.alt}
+                alt=""
                 class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
-                width={600}
+                widths={[300, 600]}
+                sizes="(min-width: 1088px) 340px, (min-width: 640px) 33vw, 50vw"
                 loading="lazy"
               />
               <span class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/70 to-transparent p-3 text-left text-xs font-medium text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
@@ -203,7 +208,7 @@ const primeira = temas[0].id;
     atual = (i + visiveis.length) % visiveis.length;
     const b = visiveis[atual];
     lbImg.src = b.dataset.full!;
-    const alt = b.querySelector("img")?.alt ?? "";
+    const alt = b.dataset.legenda ?? "";
     lbImg.alt = alt;
     if (legenda) legenda.textContent = alt;
     if (contador) contador.textContent = `${atual + 1} / ${visiveis.length}`;

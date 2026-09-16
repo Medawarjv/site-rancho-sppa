@@ -72,7 +72,7 @@ import Icon from "./Icon.astro";
       href="#"
       target="_blank"
       rel="noopener"
-      class="mt-6 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-[#1ebe57]"
+      class="mt-6 inline-block rounded-full bg-zap px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-zap-escuro"
     >
       Consultar no WhatsApp
     </a>
@@ -105,7 +105,7 @@ import Icon from "./Icon.astro";
           href="#"
           target="_blank"
           rel="noopener"
-          class="hidden items-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#1ebe57]"
+          class="hidden items-center gap-2 rounded-full bg-zap px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-zap-escuro"
         >
           <Icon name="whatsapp" class="h-4 w-4" />
           Pedir no WhatsApp
@@ -337,8 +337,9 @@ import Icon from "./Icon.astro";
 
       if (data < hoje) {
         const cel = document.createElement("div");
-        cel.className = `${CLS_BASE} text-stone-300`;
+        cel.className = `${CLS_BASE} text-stone-400`;
         cel.textContent = String(dia);
+        cel.setAttribute("aria-hidden", "true"); // dia passado: só preenche a grade
         grade.appendChild(cel);
       } else if (ocupados.has(k)) {
         const cel = document.createElement("div");

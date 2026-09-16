@@ -180,7 +180,7 @@ const blocos = [
             href={waHero}
             target="_blank"
             rel="noopener"
-            class="inline-block rounded-full bg-[#25D366] px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-[#1ebe57]"
+            class="inline-block rounded-full bg-zap px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-zap-escuro"
           >
             Consultar disponibilidade
           </a>
@@ -232,7 +232,8 @@ const blocos = [
                 src={b.img}
                 alt={b.alt}
                 class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
-                width={800}
+                widths={[400, 800]}
+                sizes="(min-width: 1024px) 352px, (min-width: 640px) 50vw, 100vw"
                 loading="lazy"
               />
             </div>
@@ -278,7 +279,7 @@ const blocos = [
       href={waFinal}
       target="_blank"
       rel="noopener"
-      class="mt-8 inline-block rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-[#1ebe57]"
+      class="mt-8 inline-block rounded-full bg-zap px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:scale-105 hover:bg-zap-escuro"
     >
       Consultar disponibilidade
     </a>

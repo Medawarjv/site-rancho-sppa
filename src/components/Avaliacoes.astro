@@ -35,7 +35,7 @@ const corDe = (nome: string) => {
       <h2 class="font-titulo text-3xl font-semibold text-mata-escura sm:text-4xl">
         Histórias de quem ama voltar
       </h2>
-      <p class="mt-4 flex flex-wrap items-center justify-center gap-2 text-tinta/70">
+      <p class="mt-4 flex flex-wrap items-center justify-center gap-2 text-tinta/80">
         <span class="text-2xl font-semibold text-mel">{resumo.nota}</span>
         <span class="flex text-mel" aria-hidden="true">
           {estrelas.map(() => <Icon name="star" class="h-5 w-5" />)}
@@ -48,7 +48,7 @@ const corDe = (nome: string) => {
       {
         lista.map((a) => (
           <figure class="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-terra/10">
-            <div class="mb-3 flex text-mel" aria-label="5 de 5 estrelas">
+            <div class="mb-3 flex text-mel" role="img" aria-label="5 de 5 estrelas">
               {estrelas.map(() => <Icon name="star" class="h-4 w-4" />)}
             </div>
             <blockquote class="flex-1 text-sm leading-relaxed text-mata-escura/80">
