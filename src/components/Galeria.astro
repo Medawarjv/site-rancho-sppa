@@ -11,35 +11,42 @@ const temas = [
 ];
 
 // Legendas por tema/arquivo (aparecem no hover e no lightbox).
+// O comentário indica a foto de origem no acervo (imagens/<pasta>/).
 const legendas: Record<string, string> = {
-  "lazer/01.jpg": "Piscina para refrescar em família",
-  "lazer/02.jpg": "Piscina em dia de sol",
-  "lazer/03.jpg": "Piscina e área de convivência",
-  "lazer/04.jpg": "Deck com piscina",
-  "lazer/05.jpg": "Rede no quiosque para descansar",
-  "lazer/06.jpg": "Espaço de estar ao ar livre",
-  "esportes/01.jpg": "Quadra de areia e playground",
-  "esportes/02.jpg": "Beach tennis em dia de sol",
-  "esportes/03.jpg": "Sala de jogos: sinuca e ping-pong",
-  "esportes/04.jpg": "Playground para a criançada",
-  "esportes/05.jpg": "Beach tennis ao entardecer",
-  "esportes/06.jpg": "Diversão garantida para os pequenos",
-  "natureza/01.jpg": "450 metros de margem na represa",
-  "natureza/02.jpg": "Pôr do sol na represa",
-  "natureza/03.jpg": "Entardecer entre os coqueiros",
-  "natureza/04.jpg": "Caiaques e deck à beira da represa",
-  "natureza/05.jpg": "Cachoeira dentro da propriedade",
-  "quiosque/01.jpg": "Forno de pizza e churrasqueira",
-  "quiosque/02.jpg": "Churrasqueira completa",
-  "quiosque/03.jpg": "Quiosque amplo para reunir todos",
-  "quiosque/04.jpg": "Grande mesa para as refeições",
-  "quiosque/05.jpg": "Quiosque com vista para a piscina",
-  "quiosque/06.jpg": "Fogão a lenha e forno",
-  "acomodacoes/01.jpg": "Suíte com ar-condicionado",
-  "acomodacoes/02.jpg": "Suíte aconchegante",
-  "acomodacoes/03.jpg": "Cama de casal e conforto",
-  "acomodacoes/04.jpg": "Acomodações para até 30 pessoas",
-  "acomodacoes/05.jpg": "Sítio do Pica Pau Amarelo",
+  "lazer/01.jpg": "Piscina aquecida com vista para o quiosque", // lazer/IMG_20260213_143905083_HDR
+  "lazer/02.jpg": "Piscina entre os coqueiros", // lazer/WhatsApp 2026-09-15 13.40.59 (1)
+  "lazer/03.jpg": "Piscina e quiosque em dia de sol", // lazer/IMG-20250305-WA0000
+  "lazer/04.jpg": "Deck da piscina com a represa ao fundo", // lazer/IMG-20250817-WA0010
+  "lazer/05.jpg": "Piscina iluminada à noite", // lazer/IMG-20251116-WA0040
+  "lazer/06.jpg": "Rede no quiosque para descansar", // quiosque/IMG-20250303-WA0000
+  "lazer/07.jpg": "Deck de madeira ao lado da piscina", // lazer/IMG_20251120_084315342
+  "esportes/01.jpg": "Quadra de areia para beach tennis, peteca e vôlei", // lazer/IMG_20260213_092440408
+  "esportes/02.jpg": "Vista geral: quadra, playground e piscina", // lazer/IMG-20250228-WA0049
+  "esportes/03.jpg": "Campo de futebol para reunir a turma", // lazer/WhatsApp 2026-09-15 13.41.03 (3)
+  "esportes/04.jpg": "Playground para a criançada", // lazer/IMG-20251206-WA0025
+  "esportes/05.jpg": "Sinuca ao lado da lareira", // quiosque/WhatsApp 2026-08-23 19.17.59 (4)
+  "esportes/06.jpg": "Quadra ao entardecer", // lazer/WhatsApp 2026-09-15 13.41.05 (1)
+  "natureza/01.jpg": "Vista aérea: 450 metros de margem na represa", // aereas/WhatsApp 2026-09-15 13.47.46 (2)
+  "natureza/02.jpg": "Píer para banho, pesca e barco", // represa/IMG_20240615_142847289_HDR
+  "natureza/03.jpg": "Cachoeira dentro da propriedade", // natureza/IMG_20260213_143132061_HDR
+  "natureza/04.jpg": "Pôr do sol na represa", // represa/WhatsApp 2026-08-23 19.21.30
+  "natureza/05.jpg": "Primaveras floridas com a quadra ao fundo", // natureza/IMG_20260213_093139583_HDR
+  "natureza/06.jpg": "Caiaque e stand-up na represa", // represa/WhatsApp 2026-08-23 19.17.54 (2)
+  "natureza/07.jpg": "Seriema, visita frequente no rancho", // natureza/IMG-20250817-WA0022
+  "natureza/08.jpg": "Ipê florido no campo", // natureza/IMG-20250912-WA0019
+  "quiosque/01.jpg": "Churrasqueira e forno de pizza", // quiosque/IMG-20251206-WA0030
+  "quiosque/02.jpg": "Quiosque amplo com vista para a área de lazer", // quiosque/IMG_20260213_080350033_HDR
+  "quiosque/03.jpg": "Sofás para descansar no quiosque", // quiosque/IMG-20251206-WA0011
+  "quiosque/04.jpg": "Forno a lenha", // quiosque/IMG-20260218-WA0019
+  "quiosque/05.jpg": "Quiosque iluminado à noite", // quiosque/WhatsApp 2026-08-23 19.18.01 (1)
+  "quiosque/06.jpg": "Salão com cozinha e mesas para as refeições", // quiosque/WhatsApp 2026-09-15 13.41.06
+  "acomodacoes/01.jpg": "Suíte com cama de casal e ar-condicionado", // acomodacoes/IMG_20260213_092636444_HDR
+  "acomodacoes/02.jpg": "Suíte com camas de solteiro", // acomodacoes/IMG_20260213_092601147_HDR
+  "acomodacoes/03.jpg": "Sala do chalé com mesa de refeições", // acomodacoes/IMG_20260213_092724977_HDR
+  "acomodacoes/04.jpg": "Sala de estar do chalé", // acomodacoes/IMG_20260213_092918430_HDR
+  "acomodacoes/05.jpg": "Banheiro da suíte", // acomodacoes/IMG_20260213_092751162
+  "acomodacoes/06.jpg": "Cozinha equipada", // acomodacoes/WhatsApp 2026-08-23 19.17.53 (1)
+  "acomodacoes/07.jpg": "Chalés entre os coqueiros", // fachadas/IMG-20260218-WA0020
 };
 
 const modules = import.meta.glob<{ default: ImageMetadata }>(
