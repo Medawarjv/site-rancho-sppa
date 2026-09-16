@@ -24,7 +24,9 @@ const ogImagem = new URL(imagem, Astro.site).href;
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover: no iPhone a página desenha por baixo da barra de status
+         e do "notch"; os elementos fixos usam env(safe-area-inset-*) pra não ficar embaixo. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Tipografia: Fraunces (títulos) + Inter (corpo) + Bebas Neue (só a marca) -->
