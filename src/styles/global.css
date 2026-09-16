@@ -6,6 +6,8 @@
   /* Fontes */
   --font-sans: "Inter", system-ui, sans-serif;
   --font-titulo: "Fraunces", Georgia, "Times New Roman", serif;
+  /* Só para a marca (wordmark), condensada como no logo oficial */
+  --font-marca: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
 
   /* Verdes (estrutura) */
   --color-mata: #2f5d3a;
