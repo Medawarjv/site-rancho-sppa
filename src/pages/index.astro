@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import site from "../data/site.json";
 import heroImg from "../assets/hero.jpg";
+import logoImg from "../assets/logo.png";
 import piscinaImg from "../assets/bloco-piscina.jpg";
 import quiosqueImg from "../assets/bloco-quiosque.jpg";
 import acomodacoesImg from "../assets/bloco-acomodacoes.jpg";
@@ -95,7 +96,7 @@ const blocos = [
     alt: "Quiosque com churrasqueira e forno de pizza",
     titulo: "Quiosque & churrasqueira",
     texto:
-      "Quiosque com churrasqueira, fogão a lenha e forno de pizza — o ponto de encontro para reunir a família toda.",
+      "Quiosque com churrasqueira, fogão a lenha e forno de pizza, o ponto de encontro para reunir a família toda.",
   },
   {
     img: acomodacoesImg,
@@ -148,6 +149,16 @@ const blocos = [
     />
     <!-- scrim de baixo pra cima (mais escuro onde fica o texto) -->
     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5"></div>
+
+    <!-- Logo do rancho (marca) -->
+    <Image
+      src={logoImg}
+      alt="Logo do Rancho SPPA: pica-pau amarelo com o nome Rancho SPPA, desde 2001"
+      class="absolute left-5 top-5 z-20 h-24 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:left-8 sm:top-7 sm:h-32 lg:h-40"
+      widths={[150, 300]}
+      sizes="160px"
+      loading="eager"
+    />
 
     <div class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-14 sm:pb-20">
       <div class="max-w-2xl text-white">
