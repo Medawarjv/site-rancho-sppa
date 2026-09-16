@@ -1,6 +1,7 @@
 ---
 import site from "../data/site.json";
 import TituloSecao from "./TituloSecao.astro";
+import Icon from "./Icon.astro";
 ---
 
 <section id="disponibilidade" class="bg-areia py-14 sm:py-20">
@@ -8,13 +9,13 @@ import TituloSecao from "./TituloSecao.astro";
   <TituloSecao
     kicker="Agenda"
     titulo="Consulte a disponibilidade"
-    sub="Datas ocupadas atualizadas pela nossa equipe. A confirmação é sempre pelo WhatsApp."
+    sub="Toque no dia de chegada e depois no dia de saída. A gente confirma tudo pelo WhatsApp."
   />
 
   <!-- Legenda -->
   <div
     id="calendario-legenda"
-    class="mb-8 hidden items-center justify-center gap-6 text-sm text-terra"
+    class="mb-8 hidden flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-terra"
   >
     <span class="flex items-center gap-2">
       <span class="inline-block h-4 w-4 rounded bg-mata/15 ring-1 ring-mata/30"></span>
@@ -23,6 +24,10 @@ import TituloSecao from "./TituloSecao.astro";
     <span class="flex items-center gap-2">
       <span class="inline-block h-4 w-4 rounded bg-stone-300"></span>
       Ocupado
+    </span>
+    <span class="flex items-center gap-2">
+      <span class="inline-block h-4 w-4 rounded bg-mata"></span>
+      Sua seleção
     </span>
   </div>
 
@@ -56,6 +61,41 @@ import TituloSecao from "./TituloSecao.astro";
     </a>
   </div>
   </div>
+
+  <!-- Barra da seleção: flutua no rodapé enquanto a pessoa escolhe as datas.
+       No mobile fica acima do botão flutuante do WhatsApp. -->
+  <div
+    id="sel-bar"
+    class="pointer-events-none fixed inset-x-0 bottom-20 z-40 hidden px-4 sm:bottom-6"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="pointer-events-auto mx-auto flex max-w-lg flex-col gap-3 rounded-2xl bg-mata-escura p-4 text-areia shadow-[0_18px_40px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-4">
+      <div class="min-w-0 flex-1">
+        <p id="sel-texto" class="font-medium leading-snug"></p>
+        <p id="sel-nota" class="mt-0.5 text-xs text-areia/70"></p>
+      </div>
+      <div class="flex shrink-0 items-center gap-2">
+        <button
+          id="sel-limpar"
+          type="button"
+          class="rounded-full px-3 py-2 text-sm text-areia/80 underline-offset-2 hover:underline"
+        >
+          Limpar
+        </button>
+        <a
+          id="sel-wa"
+          href="#"
+          target="_blank"
+          rel="noopener"
+          class="hidden items-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#1ebe57]"
+        >
+          <Icon name="whatsapp" class="h-4 w-4" />
+          Pedir no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -63,15 +103,28 @@ import TituloSecao from "./TituloSecao.astro";
   const loading = document.getElementById("calendario-loading")!;
   const legenda = document.getElementById("calendario-legenda")!;
   const fallback = document.getElementById("calendario-fallback")!;
+  const bar = document.getElementById("sel-bar")!;
+  const selTexto = document.getElementById("sel-texto")!;
+  const selNota = document.getElementById("sel-nota")!;
+  const selWa = document.getElementById("sel-wa") as HTMLAnchorElement;
+  const selLimpar = document.getElementById("sel-limpar")!;
   const whatsapp = wrap.dataset.whatsapp ?? "";
 
   const MESES_A_MOSTRAR = 6;
   const NOMES_DIAS = ["D", "S", "T", "Q", "Q", "S", "S"];
   const pad = (n: number) => String(n).padStart(2, "0");
   const chave = (a: number, m: number, d: number) => `${a}-${pad(m + 1)}-${pad(d)}`;
+  const br = (k: string) => k.split("-").reverse().join("/");
+  const diasEntre = (a: string, b: string) =>
+    Math.round((Date.parse(b) - Date.parse(a)) / 86400000);
 
-  function linkWhatsApp(dataBr: string) {
-    const msg = `Olá! Quero consultar a disponibilidade do Rancho SPPA para o dia ${dataBr}.`;
+  // Estado da seleção
+  let ocupados = new Set<string>();
+  const botoes = new Map<string, HTMLButtonElement>(); // "YYYY-MM-DD" → botão do dia
+  let selIn: string | null = null;
+  let selOut: string | null = null;
+
+  function waLink(msg: string) {
     return `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -81,18 +134,105 @@ import TituloSecao from "./TituloSecao.astro";
     legenda.classList.add("hidden");
     fallback.classList.remove("hidden");
     const a = document.getElementById("calendario-fallback-wa") as HTMLAnchorElement;
-    const msg = "Olá! Vim pelo site e quero consultar a disponibilidade do Rancho SPPA.";
-    a.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
+    a.href = waLink("Olá! Vim pelo site e quero consultar a disponibilidade do Rancho SPPA.");
   }
 
-  function renderMeses(ocupados: Set<string>) {
+  // --- Seleção de período -------------------------------------------------
+
+  /** Há algum dia ocupado entre a e b (inclusive)? */
+  function cruzaOcupado(a: string, b: string) {
+    const d = new Date(a + "T12:00:00");
+    const fim = Date.parse(b + "T12:00:00");
+    while (d.getTime() <= fim) {
+      if (ocupados.has(d.toISOString().slice(0, 10))) return true;
+      d.setDate(d.getDate() + 1);
+    }
+    return false;
+  }
+
+  function clicarDia(k: string) {
+    if (!selIn || selOut) {
+      // começa (ou recomeça) uma seleção
+      selIn = k;
+      selOut = null;
+    } else if (k < selIn) {
+      // clicou antes do check-in: vira o novo check-in
+      selIn = k;
+    } else if (cruzaOcupado(selIn, k)) {
+      // período passa por dia ocupado: recomeça daqui e avisa
+      selIn = k;
+      selOut = null;
+      render();
+      selNota.textContent = "Esse período passa por um dia ocupado. Comecei de novo a partir do dia escolhido.";
+      return;
+    } else {
+      selOut = k;
+    }
+    render();
+  }
+
+  function limpar() {
+    selIn = selOut = null;
+    render();
+  }
+
+  const CLS_BASE = "flex h-9 items-center justify-center rounded text-sm transition";
+  const CLS_LIVRE = `${CLS_BASE} bg-mata/10 font-medium text-mata ring-1 ring-mata/20 hover:bg-mata hover:text-white`;
+  const CLS_PONTA = `${CLS_BASE} bg-mata font-semibold text-white ring-1 ring-mata`;
+  const CLS_MEIO = `${CLS_BASE} bg-mata/30 font-medium text-mata-escura`;
+
+  function render() {
+    botoes.forEach((b, k) => {
+      const ponta = k === selIn || k === selOut;
+      const meio = !!selIn && !!selOut && k > selIn && k < selOut;
+      b.className = ponta ? CLS_PONTA : meio ? CLS_MEIO : CLS_LIVRE;
+      b.setAttribute("aria-pressed", ponta ? "true" : "false");
+    });
+
+    if (!selIn) {
+      bar.classList.add("hidden");
+      return;
+    }
+    bar.classList.remove("hidden");
+
+    if (!selOut) {
+      selTexto.textContent = `Chegada ${br(selIn)}`;
+      selNota.textContent = "Agora toque no dia de saída (ou no mesmo dia, para day use).";
+      selWa.classList.add("hidden");
+      selWa.classList.remove("inline-flex");
+      return;
+    }
+
+    const n = diasEntre(selIn, selOut);
+    let msg: string;
+    if (n === 0) {
+      selTexto.textContent = `Day use em ${br(selIn)}`;
+      selNota.textContent = "Passar o dia, até o pôr do sol.";
+      msg = `Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para day use no dia ${br(selIn)}.`;
+    } else {
+      const diarias = n === 1 ? "1 diária" : `${n} diárias`;
+      selTexto.textContent = `${br(selIn)} a ${br(selOut)} · ${diarias}`;
+      selNota.textContent =
+        n === 1 ? "Para pernoite o mínimo é de 2 diárias, mas pode perguntar." : "Vamos confirmar e passar os valores no WhatsApp.";
+      msg = `Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade de ${br(selIn)} (chegada) a ${br(selOut)} (saída), ${diarias}.`;
+    }
+    selWa.href = waLink(msg);
+    selWa.classList.remove("hidden");
+    selWa.classList.add("inline-flex");
+  }
+
+  selLimpar.addEventListener("click", limpar);
+
+  // --- Grade de meses ------------------------------------------------------
+
+  function renderMeses() {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
     const base = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
 
     for (let i = 0; i < MESES_A_MOSTRAR; i++) {
       const mes = new Date(base.getFullYear(), base.getMonth() + i, 1);
-      wrap.appendChild(montarMes(mes, hoje, ocupados));
+      wrap.appendChild(montarMes(mes, hoje));
     }
 
     loading.classList.add("hidden");
@@ -101,7 +241,7 @@ import TituloSecao from "./TituloSecao.astro";
     wrap.classList.remove("hidden");
   }
 
-  function montarMes(mes: Date, hoje: Date, ocupados: Set<string>) {
+  function montarMes(mes: Date, hoje: Date) {
     const ano = mes.getFullYear();
     const m = mes.getMonth();
     const primeiroDiaSemana = new Date(ano, m, 1).getDay();
@@ -111,10 +251,7 @@ import TituloSecao from "./TituloSecao.astro";
 
     const titulo = document.createElement("h3");
     titulo.className = "mb-3 text-center font-semibold capitalize text-mata";
-    titulo.textContent = mes.toLocaleDateString("pt-BR", {
-      month: "long",
-      year: "numeric",
-    });
+    titulo.textContent = mes.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
     card.appendChild(titulo);
 
     const grade = document.createElement("div");
@@ -134,33 +271,29 @@ import TituloSecao from "./TituloSecao.astro";
     for (let dia = 1; dia <= totalDias; dia++) {
       const data = new Date(ano, m, dia);
       const k = chave(ano, m, dia);
-      const passado = data < hoje;
-      const ocupado = ocupados.has(k);
 
-      const base =
-        "flex h-9 items-center justify-center rounded text-sm transition";
-
-      if (passado) {
+      if (data < hoje) {
         const cel = document.createElement("div");
-        cel.className = `${base} text-stone-300`;
+        cel.className = `${CLS_BASE} text-stone-300`;
         cel.textContent = String(dia);
         grade.appendChild(cel);
-      } else if (ocupado) {
+      } else if (ocupados.has(k)) {
         const cel = document.createElement("div");
-        cel.className = `${base} bg-stone-300 text-stone-500`;
+        cel.className = `${CLS_BASE} bg-stone-300 text-stone-500`;
         cel.textContent = String(dia);
         cel.setAttribute("aria-label", `Dia ${dia}: ocupado`);
         grade.appendChild(cel);
       } else {
-        const dataBr = `${pad(dia)}/${pad(m + 1)}/${ano}`;
-        const a = document.createElement("a");
-        a.href = linkWhatsApp(dataBr);
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.className = `${base} bg-mata/10 font-medium text-mata ring-1 ring-mata/20 hover:bg-mata hover:text-white`;
-        a.textContent = String(dia);
-        a.setAttribute("aria-label", `Dia ${dia}: disponível, consultar no WhatsApp`);
-        grade.appendChild(a);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = CLS_LIVRE;
+        b.textContent = String(dia);
+        b.dataset.dia = k;
+        b.setAttribute("aria-label", `Dia ${br(k)}: disponível, selecionar`);
+        b.setAttribute("aria-pressed", "false");
+        b.addEventListener("click", () => clicarDia(k));
+        botoes.set(k, b);
+        grade.appendChild(b);
       }
     }
 
@@ -177,7 +310,8 @@ import TituloSecao from "./TituloSecao.astro";
         mostrarFallback();
         return;
       }
-      renderMeses(new Set<string>(data.ocupados));
+      ocupados = new Set<string>(data.ocupados);
+      renderMeses();
     })
     .catch(() => mostrarFallback());
 </script>
