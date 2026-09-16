@@ -5,101 +5,130 @@ import Icon from "./Icon.astro";
 import TituloSecao from "./TituloSecao.astro";
 import bannerImg from "../assets/comodidades.jpg";
 
-const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Quero saber sobre as comodidades e os serviços parceiros para a minha estadia no Rancho SPPA.")}`;
+const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Quero montar minha estadia no Rancho SPPA (comodidades e/ou parceiros). Pode me ajudar?")}`;
 
-// Itens que o próprio rancho oferece para deixar a estadia mais completa.
+// GRUPO 1 — itens que o próprio rancho oferece (checklist).
 const comodidades = [
-  { icone: "bed", titulo: "Cama, mesa e banho", texto: "Mais conforto e praticidade, sem precisar levar de casa." },
-  { icone: "wine", titulo: "Taças", texto: "Tudo pronto para os seus brindes e momentos especiais." },
-  { icone: "utensils", titulo: "Travessas", texto: "Mais praticidade para servir as refeições e confraternizações." },
-  { icone: "check", titulo: "Tábuas", texto: "Perfeitas para servir petiscos, frios e compartilhar bons momentos." },
-  { icone: "wine", titulo: "Adega", texto: "Para manter suas bebidas na temperatura ideal." },
+  { icone: "bed", titulo: "Cama, mesa e banho", texto: "Enxoval completo, sem precisar levar de casa." },
+  { icone: "wine", titulo: "Taças", texto: "Tudo pronto para os seus brindes." },
+  { icone: "utensils", titulo: "Travessas", texto: "Louça de servir para a mesa farta." },
+  { icone: "check", titulo: "Tábuas", texto: "Para petiscos, frios e bons momentos." },
+  { icone: "wine", titulo: "Adega", texto: "Suas bebidas na temperatura ideal." },
 ];
 
-// Serviços indicados por parceiros independentes (sem vínculo com o rancho).
+// GRUPO 2 — parceiros independentes indicados pela casa (curadoria).
 const parceiros = [
-  { icone: "check", titulo: "Padaria", texto: "Indicações para um café da manhã mais prático e completo." },
-  { icone: "sparkles", titulo: "Bolos e doces", texto: "Opções para aniversários e comemorações especiais." },
-  { icone: "utensils", titulo: "Chef particular", texto: "Profissionais para uma experiência gastronômica na estadia." },
-  { icone: "car", titulo: "Transporte", texto: "Indicações para facilitar a chegada e o deslocamento do grupo." },
-  { icone: "anchor", titulo: "Lancha e flutuante", texto: "Contatos para aproveitar ainda mais a Represa de Miranda." },
+  { icone: "coffee", titulo: "Padaria", texto: "Café da manhã prático e completo, entregue no rancho." },
+  { icone: "sparkles", titulo: "Bolos e doces", texto: "Para aniversários e comemorações especiais." },
+  { icone: "utensils", titulo: "Chef particular", texto: "Um jantar preparado na cozinha do rancho." },
+  { icone: "car", titulo: "Transporte", texto: "Para a chegada e o deslocamento do seu grupo." },
+  { icone: "anchor", titulo: "Lancha e flutuante", texto: "Para aproveitar ainda mais a Represa de Miranda." },
 ];
 ---
 
-<section id="comodidades" class="bg-white py-14 sm:py-20">
-  <div class="mx-auto max-w-6xl px-6">
+<section id="comodidades" class="bg-white py-16 sm:py-24">
+  <div class="mx-auto max-w-5xl px-6">
     <TituloSecao
       kicker="Monte sua experiência"
       titulo="Deixe sua estadia ainda mais completa"
-      sub="Comodidades do rancho e contatos de parceiros para o que você precisar. Tudo combinado com a gente pelo WhatsApp."
+      sub="Escolha o que faz sentido pra você — a gente organiza o resto no WhatsApp."
     />
 
-    <!-- Banner visual da seção -->
-    <div class="relative mb-12 overflow-hidden rounded-2xl shadow-[0_18px_40px_-18px_rgba(30,63,39,0.35)] ring-1 ring-terra/10">
-      <Image
-        src={bannerImg}
-        alt="Área de estar aconchegante no quiosque do Rancho SPPA"
-        class="h-52 w-full object-cover object-center sm:h-72"
-        widths={[768, 1280]}
-        sizes="(min-width: 1152px) 1088px, 100vw"
-        loading="lazy"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-mata-escura/70 to-transparent"></div>
-      <p class="absolute bottom-5 left-6 max-w-md font-titulo text-xl font-medium text-white drop-shadow sm:text-2xl">
-        Conforto de casa, no meio da natureza.
+    <!-- GRUPO 1: Do rancho (checklist, acento dourado) -->
+    <div class="rounded-2xl border-l-2 border-mel bg-areia/60 p-6 sm:p-8">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="font-titulo text-2xl text-mel">01</span>
+        <div class="flex-1">
+          <h3 class="font-titulo text-xl font-semibold text-mata-escura">
+            Do <em>rancho</em>
+          </h3>
+          <p class="text-sm text-tinta/60">comodidades que a casa oferece pra você</p>
+        </div>
+        <span class="hidden shrink-0 items-center gap-1 rounded-full bg-mel/10 px-3 py-1 text-xs font-medium text-mel ring-1 ring-mel/25 sm:inline-flex">
+          <Icon name="check" class="h-3.5 w-3.5" /> do rancho
+        </span>
+      </div>
+      <ul class="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+        {
+          comodidades.map((c) => (
+            <li class="group flex items-start gap-3 rounded-lg px-2 py-2.5 transition hover:bg-mel/5">
+              <Icon name={c.icone} class="mt-0.5 h-5 w-5 shrink-0 text-mel" />
+              <div>
+                <span class="font-medium text-mata-escura">{c.titulo}</span>
+                <p class="text-sm leading-relaxed text-tinta/60">{c.texto}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Divisor decorativo -->
+    <div class="my-10 flex items-center justify-center gap-4 text-terra/25">
+      <span class="h-px w-16 bg-current"></span>
+      <Icon name="leaf" class="h-5 w-5 text-mel/70" />
+      <span class="h-px w-16 bg-current"></span>
+    </div>
+
+    <!-- GRUPO 2: Indicados pela casa (cards, acento verde) -->
+    <div class="rounded-2xl border-l-2 border-mata bg-mata/[0.04] p-6 sm:p-8">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="font-titulo text-2xl text-mata">02</span>
+        <div>
+          <h3 class="font-titulo text-xl font-semibold text-mata-escura">
+            <em>Indicados</em> pela casa
+          </h3>
+          <p class="text-sm text-tinta/60">parceiros de confiança, à sua disposição</p>
+        </div>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          parceiros.map((p) => (
+            <li class="group relative rounded-2xl bg-white p-5 shadow-[0_2px_20px_-8px_rgba(120,90,40,0.25)] ring-1 ring-terra/10 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_rgba(30,63,39,0.3)]">
+              <span class="absolute right-3 top-3 rounded-full bg-mata/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-mata">
+                indicado
+              </span>
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-mata/10 text-mata transition group-hover:bg-mata group-hover:text-areia">
+                <Icon name={p.icone} class="h-5 w-5" />
+              </span>
+              <h4 class="mt-3 font-semibold text-mata-escura">{p.titulo}</h4>
+              <p class="mt-1 text-sm leading-relaxed text-tinta/60">{p.texto}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-5 font-titulo text-xs italic text-tinta/50">
+        Serviços independentes — indicamos porque confiamos, sem cobrança nem
+        comissão.
       </p>
     </div>
 
-    <!-- Comodidades do rancho -->
-    <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-terra/70">
-      Comodidades do rancho
-    </h3>
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        comodidades.map((c) => (
-          <li class="flex items-start gap-3 rounded-xl bg-areia p-4 ring-1 ring-terra/10">
-            <Icon name={c.icone} class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
-            <div>
-              <span class="font-semibold text-mata">{c.titulo}</span>
-              <p class="mt-0.5 text-sm text-terra">{c.texto}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-
-    <!-- Parceiros -->
-    <h3 class="mb-4 mt-10 text-sm font-semibold uppercase tracking-wide text-terra/70">
-      Precisa de algo a mais? Indicamos parceiros
-    </h3>
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        parceiros.map((p) => (
-          <li class="flex items-start gap-3 rounded-xl bg-areia p-4 ring-1 ring-terra/10">
-            <Icon name={p.icone} class="mt-0.5 h-5 w-5 shrink-0 text-agua" />
-            <div>
-              <span class="font-semibold text-mata">{p.titulo}</span>
-              <p class="mt-0.5 text-sm text-terra">{p.texto}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-
-    <p class="mt-6 text-xs text-terra/60">
-      Os serviços de parceiros são prestados por profissionais e empresas
-      independentes, sem vínculo com o Sítio do Pica Pau Amarelo.
-    </p>
-
-    <div class="mt-8 text-center">
-      <a
-        href={waHref}
-        target="_blank"
-        rel="noopener"
-        class="inline-block rounded-full bg-mata px-7 py-3 font-semibold text-areia shadow-md transition hover:scale-105"
-      >
-        Pedir indicações no WhatsApp
-      </a>
+    <!-- Banner + CTA fechando a seção -->
+    <div class="relative mt-10 overflow-hidden rounded-2xl shadow-[0_18px_40px_-18px_rgba(30,63,39,0.35)]">
+      <Image
+        src={bannerImg}
+        alt="Área de estar aconchegante no quiosque do Rancho SPPA"
+        class="h-64 w-full object-cover sm:h-72"
+        widths={[768, 1280]}
+        sizes="(min-width: 1088px) 1024px, 100vw"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-mata-escura/65"></div>
+      <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
+        <p class="font-titulo text-xl font-medium drop-shadow sm:text-2xl">
+          Conforto de casa, no meio da natureza.
+        </p>
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener"
+          class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-3.5 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#1ebe57]"
+        >
+          Montar minha estadia no WhatsApp
+        </a>
+      </div>
     </div>
   </div>
 </section>
