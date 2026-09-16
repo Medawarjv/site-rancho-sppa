@@ -33,13 +33,19 @@ const waFinal = wa(
 const schema = {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
+  "@id": "https://sppa.com.br/#lodging",
   name: site.nome,
   alternateName: site.nomeCompleto,
   description:
-    "Rancho para aluguel por temporada às margens da Represa de Miranda, em Indianópolis-MG, a cerca de 1 hora de Uberlândia.",
+    "Rancho para aluguel por temporada às margens da Represa de Miranda, em Indianópolis-MG, a cerca de 1 hora de Uberlândia. Piscina aquecida, 10 suítes para até 30 pessoas, quiosque com churrasqueira, esportes e natureza.",
   url: "https://sppa.com.br",
-  image: "https://sppa.com.br/og.jpg",
+  image: ["https://sppa.com.br/og.jpg"],
   telephone: `+${site.whatsapp}`,
+  hasMap: site.mapsLink,
+  numberOfRooms: 10,
+  petsAllowed: true,
+  paymentAccepted: "PIX, Dinheiro",
+  areaServed: ["Indianópolis", "Uberlândia", "Triângulo Mineiro"],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Indianópolis",
@@ -59,18 +65,20 @@ const schema = {
     bestRating: "5",
   },
   amenityFeature: [
-    "Piscina aquecida",
-    "Churrasqueira e forno de pizza",
+    "Piscina aquecida por energia solar",
+    "Quiosque com churrasqueira e forno de pizza",
+    "10 suítes com ar-condicionado",
     "Wi-Fi",
-    "Acesso à represa e píer",
+    "Acesso à Represa de Miranda com píer",
     "Quadra de beach tennis",
+    "Trilhas e cachoeiras",
     "Pet friendly",
   ].map((nome) => ({
     "@type": "LocationFeatureSpecification",
     name: nome,
     value: true,
   })),
-  sameAs: [site.mapsLink],
+  sameAs: [site.mapsLink].filter(Boolean),
 };
 
 // Os 6 blocos do rancho (escopo §4.2). Texto adaptado do material aprovado.

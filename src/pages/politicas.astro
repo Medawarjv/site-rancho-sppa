@@ -4,6 +4,15 @@ import site from "../data/site.json";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi as políticas do site do Rancho SPPA e tenho uma dúvida.")}`;
 
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Início", item: "https://sppa.com.br/" },
+    { "@type": "ListItem", position: 2, name: "Políticas e regras", item: "https://sppa.com.br/politicas/" },
+  ],
+};
+
 const secoes = [
   {
     titulo: "Reserva e pagamento",
@@ -56,6 +65,8 @@ const secoes = [
   titulo={`Políticas e regras — ${site.nome}`}
   descricao="Regras de reserva, pagamento, cancelamento, horários, pets e segurança do Rancho SPPA."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
+
   <main class="mx-auto max-w-3xl px-6 py-16 sm:py-24">
     <a href="/" class="text-sm font-medium text-agua hover:text-mata">← Voltar ao site</a>
 

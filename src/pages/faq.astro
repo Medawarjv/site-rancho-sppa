@@ -14,6 +14,15 @@ const schema = {
     acceptedAnswer: { "@type": "Answer", text: item.r },
   })),
 };
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Início", item: "https://sppa.com.br/" },
+    { "@type": "ListItem", position: 2, name: "Perguntas frequentes", item: "https://sppa.com.br/faq/" },
+  ],
+};
 ---
 
 <Layout
@@ -21,6 +30,7 @@ const schema = {
   descricao="Tire suas dúvidas sobre o Rancho SPPA: valores, reservas, cancelamento, horários, o que está incluso, pets e como chegar."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
 
   <main class="mx-auto max-w-3xl px-6 py-16 sm:py-24">
     <a href="/" class="text-sm font-medium text-agua hover:text-mata">← Voltar ao site</a>

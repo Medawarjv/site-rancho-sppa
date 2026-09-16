@@ -10,8 +10,8 @@ interface Props {
 }
 
 const {
-  titulo = `${site.nome} — Aluguel por temporada em Indianópolis-MG`,
-  descricao = "Rancho para aluguel por temporada às margens da Represa de Miranda, a ~1h de Uberlândia. Piscina aquecida, 10 suítes, natureza e represa.",
+  titulo = `${site.nome} — Aluguel por temporada · Represa de Miranda, MG`,
+  descricao = "Rancho para aluguel por temporada às margens da Represa de Miranda, em Indianópolis-MG, a ~1h de Uberlândia. Piscina aquecida, 10 suítes até 30 pessoas, quiosque, esportes e natureza.",
   imagem = "/og.jpg",
 } = Astro.props;
 
@@ -45,6 +45,9 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImagem} />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:alt" content="Área de lazer do Rancho SPPA à beira da Represa de Miranda" />
     <meta property="og:site_name" content={site.nome} />
     <meta property="og:locale" content="pt_BR" />
 
