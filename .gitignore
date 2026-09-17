@@ -20,3 +20,6 @@ Thumbs.db
 # acervo bruto de fotos (250 MB): fica só no PC, o site usa src/assets/
 imagens/
 Imagens/
+
+# material de VENDA do rancho (preço, matrícula): nunca versionar — repo é público
+FICHA_*.pdf
