@@ -4,7 +4,7 @@ import site from "../data/site.json";
 import WhatsAppFloat from "../components/WhatsAppFloat.astro";
 import Icon from "../components/Icon.astro";
 // Pré-carrega as duas fontes que aparecem acima da dobra (título e corpo).
-import fonteTituloUrl from "@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url";
+import fonteTituloUrl from "@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2?url";
 import fonteCorpoUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 
 interface Props {
@@ -32,7 +32,7 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Tipografia: Fraunces (títulos) + Inter (corpo) + Bebas Neue (só a marca),
+    <!-- Tipografia: Playfair Display (títulos) + Inter (corpo) + Bebas Neue (só a marca),
          hospedadas no próprio site (ver global.css). Preload das duas principais. -->
     <link rel="preload" href={fonteTituloUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={fonteCorpoUrl} as="font" type="font/woff2" crossorigin />
