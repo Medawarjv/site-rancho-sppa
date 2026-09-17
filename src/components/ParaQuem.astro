@@ -1,0 +1,84 @@
+---
+// "Para quem é": ajuda quem está decidindo a se enxergar no rancho.
+// Cada card manda uma mensagem contextual pro WhatsApp.
+import { Image } from "astro:assets";
+import site from "../data/site.json";
+import TituloSecao from "./TituloSecao.astro";
+import familiaImg from "../assets/perfil-familia.jpg";
+import festaImg from "../assets/perfil-festa.jpg";
+import amigosImg from "../assets/perfil-amigos.jpg";
+
+const wa = (msg: string) => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
+
+const perfis = [
+  {
+    img: familiaImg,
+    alt: "Playground e quadra de areia do rancho em dia de sol",
+    titulo: "Família grande",
+    texto:
+      "10 suítes, piscina aquecida e playground: cabe todo mundo, dos avós às crianças, com espaço pra cada um ter o seu canto.",
+    cta: "Quero levar a família",
+    msg: "Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para uma viagem em família.",
+  },
+  {
+    img: festaImg,
+    alt: "Quiosque do rancho iluminado à noite",
+    titulo: "Aniversários e confraternizações",
+    texto:
+      "Quiosque com churrasqueira e forno de pizza, salão com mesas e som até as 22h. Bolo, chef e padaria a gente indica.",
+    cta: "Quero comemorar aqui",
+    msg: "Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para uma comemoração.",
+  },
+  {
+    img: amigosImg,
+    alt: "Píer do rancho na Represa de Miranda",
+    titulo: "Amigos e pescaria",
+    texto:
+      "450 m de represa com píer e tablado de pesca, redutor pra lancha e jet ski. Sinuca e fogueira pra fechar a noite.",
+    cta: "Quero vir com os amigos",
+    msg: "Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para um fim de semana com amigos.",
+  },
+];
+---
+
+<section id="para-quem" class="bg-white py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-6">
+    <TituloSecao
+      kicker="Para quem é"
+      titulo="Feito para reunir"
+      sub="Cada grupo aproveita o rancho de um jeito. Conta pra gente qual é o seu que a Lorena monta a estadia."
+    />
+
+    <div class="grid gap-6 sm:grid-cols-3">
+      {
+        perfis.map((p) => (
+          <article class="group flex flex-col overflow-hidden rounded-2xl bg-areia ring-1 ring-terra/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-18px_rgba(30,63,39,0.35)]">
+            <div class="overflow-hidden">
+              <Image
+                src={p.img}
+                alt={p.alt}
+                class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
+                widths={[400, 640, 800]}
+                sizes="(min-width: 1088px) 352px, (min-width: 640px) 33vw, 100vw"
+                loading="lazy"
+              />
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="font-titulo text-xl font-semibold text-mata-escura">{p.titulo}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-tinta/80">{p.texto}</p>
+              <a
+                href={wa(p.msg)}
+                target="_blank"
+                rel="noopener"
+                class="mt-5 inline-flex items-center gap-2 self-start rounded-full border border-mata/40 px-4 py-2 text-sm font-semibold text-mata transition hover:bg-mata hover:text-white"
+              >
+                {p.cta}
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

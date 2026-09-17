@@ -16,6 +16,7 @@ import ComoChegar from "../components/ComoChegar.astro";
 import Avaliacoes from "../components/Avaliacoes.astro";
 import Comodidades from "../components/Comodidades.astro";
 import BarraFatos from "../components/BarraFatos.astro";
+import ParaQuem from "../components/ParaQuem.astro";
 import TituloSecao from "../components/TituloSecao.astro";
 import Icon from "../components/Icon.astro";
 import avaliacoes from "../data/avaliacoes.json";
@@ -251,6 +252,9 @@ const blocos = [
   <!-- GALERIA -->
   <Galeria />
 
+  <!-- PARA QUEM É (3 perfis com CTA contextual) -->
+  <ParaQuem />
+
   <!-- DISPONIBILIDADE (calendário via iCal) -->
   <Calendario />
 
@@ -283,6 +287,16 @@ const blocos = [
     >
       Consultar disponibilidade
     </a>
+
+    <!-- Prova social junto do botão final -->
+    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-areia/80">
+      <span class="flex text-dourado" aria-hidden="true">
+        {[0, 1, 2, 3, 4].map(() => <Icon name="star" class="h-4 w-4" />)}
+      </span>
+      <span>
+        <strong class="text-areia">{avaliacoes.resumo.nota}</strong> · {avaliacoes.resumo.total} avaliações no Google
+      </span>
+    </p>
   </section>
 
 </Layout>
