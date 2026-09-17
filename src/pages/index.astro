@@ -149,20 +149,22 @@ const blocos = [
     />
     <!-- scrim de baixo pra cima (mais escuro onde fica o texto) -->
     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5"></div>
+    <!-- scrim do topo: garante fundo escuro atrás da marca (no celular cai nuvem branca ali) -->
+    <div class="absolute inset-x-0 top-0 h-[32%] bg-gradient-to-b from-black/45 to-transparent sm:from-black/30"></div>
 
     <!-- Marca (wordmark tipográfico, mesma estrutura do logo oficial) -->
     <a
       href="/"
       aria-label="Rancho Pica-Pau MG, desde 2001. Voltar ao início"
-      class="absolute inset-x-0 top-[calc(1.25rem+env(safe-area-inset-top))] z-20 mx-auto flex w-fit flex-col items-center drop-shadow-[0_1px_6px_rgba(0,0,0,0.55)] sm:inset-x-auto sm:left-8 sm:top-[calc(1.75rem+env(safe-area-inset-top))] sm:mx-0 sm:items-start"
+      class="absolute inset-x-0 top-[calc(1.25rem+env(safe-area-inset-top))] z-20 mx-auto flex w-fit flex-col items-center [filter:drop-shadow(0_1px_1px_rgba(0,0,0,0.6))_drop-shadow(0_2px_10px_rgba(0,0,0,0.5))] sm:inset-x-auto sm:left-8 sm:top-[calc(1.75rem+env(safe-area-inset-top))] sm:mx-0 sm:items-start"
     >
       <span class="font-marca text-[1.75rem] uppercase leading-none tracking-wide text-white sm:text-4xl lg:text-5xl">
         Rancho <span class="text-dourado">Pica-Pau</span> MG
       </span>
-      <span class="mt-1.5 flex items-center gap-2 text-[9px] font-medium uppercase tracking-[0.35em] text-white/85 sm:text-[11px] lg:text-xs">
-        <span class="h-px flex-1 bg-white/60"></span>
+      <span class="mt-1.5 flex items-center gap-2 self-stretch text-[11px] font-semibold uppercase tracking-[0.35em] text-white sm:font-medium lg:text-xs">
+        <span class="h-px flex-1 bg-white/80"></span>
         Desde 2001
-        <span class="h-px flex-1 bg-white/60"></span>
+        <span class="h-px flex-1 bg-white/80"></span>
       </span>
     </a>
 
