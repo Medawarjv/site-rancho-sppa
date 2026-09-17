@@ -32,7 +32,9 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <!-- viewport-fit=cover: no iPhone a página desenha por baixo da barra de status
          e do "notch"; os elementos fixos usam env(safe-area-inset-*) pra não ficar embaixo. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Tipografia: Playfair Display (títulos) + Inter (corpo) + Bebas Neue (só a marca),
          hospedadas no próprio site (ver global.css). Preload das duas principais. -->
