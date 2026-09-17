@@ -1,0 +1,35 @@
+---
+// "Voltar ao topo" só no celular (a página é longa). Aparece depois de rolar
+// um pouco; fica no canto esquerdo pra não brigar com o botão do WhatsApp.
+import Icon from "./Icon.astro";
+---
+
+<button
+  id="voltar-topo"
+  type="button"
+  aria-label="Voltar ao topo"
+  class="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-5 z-40 flex h-11 w-11 translate-y-4 items-center justify-center rounded-full bg-creme/95 text-mata-escura opacity-0 shadow-lg ring-1 ring-terra/15 backdrop-blur transition duration-300 md:hidden"
+>
+  <Icon name="arrow-up" class="h-5 w-5" />
+</button>
+
+<script>
+  const btn = document.getElementById("voltar-topo")!;
+  let visivel: boolean | null = null; // null = ainda não aplicado
+
+  function checar() {
+    const mostrar = window.scrollY > 600;
+    if (mostrar === visivel) return;
+    visivel = mostrar;
+    btn.classList.toggle("opacity-0", !mostrar);
+    btn.classList.toggle("translate-y-4", !mostrar);
+    btn.classList.toggle("pointer-events-none", !mostrar);
+  }
+  window.addEventListener("scroll", checar, { passive: true });
+  checar();
+
+  btn.addEventListener("click", () => {
+    const suave = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: suave ? "smooth" : "auto" });
+  });
+</script>

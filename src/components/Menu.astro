@@ -1,0 +1,81 @@
+---
+// Menu fixo, só em telas médias pra cima (no celular o botão flutuante do
+// WhatsApp e o "voltar ao topo" já resolvem). Sobre o hero fica transparente;
+// ao rolar (ou em páginas sem hero) ganha fundo claro e mostra a marca.
+import site from "../data/site.json";
+import Icon from "./Icon.astro";
+
+const wa = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade.")}`;
+const links = [
+  { href: "/#rancho", nome: "O rancho" },
+  { href: "/#galeria", nome: "Galeria" },
+  { href: "/#disponibilidade", nome: "Datas" },
+  { href: "/faq", nome: "FAQ" },
+];
+---
+
+<header
+  id="menu"
+  class="pointer-events-none fixed inset-x-0 top-0 z-40 hidden transition-[background-color,box-shadow] duration-300 md:block"
+  data-solido=""
+>
+  <div class="pointer-events-auto mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+    <a
+      href="/"
+      class="menu-marca font-marca text-2xl uppercase leading-none tracking-wide opacity-0 transition-opacity duration-300"
+      aria-label="Rancho Pica-Pau MG, início"
+    >
+      Rancho <span class="text-mel">Pica-Pau</span> MG
+    </a>
+    <nav class="flex items-center gap-1" aria-label="Seções do site">
+      {
+        links.map((l) => (
+          <a href={l.href} class="menu-link rounded-full px-3.5 py-2 text-sm font-medium transition hover:bg-black/5">
+            {l.nome}
+          </a>
+        ))
+      }
+      <a
+        href={wa}
+        target="_blank"
+        rel="noopener"
+        class="ml-2 inline-flex items-center gap-2 rounded-full bg-zap px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-zap-escuro"
+      >
+        <Icon name="whatsapp" class="h-4 w-4" />
+        WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const menu = document.getElementById("menu")!;
+  const temHero = !!document.getElementById("hero");
+
+  const SOLIDO = ["bg-creme/95", "shadow-[0_1px_0_rgba(124,90,60,0.12)]", "backdrop-blur", "text-mata-escura"];
+  const TRANSP = ["text-white", "drop-shadow"];
+
+  function aplicar(solido: boolean) {
+    if (menu.dataset.solido === String(solido)) return;
+    menu.dataset.solido = String(solido);
+    menu.classList.remove(...(solido ? TRANSP : SOLIDO));
+    menu.classList.add(...(solido ? SOLIDO : TRANSP));
+    menu.querySelector(".menu-marca")?.classList.toggle("opacity-0", !solido);
+    menu.querySelectorAll(".menu-link").forEach((a) => {
+      a.classList.toggle("hover:bg-black/5", solido);
+      a.classList.toggle("hover:bg-white/15", !solido);
+    });
+  }
+
+  if (!temHero) {
+    // páginas sem hero (FAQ, políticas, 404): menu sólido desde o início e
+    // folga no topo pra o conteúdo não começar embaixo dele
+    aplicar(true);
+    document.body.classList.add("md:pt-16");
+  } else {
+    // Sem requestAnimationFrame: é pausado em aba sem foco e o handler é barato.
+    const checar = () => aplicar(window.scrollY > 40);
+    window.addEventListener("scroll", checar, { passive: true });
+    checar();
+  }
+</script>

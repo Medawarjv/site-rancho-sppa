@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import site from "../data/site.json";
 import WhatsAppFloat from "../components/WhatsAppFloat.astro";
+import Menu from "../components/Menu.astro";
+import VoltarTopo from "../components/VoltarTopo.astro";
 import Icon from "../components/Icon.astro";
 // Pré-carrega as duas fontes que aparecem acima da dobra (título e corpo).
 import fonteTituloUrl from "@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2?url";
@@ -63,6 +65,7 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="text-mata-escura antialiased">
+    <Menu />
     <slot />
 
     <footer class="bg-mata-escura py-12 text-center text-sm text-areia/70">
@@ -90,5 +93,6 @@ const ogImagem = new URL(imagem, Astro.site).href;
     </footer>
 
     <WhatsAppFloat />
+    <VoltarTopo />
   </body>
 </html>

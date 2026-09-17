@@ -53,6 +53,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Rolagem suave nos links de âncora (menu) e folga pro menu fixo não cobrir
+   o início da seção. Quem pede menos movimento não ganha a animação. */
+html { scroll-behavior: smooth; }
+@media (min-width: 768px) { html { scroll-padding-top: 4.5rem; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 /* Títulos: deixa o navegador usar o eixo óptico quando a fonte tiver */
 .font-titulo {
   font-optical-sizing: auto;
