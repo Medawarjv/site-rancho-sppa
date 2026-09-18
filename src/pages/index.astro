@@ -22,7 +22,7 @@ import Icon from "../components/Icon.astro";
 import avaliacoes from "../data/avaliacoes.json";
 
 // WhatsApp com mensagem contextual por seção (a mensagem NÃO é enviada
-// sozinha — o usuário confirma; só já dá o contexto pra Lorena).
+// sozinha — o usuário confirma; só já dá o contexto pro atendimento).
 const wa = (msg: string) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
 const waHero = wa("Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade.");
@@ -292,7 +292,7 @@ const blocos = [
       Bora marcar a sua data?
     </h2>
     <p class="mx-auto mt-4 max-w-xl text-areia/85">
-      A Lorena responde rapidinho no WhatsApp: tira dúvidas, confirma
+      Nosso atendimento responde rapidinho no WhatsApp: tira dúvidas, confirma
       disponibilidade e passa os valores. Sem compromisso.
     </p>
     <a

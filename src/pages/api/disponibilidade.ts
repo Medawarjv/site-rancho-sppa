@@ -104,7 +104,7 @@ function adicionarDias(dias: Set<string>, dtstart: string, dtend: string, allDay
 
   // Em eventos de dia inteiro o DTEND do iCal é exclusivo (aponta pro dia
   // seguinte ao último). Tiro 1 pra ocupar exatamente os dias que aparecem
-  // na agenda. Regra do rancho: a Lorena marca do check-in ATÉ o check-out,
+  // na agenda. Regra do rancho: o atendimento marca do check-in ATÉ o check-out,
   // então o dia do check-out também fica bloqueado (sem check-in no mesmo dia).
   if (allDay) fim.setUTCDate(fim.getUTCDate() - 1);
   if (fim < inicio) fim = new Date(inicio);

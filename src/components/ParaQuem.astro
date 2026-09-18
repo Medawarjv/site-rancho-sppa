@@ -14,9 +14,9 @@ const perfis = [
   {
     img: familiaImg,
     alt: "Playground e quadra de areia do rancho em dia de sol",
-    titulo: "Família grande",
+    titulo: "Famílias",
     texto:
-      "10 suítes, piscina aquecida e playground: cabe todo mundo, dos avós às crianças, com espaço pra cada um ter o seu canto.",
+      "Crianças na piscina aquecida, no playground e na quadra de areia. Adultos no caiaque, na sinuca ou pescando no píer. No living, a área comum do rancho, todo mundo se encontra. E são 10 suítes pra cada um ter o seu canto.",
     cta: "Quero levar a família",
     msg: "Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para uma viagem em família.",
   },
@@ -43,11 +43,14 @@ const perfis = [
 
 <section id="para-quem" class="bg-white py-16 sm:py-24">
   <div class="mx-auto max-w-6xl px-6">
-    <TituloSecao
-      kicker="Para quem é"
-      titulo="Feito para reunir"
-      sub="Cada grupo aproveita o rancho de um jeito. Conta pra gente qual é o seu que a Lorena monta a estadia."
-    />
+    <TituloSecao kicker="Para quem é" titulo="Feito para reunir">
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-tinta/80">
+        Seja uma família pequena ou um grupo de 30 pessoas,
+        <strong class="font-semibold text-mata-escura">o rancho inteiro fica exclusivo para vocês</strong>,
+        sem dividir nada com outros hóspedes. Conta pra gente como é o seu grupo
+        que montamos a estadia.
+      </p>
+    </TituloSecao>
 
     <div class="grid gap-6 sm:grid-cols-3">
       {
