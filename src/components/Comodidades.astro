@@ -22,7 +22,7 @@ const comodidades = [
 // GRUPO 2 — parceiros independentes indicados pelo rancho (curadoria).
 const parceiros = [
   { icone: "cart", titulo: "Mercado e depósito de bebidas", texto: "Compras e bebidas entregues direto no rancho, sem precisar sair." },
-  { icone: "croissant", titulo: "Padaria", texto: "Café da manhã prático e completo, entregue no rancho." },
+  { icone: "croissant", titulo: "Padaria", texto: "Café da manhã prático e completo para o seu grupo." },
   { icone: "utensils", titulo: "Cozinheiro e churrasqueiro", texto: "Profissionais que preparam as refeições do seu grupo no próprio rancho." },
   { icone: "cake-slice", titulo: "Bolos e doces", texto: "Para aniversários e comemorações especiais." },
   { icone: "car", titulo: "Transporte", texto: "Para a chegada e o deslocamento do seu grupo." },
@@ -103,11 +103,24 @@ const parceiros = [
         }
       </ul>
 
-      <p class="mt-5 font-titulo text-xs italic leading-relaxed text-tinta/50">
-        A contratação, a disponibilidade e o pagamento são tratados diretamente
-        com cada fornecedor. Apenas indicamos contatos de confiança. Não temos
-        vínculo direto com eles.
-      </p>
+      <!-- Observações em destaque: como funciona a contratação e a busca pelo caseiro -->
+      <div class="mt-6 space-y-3 rounded-xl bg-white p-5 text-sm leading-relaxed text-tinta/85 ring-1 ring-mata/20">
+        <p class="flex items-start gap-3">
+          <Icon name="info" class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
+          <span>
+            <strong class="font-semibold text-mata-escura">Você contrata direto com cada fornecedor.</strong>
+            A disponibilidade e o pagamento são combinados com eles. Apenas indicamos
+            contatos de confiança, sem vínculo direto com o rancho.
+          </span>
+        </p>
+        <p class="flex items-start gap-3">
+          <Icon name="car" class="mt-0.5 h-5 w-5 shrink-0 text-mata" />
+          <span>
+            <strong class="font-semibold text-mata-escura">O fornecedor não entrega?</strong>
+            Nosso caseiro pode buscar os produtos para você, mediante o pagamento de uma taxa.
+          </span>
+        </p>
+      </div>
     </div>
 
     <!-- Banner + CTA fechando a seção -->
