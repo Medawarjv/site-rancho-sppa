@@ -3,13 +3,25 @@ import site from "../data/site.json";
 import Icon from "./Icon.astro";
 import TituloSecao from "./TituloSecao.astro";
 
-// Mapa embutido (sem chave de API) apontando pro pin exato do rancho.
-const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}(${encodeURIComponent(site.nome)})&z=13&output=embed`;
+// Mapa embutido (sem chave de API).
+// Usa o CID = cadastro oficial "Rancho SPPA" no Google (não coordenadas):
+// com lat/lng o Google solta um pin anônimo em cima do marcador do rancho,
+// esconde o nome e mostra "Place info couldn't load". Com o CID aparece o
+// nome, a nota e as avaliações. O CID vem do mapsLink (parte final do ftid, em decimal).
+// z=8: zoom aberto de propósito, pra aparecerem as cidades do entorno
+// (Uberlândia, Araguari, Monte Carmelo, Araxá).
+const embedSrc = `https://maps.google.com/maps?cid=${site.mapsCid}&z=8&hl=pt-BR&output=embed`;
 ---
 
 <section id="como-chegar" class="bg-areia py-14 sm:py-20">
   <div class="mx-auto max-w-6xl px-6">
-  <TituloSecao kicker="A localização" titulo="Como chegar" sub={site.endereco} />
+  <TituloSecao kicker="A localização" titulo="Como chegar">
+    <p class="mt-5 inline-flex items-center justify-center gap-2 font-titulo text-2xl font-semibold text-mata sm:text-3xl">
+      <Icon name="map-pin" class="h-6 w-6 shrink-0 text-mel sm:h-7 sm:w-7" />
+      {site.cidade}
+    </p>
+    <p class="mt-1 text-sm tracking-wide text-tinta/70">{site.cep}</p>
+  </TituloSecao>
 
   <div class="grid items-center gap-8 lg:grid-cols-2">
     <!-- Mapa -->
@@ -27,7 +39,7 @@ const embedSrc = `https://maps.google.com/maps?q=${site.mapsLat},${site.mapsLng}
     <!-- Texto do caminho -->
     <div>
       <p class="text-lg leading-relaxed text-terra">
-        Estamos a cerca de <strong class="text-mata">1 hora de Uberlândia</strong>,
+        Estamos a <strong class="text-mata">menos de 1 hora de Uberlândia</strong>,
         às margens da Represa de Miranda.
       </p>
       <ul class="mt-6 space-y-3 text-terra">
