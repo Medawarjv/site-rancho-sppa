@@ -7,13 +7,16 @@ import bannerImg from "../assets/comodidades.jpg";
 
 const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Quero montar minha estadia no Rancho SPPA (comodidades e/ou parceiros). Pode me ajudar?")}`;
 
-// GRUPO 1 — itens que o próprio rancho oferece (checklist).
+// GRUPO 1 — o que já vem incluso na estadia (checklist).
+// Só entra aqui o que o rancho realmente fornece. Roupa de cama e banho NÃO entra:
+// é o hóspede quem leva (ver FAQ "O que está incluso e o que preciso levar?").
 const comodidades = [
-  { icone: "bed", titulo: "Cama, mesa e banho", texto: "Enxoval completo, sem precisar levar de casa." },
-  { icone: "wine", titulo: "Taças", texto: "Tudo pronto para os seus brindes." },
-  { icone: "utensils", titulo: "Travessas", texto: "Louça de servir para a mesa farta." },
-  { icone: "board", titulo: "Tábuas", texto: "Para servir petiscos, frios e compartilhar bons momentos." },
-  { icone: "adega", titulo: "Adega", texto: "Para armazenar e manter suas bebidas na temperatura ideal." },
+  { icone: "utensils", titulo: "Utensílios de cozinha", texto: "Panelas, louças e talheres para o grupo todo. É só trazer os ingredientes." },
+  { icone: "flame", titulo: "Churrasqueira e forno a lenha", texto: "Do churrasco de domingo à pizza feita na hora, sem sair do quiosque." },
+  { icone: "chef-hat", titulo: "Cozinha industrial", texto: "Espaço e equipamentos para cozinhar para muita gente, sem aperto." },
+  { icone: "wine", titulo: "Taças, travessas e tábuas", texto: "Mesa bem servida, do brinde à tábua de frios." },
+  { icone: "fridge", titulo: "Freezer e geladeira", texto: "Espaço de sobra para as compras do grupo e bebida sempre gelada." },
+  { icone: "check", titulo: "Básico do dia a dia", texto: "Gás, papel higiênico, detergente, bucha e sacos de lixo já esperam por você." },
 ];
 
 // GRUPO 2 — parceiros independentes indicados pelo rancho (curadoria).
@@ -42,7 +45,7 @@ const parceiros = [
           <h3 class="font-titulo text-xl font-semibold text-mata-escura">
             Do <em>rancho</em>
           </h3>
-          <p class="text-sm text-tinta/75">comodidades que o rancho oferece pra você</p>
+          <p class="text-sm text-tinta/75">já incluso na sua estadia</p>
         </div>
       </div>
       <ul class="grid gap-x-8 gap-y-1 sm:grid-cols-2">
@@ -58,6 +61,9 @@ const parceiros = [
           ))
         }
       </ul>
+      <p class="mt-5 border-t border-terra/10 px-2 pt-4 text-sm text-tinta/70">
+        Roupas de cama e banho ficam por sua conta.
+      </p>
     </div>
 
     <!-- Divisor decorativo -->
