@@ -61,6 +61,12 @@ import Icon from "./Icon.astro";
   >
   </div>
 
+  <!-- Observação: o que confirma a reserva é o sinal (sem detalhar valores aqui) -->
+  <p class="mx-auto mt-8 flex w-fit max-w-xl items-center justify-center gap-2.5 rounded-xl bg-white/70 px-4 py-3 text-sm leading-relaxed text-terra ring-1 ring-terra/10">
+    <Icon name="key" class="h-4 w-4 shrink-0 text-mata" />
+    <span>A reserva é confirmada mediante o pagamento do sinal.</span>
+  </p>
+
   <!-- Fallback: some se a leitura do calendário falhar -->
   <div id="calendario-fallback" class="hidden text-center">
     <p class="mx-auto max-w-md text-terra">
@@ -133,7 +139,7 @@ import Icon from "./Icon.astro";
 
   // Quantos meses ficam à frente e quantos aparecem por vez
   // (1 no celular, 2 no tablet, 3 no desktop — acompanha as colunas da grade).
-  const MESES_A_MOSTRAR = 6;
+  const MESES_A_MOSTRAR = 12;
   const mqTablet = window.matchMedia("(min-width: 640px)");
   const mqDesktop = window.matchMedia("(min-width: 1024px)");
   const porPagina = () => (mqDesktop.matches ? 3 : mqTablet.matches ? 2 : 1);
