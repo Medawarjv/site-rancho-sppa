@@ -1,4 +1,5 @@
 ---
+import QRCode from "qrcode";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import site from "../data/site.json";
@@ -25,6 +26,15 @@ import avaliacoes from "../data/avaliacoes.json";
 // sozinha — o usuário confirma; só já dá o contexto pro atendimento).
 const wa = (msg: string) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
+// QR code do CTA final (só desktop): quem está no computador sem WhatsApp conectado
+// aponta a câmera do celular e cai direto na conversa. Gerado no build, sem JS no cliente.
+// Mensagem curta de propósito: quanto menor a URL, mais fácil de ler o QR.
+const qrSvg = await QRCode.toString(wa("Olá! Vim pelo site do Rancho SPPA."), {
+  type: "svg",
+  margin: 1,
+  errorCorrectionLevel: "M",
+  color: { dark: "#1e3f27", light: "#ffffff" },
+});
 const waFinal = wa(
   "Olá! Quero marcar uma data no Rancho SPPA. Pode me passar a disponibilidade e os valores?",
 );
@@ -300,6 +310,26 @@ const blocos = [
     >
       Consultar disponibilidade
     </a>
+
+    <!-- Número por extenso: pra quem prefere salvar o contato ou chamar pelo celular -->
+    <p class="mt-5 text-sm text-areia/85">
+      Ou chame no WhatsApp:
+      <a href={waFinal} target="_blank" rel="noopener" class="whitespace-nowrap font-semibold text-areia underline-offset-4 hover:underline">{site.whatsappExibicao}</a>
+    </p>
+
+    <!-- QR code: só em tela grande (no celular o botão já abre o app) -->
+    <div class="mx-auto mt-8 hidden w-fit items-center gap-5 rounded-2xl bg-white/10 p-4 pr-6 text-left ring-1 ring-white/15 lg:flex">
+      <div
+        class="h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-white p-1 [&>svg]:h-full [&>svg]:w-full"
+        role="img"
+        aria-label="QR code para abrir a conversa com o Rancho SPPA no WhatsApp"
+        set:html={qrSvg}
+      />
+      <p class="max-w-[15rem] text-sm leading-relaxed text-areia/90">
+        <strong class="block font-semibold text-areia">Está no computador?</strong>
+        Aponte a câmera do celular para o código e a conversa abre direto no WhatsApp.
+      </p>
+    </div>
 
     <!-- Prova social junto do botão final -->
     <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-areia/80">

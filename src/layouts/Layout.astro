@@ -85,6 +85,17 @@ const ogImagem = new URL(imagem, Astro.site).href;
           </a>
         )
       }
+      <p class="mb-5">
+        <a
+          href={`https://wa.me/${site.whatsapp}`}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 font-medium text-areia transition hover:text-dourado"
+        >
+          <Icon name="whatsapp" class="h-4 w-4" />
+          WhatsApp {site.whatsappExibicao}
+        </a>
+      </p>
       <nav class="mb-4 flex flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="/" class="hover:text-areia">Início</a>
         <a href="/faq" class="hover:text-areia">Perguntas frequentes</a>
