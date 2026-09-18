@@ -94,9 +94,9 @@ const blocos = [
   {
     img: quiosqueImg,
     alt: "Quiosque com churrasqueira e forno de pizza",
-    titulo: "Quiosque & churrasqueira",
+    titulo: "Quiosque e área gourmet",
     texto:
-      "Quiosque com churrasqueira, fogão a lenha e forno de pizza, o ponto de encontro para reunir a família toda.",
+      "Quiosque com churrasqueira, fogão a lenha e forno de pizza, além de cozinha industrial completa. O ponto de encontro para reunir a família toda.",
   },
   {
     img: acomodacoesImg,
@@ -136,21 +136,35 @@ const blocos = [
   <!-- HERO (full-bleed) -->
   <header
     id="hero"
-    class="relative flex min-h-[80vh] items-end overflow-hidden sm:min-h-[90vh]"
+    class="relative flex items-end overflow-hidden bg-mata-escura sm:min-h-[90vh]"
   >
-    <Image
-      src={heroImg}
-      alt="Vista da área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground, quiosque e coqueiros"
-      class="animate-kenburns absolute inset-0 h-full w-full object-cover object-[center_78%]"
-      widths={[768, 1280, 1600]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <!-- scrim de baixo pra cima (mais escuro onde fica o texto) -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5"></div>
-    <!-- scrim do topo: garante fundo escuro atrás da marca (no celular cai nuvem branca ali) -->
-    <div class="absolute inset-x-0 top-0 h-[32%] bg-gradient-to-b from-black/45 to-transparent sm:from-black/30"></div>
+    <!--
+      FOTO.
+      Celular: a foto fica livre no topo (sem texto por cima, por isso clara) e o texto vem
+      embaixo, no verde. O trecho visível da piscina (o tronco da palmeira cobre a ponta direita)
+      fica a 78% da largura da foto; pra ele cair no CENTRO da tela a foto precisa ter 227vw de
+      largura (= 100vw / (2 x 0.22)), colada à direita. Altura = 227 x 3/4.
+      Desktop: foto full-bleed, alinhada por baixo pra quadra e piscina aparecerem inteiras.
+    -->
+    <div class="absolute inset-x-0 top-0 h-[88vw] overflow-hidden sm:inset-0 sm:h-auto">
+      <Image
+        src={heroImg}
+        alt="Vista da área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground, quiosque e coqueiros"
+        class="animate-kenburns absolute bottom-0 right-0 h-[170.25vw] w-[227vw] max-w-none origin-[78%_90%] sm:inset-0 sm:h-full sm:w-full sm:object-cover sm:object-[center_97%]"
+        widths={[768, 1280, 1600]}
+        quality={72}
+        sizes="(max-width: 639px) 227vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <!-- celular: funde a base da foto no verde do bloco de texto -->
+      <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-mata-escura to-transparent sm:hidden"></div>
+      <!-- desktop: escurece só a LATERAL do texto; a direita (piscina) fica clara -->
+      <div class="absolute inset-0 hidden bg-gradient-to-r from-black/75 via-black/45 via-45% to-transparent to-80% sm:block"></div>
+      <div class="absolute inset-x-0 bottom-0 hidden h-1/4 bg-gradient-to-t from-black/30 to-transparent sm:block"></div>
+      <!-- scrim do topo: fundo escuro atrás da marca -->
+      <div class="absolute inset-x-0 top-0 h-[30%] bg-gradient-to-b from-black/50 to-transparent sm:from-black/30"></div>
+    </div>
 
     <!-- Marca (wordmark tipográfico, mesma estrutura do logo oficial) -->
     <a
@@ -168,15 +182,15 @@ const blocos = [
       </span>
     </a>
 
-    <!-- pt reserva espaço pra marca: o título nunca encosta nela no mobile -->
-    <div class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-14 pt-24 sm:pb-20 sm:pt-32">
+    <!-- celular: o texto começa logo abaixo da foto (88vw). Desktop: pt reserva espaço pra marca -->
+    <div class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-12 pt-[calc(88vw+0.5rem)] sm:pb-20 sm:pt-32">
       <div class="max-w-2xl text-white">
         <h1 class="font-titulo text-4xl font-semibold leading-[1.05] drop-shadow-md sm:text-6xl xl:text-7xl">
           Seu refúgio na Represa de Miranda
         </h1>
         <p class="mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
-          Rancho para aluguel por temporada em Indianópolis-MG, a cerca de
-          1&nbsp;hora de Uberlândia. Natureza, água e sossego para a família toda.
+          Rancho para aluguel por temporada em Indianópolis-MG, a menos de
+          1&nbsp;hora de Uberlândia. Natureza, água e sossego para toda família.
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
