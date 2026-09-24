@@ -65,6 +65,35 @@ const ogImagem = new URL(imagem, Astro.site).href;
     <meta name="twitter:image" content={ogImagem} />
 
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Meta Pixel Code (is:inline: o Astro não deve processar/empacotar este script) -->
+    <script is:inline>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1064650599709069');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1064650599709069&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Evento "Contact" em qualquer clique num link de WhatsApp (wa.me), em todas as
+         páginas — inclusive links montados por JS (calendário). Serve pra otimizar
+         campanhas por conversa iniciada. -->
+    <script is:inline>
+      document.addEventListener("click", function (ev) {
+        var a = ev.target && ev.target.closest && ev.target.closest('a[href*="wa.me/"]');
+        if (!a || typeof fbq !== "function") return;
+        fbq("track", "Contact", { content_name: a.getAttribute("aria-label") || (a.textContent || "").trim().slice(0, 80) });
+      });
+    </script>
   </head>
   <body class="text-mata-escura antialiased">
     <Menu />
