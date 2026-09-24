@@ -4,6 +4,7 @@ import site from "../data/site.json";
 import WhatsAppFloat from "../components/WhatsAppFloat.astro";
 import Menu from "../components/Menu.astro";
 import VoltarTopo from "../components/VoltarTopo.astro";
+import AvisoCookies from "../components/AvisoCookies.astro";
 import Icon from "../components/Icon.astro";
 // Pré-carrega as duas fontes que aparecem acima da dobra (título e corpo).
 import fonteTituloUrl from "@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2?url";
@@ -136,5 +137,6 @@ const ogImagem = new URL(imagem, Astro.site).href;
 
     <WhatsAppFloat />
     <VoltarTopo />
+    <AvisoCookies />
   </body>
 </html>

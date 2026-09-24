@@ -1,0 +1,49 @@
+---
+// Aviso de cookies (LGPD) o mais discreto possível: uma linha, canto inferior
+// esquerdo, some ao tocar em "Ok" e não volta (localStorage). No celular fica
+// logo acima da fileira dos botões flutuantes (voltar ao topo + WhatsApp).
+---
+
+<div
+  id="nota-lgpd"
+  role="status"
+  class="pointer-events-none fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] left-4 right-4 z-40 flex translate-y-2 items-center gap-3 rounded-xl bg-mata-escura/95 px-4 py-2.5 text-xs leading-snug text-areia/90 opacity-0 shadow-lg ring-1 ring-white/10 backdrop-blur transition duration-500 md:bottom-5 md:left-5 md:right-auto md:max-w-sm"
+>
+  <p class="grow">Usamos cookies para medir visitas e anúncios.</p>
+  <button
+    id="nota-lgpd-ok"
+    type="button"
+    class="shrink-0 rounded-full bg-areia/15 px-3 py-1 font-semibold text-areia transition hover:bg-areia/25"
+  >
+    Ok
+  </button>
+</div>
+
+<script>
+  const CHAVE = "sppa-cookies-ok";
+  const aviso = document.getElementById("nota-lgpd")!;
+  const ok = document.getElementById("nota-lgpd-ok")!;
+
+  function lembrado() {
+    try {
+      return localStorage.getItem(CHAVE) === "1";
+    } catch {
+      return false;
+    }
+  }
+
+  function esconder() {
+    aviso.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+    try {
+      localStorage.setItem(CHAVE, "1");
+    } catch {}
+  }
+
+  if (!lembrado()) {
+    // Um respiro antes de aparecer, pra não competir com o hero.
+    setTimeout(() => {
+      aviso.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+    }, 1500);
+    ok.addEventListener("click", esconder);
+  }
+</script>
