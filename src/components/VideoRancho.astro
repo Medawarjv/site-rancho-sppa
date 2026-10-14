@@ -1,0 +1,52 @@
+---
+import { getImage } from "astro:assets";
+import posterImg from "../assets/video-poster.jpg";
+
+// Vídeo institucional (fotógrafo, out/2026), hospedado no próprio site em vez do
+// YouTube: sem marca nem "vídeos relacionados" levando o visitante pra outro anúncio.
+// preload="none": nada do vídeo baixa até a pessoa apertar play.
+// Celular recebe a versão 720p (~11 MB); tela grande, 1080p (~19 MB).
+const poster = await getImage({ src: posterImg, width: 1280, format: "webp", quality: 70 });
+---
+
+<section id="video" class="bg-mata-escura py-16 text-areia sm:py-24">
+  <div class="mx-auto max-w-6xl px-6 lg:px-10">
+    <div class="mx-auto mb-10 max-w-3xl text-center sm:mb-14">
+      <h2 class="font-titulo text-3xl font-semibold text-areia sm:text-5xl">
+        Conheça o rancho em 1&nbsp;minuto
+      </h2>
+      <span class="mx-auto mt-5 block h-px w-16 bg-dourado/70" aria-hidden="true"></span>
+      <p class="mx-auto mt-5 max-w-xl leading-relaxed text-areia/75">
+        Da represa à cachoeira, das áreas de lazer às suítes: um passeio completo pelo Rancho SPPA.
+      </p>
+    </div>
+
+    <div class="overflow-hidden rounded-2xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
+      <video
+        id="video-rancho"
+        class="aspect-video w-full bg-black"
+        controls
+        playsinline
+        preload="none"
+        poster={poster.src}
+        aria-label="Vídeo institucional do Rancho SPPA, com 1 minuto e 12 segundos"
+      >
+        <source src="/video/rancho-1080.mp4" type="video/mp4" media="(min-width: 768px)" />
+        <source src="/video/rancho-720.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Meta Pixel: registra uma vez quando alguém dá play no vídeo.
+  const v = document.getElementById("video-rancho") as HTMLVideoElement | null;
+  v?.addEventListener(
+    "play",
+    () => {
+      const fbq = (window as any).fbq;
+      if (typeof fbq === "function") fbq("track", "ViewContent", { content_name: "Vídeo institucional" });
+    },
+    { once: true },
+  );
+</script>

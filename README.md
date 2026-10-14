@@ -67,11 +67,12 @@ menores e em WebP. Não precisa (nem deve) subir foto de 4000 px.
 
 | Onde aparece | Arquivo |
 |---|---|
-| Foto grande do topo (hero) | `src/assets/hero.jpg` (horizontal, ~1920 px) |
+| Topo (hero): vídeo em loop | `public/video/hero-loop-1080.mp4` (computador) e `hero-loop-720.mp4` (celular), ~12 s, sem som. A foto que aparece enquanto o vídeo carrega é `src/assets/hero-video.jpg` (1º quadro do loop) |
+| Vídeo institucional (seção "Conheça o rancho") | `public/video/rancho-1080.mp4` e `rancho-720.mp4`; capa em `src/assets/video-poster.jpg` |
 | Os 6 cards da estrutura | `src/assets/bloco-piscina.jpg`, `bloco-quiosque.jpg`, `bloco-acomodacoes.jpg`, `bloco-esportes.jpg`, `bloco-natureza.jpg`, `bloco-represa.jpg` |
 | Banner da seção de comodidades | `src/assets/comodidades.jpg` |
 | Galeria | `src/assets/galeria/<tema>/01.jpg, 02.jpg…` (temas: `lazer`, `esportes`, `natureza`, `quiosque`, `acomodacoes`) |
-| Imagem de compartilhamento (WhatsApp/redes) | `public/og.jpg` (1600×1200) |
+| Imagem de compartilhamento (WhatsApp/redes) | `public/og.jpg` (1200×630) |
 | Fotos dos avaliadores | `public/avatars/nome.png` (96×96) |
 
 **Galeria:** para trocar uma foto, substitua o arquivo mantendo o nome (ex.: `lazer/03.jpg`).
@@ -80,7 +81,12 @@ Para **adicionar**, crie o próximo número (`08.jpg`) e inclua a legenda em
 o arquivo e a linha da legenda. A galeria corta as fotos em 4:3 — prefira fotos horizontais.
 
 O acervo bruto de fotos (organizado por assunto) fica na pasta `imagens/` **só no computador** —
-não vai para o GitHub. Tem um `imagens/README.md` explicando as pastas.
+não vai para o GitHub. Tem um `imagens/README.md` explicando as pastas. O ensaio profissional
+(out/2026: 87 fotos + vídeo original de 107 MB) fica em `Venda Rancho/Fotos outubro 26/`, também só no
+computador; nas legendas da galeria, `fotografo/F20` = `Fotos Editadas/edit-20.jpg` e `D` = drone.
+
+**Vídeos:** comprimidos com ffmpeg a partir do original (o de 107 MB não vai pro site). Se trocar o
+vídeo, gere de novo as versões 1080p e 720p mantendo os nomes.
 
 ---
 

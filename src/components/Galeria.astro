@@ -11,45 +11,54 @@ const temas = [
 ];
 
 // Legendas por tema/arquivo (aparecem no hover e no lightbox).
-// O comentário indica a foto de origem no acervo (imagens/<pasta>/).
+// O comentário indica a foto de origem: imagens/<pasta>/ no acervo antigo, ou
+// fotografo/<id> no ensaio profissional de out/2026 (F = solo, D = drone).
 const legendas: Record<string, string> = {
-  "lazer/01.jpg": "Piscina aquecida com vista para o quiosque", // lazer/IMG_20260213_143905083_HDR
-  "lazer/02.jpg": "Lounge coberto com sofás e ventiladores", // lazer/WhatsApp 2026-09-18 13.19.17
-  "lazer/03.jpg": "Playground em grama sintética", // lazer/IMG_20260213_093209875_HDR
-  "lazer/04.jpg": "Mesa rústica de madeira ao lado da piscina", // lazer/IMG-20251206-WA0013
-  "lazer/05.jpg": "Piscina e quiosque em dia de sol", // lazer/IMG-20250305-WA0000
-  "lazer/06.jpg": "Vinho gelado no deck em fim de tarde", // lazer/Vinho.jpeg (recorte 960x720)
-  "lazer/07.jpg": "Deck de madeira ao lado da piscina", // lazer/IMG_20251120_084315342
-  "lazer/08.jpg": "Varanda com mesa e vista para o playground", // lazer/IMG-20250817-WA0020
+  "lazer/01.jpg": "Piscina com deck de pedra e mesas ao sol", // fotografo/F20
+  "lazer/02.jpg": "Piscina entre coqueiros, ao lado do quiosque", // fotografo/F34
+  "lazer/03.jpg": "Piscina menor, com a varanda de madeira ao fundo", // fotografo/F21
+  "lazer/04.jpg": "Playground em grama sintética", // fotografo/F68
+  "lazer/05.jpg": "Lounge coberto com sofás, de frente para a mata", // fotografo/F23
+  "lazer/06.jpg": "Varanda com sofás e mesas rústicas de madeira", // fotografo/F33
+  "lazer/07.jpg": "Sofás de vime no lounge, com a sinuca ao fundo", // fotografo/F71
+  "lazer/08.jpg": "Vinho gelado no deck em fim de tarde", // lazer/Vinho.jpeg (recorte 960x720)
   "lazer/09.jpg": "Fogueira para as noites no rancho", // detalhes/IMG-20250817-WA0030
-  "esportes/01.jpg": "Quadra de areia para beach tennis, peteca e vôlei", // lazer/IMG-20250815-WA0044
-  "esportes/02.jpg": "Vista geral: quadra, playground e piscina", // lazer/IMG-20250228-WA0049
-  "esportes/03.jpg": "Campo de futebol visto de cima", // aereas/WhatsApp 2026-09-15 13.41.00 (1)
-  "esportes/04.jpg": "Playground para a criançada", // lazer/IMG-20251206-WA0025
-  "esportes/05.jpg": "Sinuca ao lado da lareira", // quiosque/WhatsApp 2026-08-23 19.17.59 (4)
-  "esportes/06.jpg": "Bicicleta ao pôr do sol, com a represa ao fundo", // lazer/WhatsApp 2026-09-18 13.19.04
-  "natureza/01.jpg": "Vista aérea: 430 metros de margem na represa", // aereas/WhatsApp 2026-09-15 13.47.46 (2)
-  "natureza/02.jpg": "A cachoeira do rancho em aquarela, por Lilian Tibery", // natureza/Obra de lilian tibery (recorte sem a borda do papel)
-  "natureza/03.jpg": "Cachoeira dentro da propriedade", // natureza/IMG_20260213_143132061_HDR
-  "natureza/04.jpg": "Pôr do sol na represa", // represa/WhatsApp 2026-08-23 19.21.30
-  "natureza/05.jpg": "Flamboyant florido no rancho", // natureza/WhatsApp 2026-08-23 19.17.58
-  "natureza/06.jpg": "Caiaque e stand-up na represa", // represa/WhatsApp 2026-08-23 19.17.54 (2)
-  "natureza/07.jpg": "Seriema, visita frequente no rancho", // natureza/natureza.jpeg (recorte 960x800)
-  "natureza/08.jpg": "Ipê florido no campo", // natureza/IMG-20250912-WA0019
-  "natureza/09.jpg": "Cachoeira no meio da mata", // natureza/Foto cachueira 2
-  "quiosque/01.jpg": "Churrasqueira e forno de pizza", // quiosque/IMG-20251206-WA0030
-  "quiosque/02.jpg": "Quiosque amplo com vista para a área de lazer", // quiosque/IMG_20260213_080350033_HDR
-  "quiosque/03.jpg": "Sofás para descansar no quiosque", // quiosque/IMG-20251206-WA0011
-  "quiosque/04.jpg": "Forno a lenha", // quiosque/IMG-20260218-WA0019
-  "quiosque/05.jpg": "Quiosque iluminado à noite", // quiosque/WhatsApp 2026-08-23 19.18.01 (1)
-  "quiosque/06.jpg": "Salão com cozinha e mesas para as refeições", // quiosque/WhatsApp 2026-09-15 13.41.06
-  "quiosque/07.jpg": "Bar e lareira do salão", // quiosque/WhatsApp 2026-09-15 13.41.05
-  "acomodacoes/01.jpg": "Suíte com cama de casal e ar-condicionado", // acomodacoes/IMG_20260213_092636444_HDR
-  "acomodacoes/02.jpg": "Suíte com camas de solteiro", // acomodacoes/IMG_20260213_092601147_HDR
-  "acomodacoes/03.jpg": "Sala do chalé com mesa de refeições", // acomodacoes/IMG_20260213_092724977_HDR
-  "acomodacoes/04.jpg": "Sala de estar do chalé", // acomodacoes/IMG_20260213_092918430_HDR
-  "acomodacoes/05.jpg": "Banheiro da suíte", // acomodacoes/IMG_20260213_092751162
-  "acomodacoes/06.jpg": "Cozinha equipada", // acomodacoes/WhatsApp 2026-08-23 19.17.53 (1)
+  "esportes/01.jpg": "Quadra de areia com playground e piscina ao lado", // fotografo/F17
+  "esportes/02.jpg": "Quadra de areia para beach tennis, peteca e vôlei", // fotografo/F67
+  "esportes/03.jpg": "Vista de cima: quadra de areia e playground", // fotografo/D07
+  "esportes/04.jpg": "Campo de futebol gramado entre as palmeiras", // fotografo/F15
+  "esportes/05.jpg": "Campo de futebol visto de cima", // fotografo/D06
+  "esportes/06.jpg": "Mesa de sinuca no lounge coberto", // fotografo/F28
+  "esportes/07.jpg": "Bicicleta ao pôr do sol, com a represa ao fundo", // lazer/WhatsApp 2026-09-18 13.19.04
+  "natureza/01.jpg": "Amanhecer na Represa de Miranda, visto do alto", // fotografo/D09
+  "natureza/02.jpg": "Vista aérea: 430 metros de margem na represa", // fotografo/D04
+  "natureza/03.jpg": "Píer e tablado de pesca na represa", // fotografo/D08
+  "natureza/04.jpg": "Cachoeira dentro da propriedade", // fotografo/F78
+  "natureza/05.jpg": "Riacho com banco para descansar na mata", // fotografo/F76
+  "natureza/06.jpg": "Horta em canteiros elevados", // fotografo/F05
+  "natureza/07.jpg": "A cachoeira do rancho em aquarela, por Lilian Tibery", // natureza/Obra de lilian tibery (recorte sem a borda do papel)
+  "natureza/08.jpg": "Seriema, visita frequente no rancho", // natureza/natureza.jpeg (recorte 960x800)
+  "natureza/09.jpg": "Pôr do sol na represa", // represa/WhatsApp 2026-08-23 19.21.30
+  "natureza/10.jpg": "Caiaque e stand-up na represa", // represa/WhatsApp 2026-08-23 19.17.54 (2)
+  "natureza/11.jpg": "Flamboyant florido no rancho", // natureza/WhatsApp 2026-08-23 19.17.58
+  "quiosque/01.jpg": "Quiosque com rede, mesas e sofás", // fotografo/F22
+  "quiosque/02.jpg": "Salão com bar, mesas e churrasqueira", // fotografo/F25
+  "quiosque/03.jpg": "Salão do quiosque, com dardos e TV", // fotografo/F66
+  "quiosque/04.jpg": "Bar e churrasqueira de tijolinho", // fotografo/F29
+  "quiosque/05.jpg": "Fogão a lenha e forno de pizza", // fotografo/F27
+  "quiosque/06.jpg": "Mesas e sofás no quiosque coberto", // fotografo/F31
+  "quiosque/07.jpg": "Cozinha industrial completa", // fotografo/F74
+  "quiosque/08.jpg": "Quiosque iluminado à noite", // quiosque/WhatsApp 2026-08-23 19.18.01 (1)
+  "acomodacoes/01.jpg": "Sede em madeira com varanda", // fotografo/F16
+  "acomodacoes/02.jpg": "Chalé com varanda de madeira", // fotografo/F19
+  "acomodacoes/03.jpg": "Varanda da sede ao entardecer", // fotografo/F60
+  "acomodacoes/04.jpg": "Sala de estar do chalé", // fotografo/F58
+  "acomodacoes/05.jpg": "Sala com mesa de refeições", // fotografo/F57
+  "acomodacoes/06.jpg": "Suíte com cama de casal, TV e ar-condicionado", // fotografo/F47
+  "acomodacoes/07.jpg": "Suíte com cama de casal e cama de solteiro", // fotografo/F42
+  "acomodacoes/08.jpg": "Suíte com camas de solteiro", // fotografo/F50
+  "acomodacoes/09.jpg": "Suíte com cama box", // fotografo/F54
+  "acomodacoes/10.jpg": "Banheiro da suíte com box de vidro", // fotografo/F43
 };
 
 const modules = import.meta.glob<{ default: ImageMetadata }>(

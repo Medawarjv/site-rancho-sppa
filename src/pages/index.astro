@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import site from "../data/site.json";
-import heroImg from "../assets/hero.jpg";
+import heroImg from "../assets/hero-video.jpg";
 import piscinaImg from "../assets/bloco-piscina.jpg";
 import quiosqueImg from "../assets/bloco-quiosque.jpg";
 import acomodacoesImg from "../assets/bloco-acomodacoes.jpg";
@@ -11,6 +11,7 @@ import esportesImg from "../assets/bloco-esportes.jpg";
 import naturezaImg from "../assets/bloco-natureza.jpg";
 import represaImg from "../assets/bloco-represa.jpg";
 import Galeria from "../components/Galeria.astro";
+import VideoRancho from "../components/VideoRancho.astro";
 import Calendario from "../components/Calendario.astro";
 import Regras from "../components/Regras.astro";
 import ComoChegar from "../components/ComoChegar.astro";
@@ -95,42 +96,42 @@ const schema = {
 const blocos = [
   {
     img: piscinaImg,
-    alt: "Piscina azul do Rancho SPPA entre coqueiros, em dia de sol",
+    alt: "Piscina azul com deck de pedra entre coqueiros, ao lado do quiosque",
     titulo: "Piscina aquecida",
     texto:
       "Piscina aquecida por energia solar, para curtir a água com conforto em qualquer época do ano.",
   },
   {
     img: quiosqueImg,
-    alt: "Quiosque com churrasqueira e forno de pizza",
+    alt: "Quiosque coberto com rede, mesas, sofás e sinuca",
     titulo: "Área gourmet e quiosque",
     texto:
       "Quiosque com churrasqueira, fogão a lenha e forno de pizza, além de cozinha industrial completa, gás e água potável. O ponto de encontro para reunir a família toda.",
   },
   {
     img: acomodacoesImg,
-    alt: "Suíte do Rancho SPPA com cama de casal, cama de solteiro e janela de madeira",
+    alt: "Suíte em madeira com cama de casal, TV e ar-condicionado",
     titulo: "Acomodações",
     texto:
       "10 suítes com ar-condicionado. Algumas, além da cama de casal, têm camas de solteiro para acomodar até 30 pessoas. Wi-Fi Starlink e fibra ótica.",
   },
   {
     img: esportesImg,
-    alt: "Quadra de areia e playground do rancho em dia de sol",
+    alt: "Quadra de areia com playground e piscina ao lado",
     titulo: "Esportes & lazer",
     texto:
       "Campo de futebol, quadra de areia para beach tennis, peteca ou vôlei, caiaques, bicicletas, sinuca, ping-pong, dardos, cartas e playground.",
   },
   {
     img: naturezaImg,
-    alt: "Riacho e cachoeira em meio à mata do rancho",
+    alt: "Cachoeira em meio à mata do rancho",
     titulo: "Natureza",
     texto:
       "70.000 m² de área verde com trilhas, pomar, nascente, riacho e cachoeiras para explorar com calma.",
   },
   {
     img: represaImg,
-    alt: "Píer do rancho às margens da Represa de Miranda",
+    alt: "Píer do rancho na Represa de Miranda, visto do alto",
     titulo: "Represa de Miranda",
     texto:
       "430 metros de margem, com píer, tablado de pesca e redutor para descer/subir lancha de até 1 tonelada na represa.",
@@ -148,24 +149,45 @@ const blocos = [
     class="relative flex items-end overflow-hidden bg-mata-escura sm:min-h-[90vh]"
   >
     <!--
-      FOTO.
-      Celular: a foto fica livre no topo (sem texto por cima, por isso clara) e o texto vem
-      embaixo, no verde. O trecho visível da piscina (o tronco da palmeira cobre a ponta direita)
-      fica a 78% da largura da foto; pra ele cair no CENTRO da tela a foto precisa ter 227vw de
-      largura (= 100vw / (2 x 0.22)), colada à direita. Altura = 227 x 3/4.
-      Desktop: foto full-bleed, alinhada por baixo pra quadra e piscina aparecerem inteiras.
+      VÍDEO EM LOOP (12 s, sem som, trechos do vídeo institucional).
+      Celular: o vídeo fica livre no topo (sem texto por cima) e o texto vem embaixo, no verde.
+      Desktop: full-bleed. A foto embaixo é o 1º quadro do loop: aparece na hora (é o LCP)
+      e o vídeo entra por cima com fade quando começa a tocar. Quem está em economia de dados
+      fica só com a foto. Não dá pra depender de prefers-reduced-motion: o Windows liga isso
+      sozinho quando as animações do sistema estão desligadas (comum em PC de escritório), e o
+      vídeo ficaria parado pra muita gente. Em vez disso há o botão de pausar (WCAG 2.2.2).
     -->
     <div class="absolute inset-x-0 top-0 h-[88vw] overflow-hidden sm:inset-0 sm:h-auto">
       <Image
         src={heroImg}
-        alt="Vista da área de lazer do Rancho SPPA em dia de sol: quadra de areia, piscina, playground, quiosque e coqueiros"
-        class="animate-kenburns absolute bottom-0 right-0 h-[170.25vw] w-[227vw] max-w-none origin-[78%_90%] sm:inset-0 sm:h-full sm:w-full sm:object-cover sm:object-[center_97%]"
-        widths={[768, 1280, 1600]}
+        alt="Vista aérea do Rancho SPPA às margens da Represa de Miranda, ao amanhecer"
+        class="absolute inset-0 h-full w-full object-cover"
+        widths={[768, 1280]}
         quality={72}
-        sizes="(max-width: 639px) 227vw, 100vw"
+        sizes="100vw"
         loading="eager"
         fetchpriority="high"
       />
+      <video
+        id="hero-video"
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-hidden="true"
+        data-src-celular="/video/hero-loop-720.mp4"
+        data-src-desktop="/video/hero-loop-1080.mp4"
+      ></video>
+      <button
+        id="hero-pausa"
+        type="button"
+        aria-label="Pausar vídeo de fundo"
+        class="absolute bottom-3 right-3 z-20 hidden h-9 w-9 items-center justify-center rounded-full bg-black/35 text-white/90 backdrop-blur-sm transition hover:bg-black/55 sm:bottom-6 sm:right-6"
+      >
+        <svg data-icone="pausa" viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+        <svg data-icone="play" viewBox="0 0 24 24" class="hidden h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </button>
       <!-- celular: funde a base da foto no verde do bloco de texto -->
       <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-mata-escura to-transparent sm:hidden"></div>
       <!-- desktop: escurece só a LATERAL do texto; a direita (piscina) fica clara -->
@@ -209,10 +231,11 @@ const blocos = [
             Consultar disponibilidade
           </a>
           <a
-            href="#rancho"
-            class="inline-block rounded-full border border-white/50 px-7 py-4 text-base font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
+            href="#video"
+            class="inline-flex items-center gap-2 rounded-full border border-white/50 px-7 py-4 text-base font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
           >
-            Conhecer o rancho
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            Ver o vídeo
           </a>
         </div>
 
@@ -237,6 +260,9 @@ const blocos = [
 
   <!-- BARRA DE FATOS -->
   <BarraFatos />
+
+  <!-- VÍDEO INSTITUCIONAL -->
+  <VideoRancho />
 
   <!-- O RANCHO — 6 blocos -->
   <section id="rancho" class="bg-areia py-14 sm:py-20">
@@ -343,3 +369,33 @@ const blocos = [
   </section>
 
 </Layout>
+
+<script>
+  // Hero: baixa e toca o loop, exceto pra quem está em economia de dados.
+  const hv = document.getElementById("hero-video") as HTMLVideoElement | null;
+  const pausa = document.getElementById("hero-pausa");
+  const conn = (navigator as any).connection;
+  const pouparDados = conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? "");
+  if (hv && pausa && !pouparDados) {
+    // Mais de 1400 px reais de largura (computador): 1080p (~8 MB). Celular: 720p (~4 MB).
+    const grande = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2) > 1400;
+    hv.src = grande ? hv.dataset.srcDesktop! : hv.dataset.srcCelular!;
+    hv.addEventListener(
+      "playing",
+      () => {
+        hv.classList.remove("opacity-0");
+        pausa.classList.replace("hidden", "flex");
+      },
+      { once: true },
+    );
+    hv.play().catch(() => {});
+    pausa.addEventListener("click", () => {
+      const tocar = hv.paused;
+      if (tocar) hv.play().catch(() => {});
+      else hv.pause();
+      pausa.setAttribute("aria-label", tocar ? "Pausar vídeo de fundo" : "Tocar vídeo de fundo");
+      pausa.querySelector('[data-icone="pausa"]')!.classList.toggle("hidden", !tocar);
+      pausa.querySelector('[data-icone="play"]')!.classList.toggle("hidden", tocar);
+    });
+  }
+</script>
