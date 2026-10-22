@@ -8,7 +8,7 @@ import sitemap from '@astrojs/sitemap';
 // Site estático por padrão; só o endpoint /api/disponibilidade roda como
 // função serverless (via `export const prerender = false` no próprio arquivo).
 export default defineConfig({
-  site: 'https://sppa.com.br',
+  site: 'https://ranchopicapaumg.com.br',
   adapter: vercel(),
   integrations: [sitemap()],
   vite: {

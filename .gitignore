@@ -23,3 +23,6 @@ Imagens/
 
 # material de VENDA do rancho (preço, matrícula): nunca versionar — repo é público
 FICHA_*.pdf
+
+.vercel
+.env*

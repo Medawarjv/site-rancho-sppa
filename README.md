@@ -3,7 +3,7 @@
 Site do **Rancho SPPA / Sítio do Pica Pau Amarelo** (Indianópolis-MG). Este guia é para quem
 precisa trocar uma foto, um texto ou o número do WhatsApp **sem saber programar**.
 
-- Site no ar: https://sppa.com.br (enquanto o domínio não entra: https://site-rancho-sppa.vercel.app)
+- Site no ar: https://ranchopicapaumg.com.br (enquanto o domínio não entra: https://site-rancho-sppa.vercel.app)
 - Código: https://github.com/Medawarjv/site-rancho-sppa
 - Hospedagem: Vercel (publica sozinha a cada alteração enviada ao GitHub, em ~2 minutos)
 
