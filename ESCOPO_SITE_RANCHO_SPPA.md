@@ -20,7 +20,7 @@ Prioridade absoluta: **zero manutenção técnica**. Meu pai não vai entrar em 
 
 ## 3. Decisões já tomadas (não reabrir)
 
-- **Preços só no simulador** (desde 06/11/2026, tabela aprovada pelo JV e pelo pai): o calendário mostra a estimativa pela tabela cheia (`src/data/precos.json`, feriados em `src/data/feriados.json`). **Descontos de última hora não aparecem no site.** Day use continua sob consulta. A Lorena confirma o valor final.
+- **Preços só no simulador** (desde 06/11/2026, tabela aprovada pelo JV e pelo pai): o calendário mostra a estimativa pela tabela cheia (`src/data/precos.json`, feriados em `src/data/feriados.json`). **Desconto de última hora no simulador, em destaque** (desde 06/11/2026: faxina grátis de 10 a 5 dias antes da sexta, 10% na segunda e terça, 15% de quarta até a chegada; estadias que incluam a noite de sexta ou sábado; configurável em `precos.json` → `ultimaHora`). Day use continua sob consulta. A Lorena confirma o valor final.
 - **Não existe reserva online.** O botão principal é "Consultar disponibilidade" e leva pro WhatsApp com mensagem pré-preenchida. Nunca "Reservar agora".
 - **Disponibilidade vem de um Google Calendar** público (modo "somente ocupado/livre") que a Lorena mantém. O site lê o iCal e renderiza um calendário mensal com os dias ocupados. Se a leitura falhar, mostra só o botão de WhatsApp — nunca mostra "disponível" por engano.
 - **Stack:** site estático. Astro + Tailwind, deploy na Vercel ou Cloudflare Pages, domínio `ranchopicapaumg.com.br` (Registro.br; o antigo `sppa.com.br` redireciona para ele). Sem CMS, sem banco, sem plugin. Conteúdo em arquivos Markdown/JSON no repositório.

@@ -1,6 +1,6 @@
 ---
 // Simulador de preços: aparece abaixo do calendário depois que a pessoa escolhe
-// chegada e saída. Mostra a estimativa com a tabela cheia (sem descontos) e termina
+// chegada e saída. Mostra a estimativa (com a oferta de última hora, quando houver) e termina
 // no WhatsApp com datas, grupo e valor já escritos. Cálculo em src/lib/simulador.ts;
 // tabela em src/data/precos.json; feriados em src/data/feriados.json.
 import site from "../data/site.json";
@@ -8,8 +8,8 @@ import precos from "../data/precos.json";
 import Icon from "./Icon.astro";
 
 const campos = [
-  { id: "adultos", nome: "Adultos", detalhe: "a partir de 14 anos", min: 1, valor: precos.adultosPadrao },
-  { id: "meia", nome: "Crianças de 6 a 13", detalhe: "pagam meia", min: 0, valor: 0 },
+  { id: "adultos", nome: "Adultos", detalhe: `a partir de ${precos.idadeAdulto} anos`, min: 1, valor: precos.adultosPadrao },
+  { id: "meia", nome: `Crianças de 6 a ${precos.idadeAdulto - 1}`, detalhe: "pagam meia", min: 0, valor: 0 },
   { id: "gratis", nome: "Crianças até 5 anos", detalhe: "não pagam", min: 0, valor: 0 },
 ];
 const BTN =
@@ -56,9 +56,25 @@ const BTN =
     <!-- Resultado -->
     <div class="flex flex-col bg-mata-escura p-6 text-areia sm:p-8">
       <div id="sim-resultado">
-        <p class="text-xs font-medium uppercase tracking-[0.2em] text-areia/70">Estimativa</p>
-        <p id="sim-total" class="mt-2 font-titulo text-4xl font-semibold tabular-nums sm:text-5xl"></p>
-        <p id="sim-pp" class="mt-1 text-sm text-dourado"></p>
+        <!-- Oferta de última hora: moldura dourada discreta, com prazo -->
+        <div id="sim-oferta" class="mb-6 hidden rounded-xl border border-dourado/40 bg-dourado/[0.08] px-4 py-3.5">
+          <p class="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-dourado">
+            <Icon name="sparkles" class="h-3.5 w-3.5" />
+            Oferta de última hora
+          </p>
+          <p id="sim-oferta-nome" class="mt-1 font-titulo text-xl font-semibold leading-tight text-areia"></p>
+          <p id="sim-oferta-prazo" class="mt-1 text-xs leading-relaxed text-areia/65"></p>
+        </div>
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-areia/60">Estimativa</p>
+        <!-- total e preço cheio na mesma linha; números alinhados (sem os algarismos "antigos" da Playfair) -->
+        <div class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 [font-variant-numeric:lining-nums_tabular-nums]">
+          <p id="sim-total" class="font-titulo text-4xl font-semibold sm:text-5xl"></p>
+          <p id="sim-cheio" class="hidden whitespace-nowrap text-lg text-areia/45 line-through decoration-1"></p>
+        </div>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span id="sim-economia" class="hidden whitespace-nowrap rounded-full bg-dourado px-3 py-1 text-xs font-semibold text-mata-escura"></span>
+          <span id="sim-pp" class="text-sm text-areia/70"></span>
+        </div>
         <dl id="sim-detalhe" class="mt-5 space-y-1.5 border-t border-white/10 pt-4 text-sm text-areia/80"></dl>
       </div>
       <div id="sim-dayuse" class="hidden">
@@ -81,7 +97,7 @@ const BTN =
         Pedir no WhatsApp
       </a>
       <p class="mt-4 text-xs leading-relaxed text-areia/60">
-        Estimativa pela tabela atual, com a taxa de limpeza. A equipe confirma o valor e a
+        Estimativa pela tabela atual, com a faxina. A equipe confirma o valor e a
         disponibilidade no WhatsApp, e a data é garantida com o sinal via PIX.
       </p>
     </div>
@@ -89,7 +105,7 @@ const BTN =
 </div>
 
 <script>
-  import { estimar, noitesEspeciais, reais, precos, type Grupo } from "../lib/simulador";
+  import { estimar, noitesEspeciais, reais, diaCurto, precos, type Grupo } from "../lib/simulador";
 
   const box = document.getElementById("simulador")!;
   const whatsapp = box.dataset.whatsapp ?? "";
@@ -103,10 +119,11 @@ const BTN =
   const br = (k: string) => k.split("-").reverse().join("/");
   const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
   const pessoas = () => grupo.adultos + grupo.meia + grupo.gratis;
+  const IDADE_MEIA = precos.idadeAdulto - 1;
 
   function descreverGrupo() {
     const partes = [plural(grupo.adultos, "adulto", "adultos")];
-    if (grupo.meia) partes.push(plural(grupo.meia, "criança de 6 a 13 anos", "crianças de 6 a 13 anos"));
+    if (grupo.meia) partes.push(plural(grupo.meia, `criança de 6 a ${IDADE_MEIA} anos`, `crianças de 6 a ${IDADE_MEIA} anos`));
     if (grupo.gratis) partes.push(plural(grupo.gratis, "criança até 5 anos", "crianças até 5 anos"));
     return partes.length > 1 ? partes.slice(0, -1).join(", ") + " e " + partes.at(-1) : partes[0];
   }
@@ -114,7 +131,7 @@ const BTN =
   function linha(rotulo: string, valor: string) {
     const d = document.createElement("div");
     d.className = "flex justify-between gap-4";
-    d.innerHTML = `<dt></dt><dd class="tabular-nums text-areia"></dd>`;
+    d.innerHTML = `<dt></dt><dd class="whitespace-nowrap tabular-nums text-areia"></dd>`;
     d.children[0].textContent = rotulo;
     d.children[1].textContent = valor;
     return d;
@@ -141,6 +158,7 @@ const BTN =
       $("sim-datas").textContent = `Day use em ${br(inicio)}`;
       $("sim-resultado").classList.add("hidden");
       $("sim-dayuse").classList.remove("hidden");
+      $("sim-oferta").classList.add("hidden");
       aviso.classList.add("hidden");
       msg = `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade para day use no dia ${br(inicio)}, para ${descreverGrupo()}.`;
       if (notaBarra) notaBarra.textContent = "Day use: valor sob consulta no WhatsApp.";
@@ -151,14 +169,31 @@ const BTN =
       $("sim-resultado").classList.remove("hidden");
       $("sim-dayuse").classList.add("hidden");
       $("sim-total").textContent = reais(e.total);
-      $("sim-pp").textContent = `≈ ${reais(e.porPessoa)} por pessoa` + (grupo.meia ? " (criança de 6 a 13 conta como meia)" : "");
+      $("sim-pp").textContent = `≈ ${reais(e.porPessoa)} por pessoa` + (grupo.meia ? ` (criança de 6 a ${IDADE_MEIA} conta como meia)` : "");
+
+      // Oferta de última hora em destaque: preço cheio riscado, economia e prazo
+      const o = e.oferta;
+      const nomeOferta = o ? (o.limpezaGratis ? "Faxina grátis" : `${o.pct}% de desconto nas diárias`) : "";
+      $("sim-oferta").classList.toggle("hidden", !o);
+      $("sim-cheio").classList.toggle("hidden", !o);
+      $("sim-economia").classList.toggle("hidden", !o);
+      if (o) {
+        $("sim-oferta-nome").textContent = nomeOferta;
+        $("sim-oferta-prazo").textContent =
+          `Este fim de semana ainda está livre. Vale até ${diaCurto(o.validaAte)}, com o sinal de 50% via PIX.`;
+        $("sim-cheio").textContent = reais(e.totalCheio);
+        $("sim-economia").textContent = `Você economiza ${reais(e.totalCheio - e.total)}`;
+      }
 
       const det = $("sim-detalhe");
       det.replaceChildren();
       if (e.comuns) det.append(linha(`${plural(e.comuns, "diária", "diárias")} × ${reais(e.valorComum)}`, reais(e.comuns * e.valorComum)));
       if (e.especiais)
         det.append(linha(`${plural(e.especiais, "diária de feriado", "diárias de feriado")} × ${reais(e.valorEspecial)}`, reais(e.especiais * e.valorEspecial)));
-      det.append(linha(`Limpeza (${e.diarias} × ${reais(precos.limpezaPorDiaria)})`, reais(e.limpeza)));
+      if (e.desconto) det.append(linha(`Desconto (${o!.pct}%)`, `− ${reais(e.desconto)}`));
+      det.append(
+        linha(`Faxina (${e.diarias} × ${reais(e.limpezaDiaria)})`, o?.limpezaGratis ? "grátis" : reais(e.limpeza)),
+      );
 
       const avisos: string[] = [];
       if (e.diarias < precos.minDiariasPernoite)
@@ -169,8 +204,12 @@ const BTN =
 
       msg =
         `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade de ${br(inicio)} (chegada) a ${br(fim)} (saída), ` +
-        `${diarias}, para ${descreverGrupo()}. A estimativa do site deu ${reais(e.total)}.`;
-      if (notaBarra) notaBarra.textContent = `Estimativa: ${reais(e.total)} para ${plural(pessoas(), "pessoa", "pessoas")}.`;
+        `${diarias}, para ${descreverGrupo()}. A estimativa do site deu ${reais(e.total)}` +
+        (o ? `, com a oferta de última hora (${nomeOferta.toLowerCase()}).` : ".");
+      if (notaBarra)
+        notaBarra.textContent = o
+          ? `Oferta de última hora: ${reais(e.total)} (${nomeOferta.toLowerCase()}) para ${plural(pessoas(), "pessoa", "pessoas")}.`
+          : `Estimativa: ${reais(e.total)} para ${plural(pessoas(), "pessoa", "pessoas")}.`;
     }
 
     const href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;

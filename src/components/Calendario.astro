@@ -36,6 +36,24 @@ import Simulador from "./Simulador.astro";
     </span>
   </div>
 
+  <!-- Oferta de última hora: aparece só quando o próximo fim de semana está livre
+       e dentro da escada de descontos. Um toque já seleciona sexta a domingo. -->
+  <button
+    id="oferta-banner"
+    type="button"
+    class="mx-auto mb-8 hidden w-full max-w-xl items-center gap-4 rounded-2xl bg-dourado px-5 py-4 text-left text-mata-escura shadow-[0_14px_34px_-14px_rgba(200,149,47,0.7)] ring-1 ring-mel/40 transition duration-150 hover:-translate-y-0.5 active:scale-[0.98]"
+  >
+    <span class="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full bg-mata-escura text-dourado sm:flex">
+      <Icon name="sparkles" class="h-5 w-5" />
+    </span>
+    <span class="min-w-0 flex-1">
+      <span class="block text-[11px] font-bold uppercase tracking-[0.18em]">Última hora · fim de semana livre</span>
+      <span id="oferta-banner-texto" class="mt-0.5 block font-titulo text-lg font-semibold leading-snug"></span>
+      <span id="oferta-banner-prazo" class="mt-0.5 block text-xs text-mata-escura/80"></span>
+    </span>
+    <span class="shrink-0 text-sm font-semibold underline underline-offset-4">Simular</span>
+  </button>
+
   <!-- Estado de carregamento -->
   <p id="calendario-loading" class="text-center text-terra">
     Carregando disponibilidade…
@@ -130,7 +148,7 @@ import Simulador from "./Simulador.astro";
 </section>
 
 <script>
-  import { noitesEspeciais } from "../lib/simulador";
+  import { noitesEspeciais, ofertaUltimaHora, hojeBrasilia, diaCurto } from "../lib/simulador";
   const especiais = noitesEspeciais();
   const wrap = document.getElementById("calendario-meses")!;
   const loading = document.getElementById("calendario-loading")!;
@@ -327,6 +345,44 @@ import Simulador from "./Simulador.astro";
 
   // --- Paginação dos meses -------------------------------------------------
 
+  // --- Oferta de última hora em destaque ------------------------------------
+  function mostrarOferta() {
+    const banner = document.getElementById("oferta-banner")!;
+    const hoje = hojeBrasilia();
+    const DIA = 86400000;
+    const k = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+    const hojeMs = Date.parse(hoje + "T00:00:00Z");
+    // próximas sextas (a partir de hoje) com sexta e sábado livres e oferta ativa
+    for (let ms = hojeMs; ms <= hojeMs + 11 * DIA; ms += DIA) {
+      if (new Date(ms).getUTCDay() !== 5) continue;
+      const sex = k(ms), sab = k(ms + DIA), dom = k(ms + 2 * DIA);
+      if (ocupados.has(sex) || ocupados.has(sab) || !botoes.has(sex) || !botoes.has(dom)) continue;
+      const o = ofertaUltimaHora(sex, dom, hoje);
+      if (!o) continue;
+      const nome = o.limpezaGratis ? "faxina grátis" : `${o.pct}% de desconto nas diárias`;
+      const fmt = (x: string) => x.slice(8, 10) + "/" + x.slice(5, 7);
+      document.getElementById("oferta-banner-texto")!.textContent =
+        `${fmt(sex)} a ${fmt(dom)} com ${nome}`;
+      document.getElementById("oferta-banner-prazo")!.textContent =
+        `Vale até ${diaCurto(o.validaAte)}, com o sinal de 50% via PIX.`;
+      banner.classList.remove("hidden");
+      banner.classList.add("flex");
+      banner.addEventListener("click", () => {
+        // vai para o mês da sexta e seleciona sexta → domingo
+        const alvo = new Date(ms);
+        const hojeD = new Date();
+        pagina = (alvo.getUTCFullYear() - hojeD.getFullYear()) * 12 + alvo.getUTCMonth() - hojeD.getMonth();
+        mostrarPagina();
+        selIn = selOut = null;
+        clicarDia(sex);
+        clicarDia(dom);
+        const suave = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document.getElementById("simulador")?.scrollIntoView({ behavior: suave ? "smooth" : "auto", block: "start" });
+      });
+      return;
+    }
+  }
+
   function mostrarPagina() {
     const n = porPagina();
     const max = Math.max(0, MESES_A_MOSTRAR - n);
@@ -430,6 +486,7 @@ import Simulador from "./Simulador.astro";
       }
       ocupados = new Set<string>(data.ocupados);
       renderMeses();
+      mostrarOferta();
     })
     .catch(() => mostrarFallback());
 </script>
