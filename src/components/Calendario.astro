@@ -18,11 +18,11 @@ import Icon from "./Icon.astro";
     class="mb-8 hidden flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-terra"
   >
     <span class="flex items-center gap-2">
-      <span class="inline-block h-4 w-4 rounded bg-mata/15 ring-1 ring-mata/30"></span>
+      <span class="inline-block h-4 w-4 rounded bg-mata/15 ring-1 ring-mata/40"></span>
       Disponível
     </span>
     <span class="flex items-center gap-2">
-      <span class="inline-block h-4 w-4 rounded bg-stone-300"></span>
+      <span class="text-xs text-stone-400 line-through" aria-hidden="true">12</span>
       Ocupado
     </span>
     <span class="flex items-center gap-2">
@@ -78,7 +78,7 @@ import Icon from "./Icon.astro";
       href="#"
       target="_blank"
       rel="noopener"
-      class="mt-6 inline-block rounded-full bg-zap px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-zap-escuro"
+      class="mt-6 inline-block rounded-full bg-zap px-8 py-4 text-lg font-semibold text-white shadow-lg transition active:scale-[0.97] hover:-translate-y-0.5 hover:bg-zap-escuro"
     >
       Consultar no WhatsApp
     </a>
@@ -89,7 +89,7 @@ import Icon from "./Icon.astro";
        No mobile fica acima do botão flutuante do WhatsApp. -->
   <div
     id="sel-bar"
-    class="pointer-events-none fixed inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 hidden px-4 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+    class="pointer-events-none invisible fixed inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 translate-y-3 px-4 opacity-0 transition-[opacity,translate,visibility] duration-150 ease-in motion-reduce:transition-none sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
     role="status"
     aria-live="polite"
   >
@@ -111,7 +111,7 @@ import Icon from "./Icon.astro";
           href="#"
           target="_blank"
           rel="noopener"
-          class="hidden items-center gap-2 rounded-full bg-zap px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-zap-escuro"
+          class="hidden items-center gap-2 rounded-full bg-zap px-5 py-3 text-sm font-semibold text-white shadow-lg transition active:scale-[0.97] hover:-translate-y-0.5 hover:bg-zap-escuro"
         >
           <Icon name="whatsapp" class="h-4 w-4" />
           Pedir no WhatsApp
@@ -170,7 +170,7 @@ import Icon from "./Icon.astro";
     legenda.classList.add("hidden");
     fallback.classList.remove("hidden");
     const a = document.getElementById("calendario-fallback-wa") as HTMLAnchorElement;
-    a.href = waLink("Olá! Vim pelo site e quero consultar a disponibilidade do Rancho SPPA.");
+    a.href = waLink("Olá! Vim pelo site e quero consultar a disponibilidade do Rancho Pica-Pau MG.");
   }
 
   // --- Seleção de período -------------------------------------------------
@@ -212,10 +212,27 @@ import Icon from "./Icon.astro";
     render();
   }
 
-  const CLS_BASE = "flex h-9 items-center justify-center rounded text-sm transition";
-  const CLS_LIVRE = `${CLS_BASE} bg-mata/10 font-medium text-mata ring-1 ring-mata/20 hover:bg-mata hover:text-white`;
-  const CLS_PONTA = `${CLS_BASE} bg-mata font-semibold text-white ring-1 ring-mata`;
-  const CLS_MEIO = `${CLS_BASE} bg-mata/30 font-medium text-mata-escura`;
+  // h-11 no celular: 44 px, o mínimo confortável para o dedo.
+  const CLS_BASE = "flex h-11 items-center justify-center rounded-md text-sm transition duration-150 sm:h-9";
+  const CLS_LIVRE = `${CLS_BASE} bg-mata/15 font-semibold text-mata-escura ring-1 ring-mata/40 hover:bg-mata hover:text-white active:scale-[0.94]`;
+  const CLS_PONTA = `${CLS_BASE} bg-mata font-semibold text-white ring-1 ring-mata active:scale-[0.94]`;
+  const CLS_MEIO = `${CLS_BASE} bg-mata/35 font-semibold text-mata-escura active:scale-[0.94]`;
+
+  // Barra da seleção: sobe ao abrir (ease-out, 200 ms) e desce mais rápido ao fechar.
+  // Avisa o resto da página (o aviso de cookies sai da frente enquanto ela está aberta).
+  const secao = document.getElementById("disponibilidade")!;
+  const BAR_FECHADA = ["opacity-0", "translate-y-3", "invisible", "duration-150", "ease-in"];
+  const BAR_ABERTA = ["duration-200", "ease-out"];
+  let barAberta = false;
+  function mostrarBarra(abrir: boolean) {
+    if (abrir === barAberta) return;
+    barAberta = abrir;
+    bar.classList.remove(...(abrir ? BAR_FECHADA : BAR_ABERTA));
+    bar.classList.add(...(abrir ? BAR_ABERTA : BAR_FECHADA));
+    // no celular, folga no fim da seção pra barra não cobrir a última semana do mês
+    secao.classList.toggle("max-sm:pb-44", abrir);
+    document.dispatchEvent(new CustomEvent("sel-bar", { detail: { aberta: abrir } }));
+  }
 
   function render() {
     botoes.forEach((b, k) => {
@@ -226,10 +243,10 @@ import Icon from "./Icon.astro";
     });
 
     if (!selIn) {
-      bar.classList.add("hidden");
+      mostrarBarra(false);
       return;
     }
-    bar.classList.remove("hidden");
+    mostrarBarra(true);
 
     if (!selOut) {
       selTexto.textContent = `Chegada ${br(selIn)}`;
@@ -244,13 +261,13 @@ import Icon from "./Icon.astro";
     if (n === 0) {
       selTexto.textContent = `Day use em ${br(selIn)}`;
       selNota.textContent = "Passar o dia, até o pôr do sol.";
-      msg = `Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade para day use no dia ${br(selIn)}.`;
+      msg = `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade para day use no dia ${br(selIn)}.`;
     } else {
       const diarias = n === 1 ? "1 diária" : `${n} diárias`;
       selTexto.textContent = `${br(selIn)} a ${br(selOut)} · ${diarias}`;
       selNota.textContent =
         n === 1 ? "Para pernoite o mínimo é de 2 diárias, mas pode perguntar." : "Vamos confirmar e passar os valores no WhatsApp.";
-      msg = `Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade de ${br(selIn)} (chegada) a ${br(selOut)} (saída), ${diarias}.`;
+      msg = `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade de ${br(selIn)} (chegada) a ${br(selOut)} (saída), ${diarias}.`;
     }
     selWa.href = waLink(msg);
     selWa.classList.remove("hidden");
@@ -343,13 +360,13 @@ import Icon from "./Icon.astro";
 
       if (data < hoje) {
         const cel = document.createElement("div");
-        cel.className = `${CLS_BASE} text-stone-600`;
+        cel.className = `${CLS_BASE} text-stone-300`;
         cel.textContent = String(dia);
         cel.setAttribute("aria-hidden", "true"); // dia passado: só preenche a grade
         grade.appendChild(cel);
       } else if (ocupados.has(k)) {
         const cel = document.createElement("div");
-        cel.className = `${CLS_BASE} bg-stone-300 text-stone-500`;
+        cel.className = `${CLS_BASE} text-stone-400 line-through decoration-stone-400/80`;
         cel.textContent = String(dia);
         cel.setAttribute("aria-label", `Dia ${dia}: ocupado`);
         grade.appendChild(cel);

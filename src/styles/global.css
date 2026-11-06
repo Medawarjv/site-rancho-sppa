@@ -59,6 +59,14 @@ html { scroll-behavior: smooth; }
 @media (min-width: 768px) { html { scroll-padding-top: 4.5rem; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
+/* Toque no celular: sem o flash cinza/azul do navegador (cada botão tem o seu
+   próprio retorno com active:) e sem a espera de duplo toque. */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 /* Títulos: deixa o navegador usar o eixo óptico quando a fonte tiver */
 .font-titulo {
   font-optical-sizing: auto;

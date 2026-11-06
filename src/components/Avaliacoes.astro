@@ -44,10 +44,15 @@ const corDe = (nome: string) => {
       </p>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Celular: carrossel lateral com encaixe (o próximo cartão aparece na borda,
+         convidando a arrastar). Do tablet pra cima, grade. -->
+    <div
+      class="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
+      aria-label="Avaliações de hóspedes"
+    >
       {
         lista.map((a) => (
-          <figure class="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-terra/10">
+          <figure class="flex w-[85%] shrink-0 snap-start flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-terra/10 sm:h-full sm:w-auto">
             <div class="mb-3 flex text-mel" role="img" aria-label="5 de 5 estrelas">
               {estrelas.map(() => <Icon name="star" class="h-4 w-4" />)}
             </div>
@@ -84,7 +89,11 @@ const corDe = (nome: string) => {
       }
     </div>
 
-    <div class="mt-10 text-center">
+    <p class="mt-3 text-center text-xs text-terra/70 sm:hidden" aria-hidden="true">
+      Arraste para o lado para ver mais →
+    </p>
+
+    <div class="mt-8 text-center sm:mt-10">
       <a
         href={site.mapsLink}
         target="_blank"

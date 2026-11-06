@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import site from "../data/site.json";
 
-const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi as políticas do site do Rancho SPPA e tenho uma dúvida.")}`;
+const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi as políticas do site do Rancho Pica-Pau MG e tenho uma dúvida.")}`;
 
 const breadcrumb = {
   "@context": "https://schema.org",
@@ -63,7 +63,7 @@ const secoes = [
 
 <Layout
   titulo={`Políticas e regras · ${site.nome}`}
-  descricao="Regras de reserva, pagamento, cancelamento, horários, pets e segurança do Rancho SPPA."
+  descricao="Regras de reserva, pagamento, cancelamento, horários, pets e segurança do Rancho Pica-Pau MG."
 >
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
 
@@ -102,7 +102,7 @@ const secoes = [
         href={waHref}
         target="_blank"
         rel="noopener"
-        class="mt-5 inline-block rounded-full bg-zap px-8 py-4 font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-zap-escuro"
+        class="mt-5 inline-block rounded-full bg-zap px-8 py-4 font-semibold text-white shadow-lg transition active:scale-[0.97] hover:-translate-y-0.5 hover:bg-zap-escuro"
       >
         Falar no WhatsApp
       </a>

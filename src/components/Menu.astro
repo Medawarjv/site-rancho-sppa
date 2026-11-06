@@ -5,7 +5,7 @@
 import site from "../data/site.json";
 import Icon from "./Icon.astro";
 
-const wa = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi o site do Rancho SPPA e quero consultar a disponibilidade.")}`;
+const wa = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade.")}`;
 const links = [
   { href: "/#video", nome: "Vídeo" },
   { href: "/#rancho", nome: "O rancho" },
@@ -40,7 +40,7 @@ const links = [
         href={wa}
         target="_blank"
         rel="noopener"
-        class="ml-2 inline-flex items-center gap-2 rounded-full bg-zap px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-zap-escuro"
+        class="ml-2 inline-flex items-center gap-2 rounded-full bg-zap px-4 py-2 text-sm font-semibold text-white shadow transition active:scale-[0.97] hover:bg-zap-escuro"
       >
         <Icon name="whatsapp" class="h-4 w-4" />
         WhatsApp

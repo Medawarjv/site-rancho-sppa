@@ -78,7 +78,7 @@ const fotos = await Promise.all(
         thumb: mod.default,
         full: cheia.src,
         cat,
-        alt: legendas[chave] ?? "Foto do Rancho SPPA",
+        alt: legendas[chave] ?? "Foto do Rancho Pica-Pau MG",
       };
     }),
 );
@@ -101,14 +101,19 @@ const primeira = temas[0].id;
     </div>
 
     <!-- Abas de tema -->
-    <div class="mb-8 flex flex-wrap justify-center gap-2" role="tablist">
+    <!-- No celular: uma faixa só, com rolagem lateral e bordas esmaecidas
+         (antes as 5 abas quebravam em 4 linhas). No desktop, centralizadas. -->
+    <div
+      class="-mx-6 mb-8 flex gap-2 overflow-x-auto px-6 pb-1 [mask-image:linear-gradient(to_right,transparent,#000_1.5rem,#000_calc(100%-1.5rem),transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0 sm:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+      role="tablist"
+    >
       {
         temas.map((t) => (
           <button
             type="button"
             role="tab"
             aria-controls="galeria-painel"
-            class="galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition"
+            class="galeria-tab shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition active:scale-[0.97]"
             data-tab={t.id}
           >
             {t.nome}
@@ -154,7 +159,7 @@ const primeira = temas[0].id;
   {/* Lightbox */}
   <div
     id="lightbox"
-    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/90 p-4"
+    class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
     role="dialog"
     aria-modal="true"
     aria-label="Foto ampliada"
@@ -172,6 +177,42 @@ const primeira = temas[0].id;
     </div>
   </div>
 </section>
+
+<style>
+  /* Lightbox: entra com fade + leve crescimento da foto (ease-out, 220 ms) e sai
+     mais rápido (150 ms). Quem pede menos movimento não ganha transição. */
+  #lightbox {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 150ms ease-in,
+      visibility 0s linear 150ms;
+  }
+  #lightbox[data-aberto] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 220ms cubic-bezier(0.23, 1, 0.32, 1),
+      visibility 0s;
+  }
+  #lb-img {
+    transform: scale(0.96);
+    transition: transform 150ms ease-in;
+  }
+  #lightbox[data-aberto] #lb-img {
+    transform: scale(1);
+    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #lightbox,
+    #lightbox[data-aberto],
+    #lb-img,
+    #lightbox[data-aberto] #lb-img {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
 
 <script>
   const grid = document.getElementById("galeria-grid")!;
@@ -205,7 +246,7 @@ const primeira = temas[0].id;
   function selecionarTab(id: string) {
     tabs.forEach((t) => {
       const on = t.dataset.tab === id;
-      t.className = "galeria-tab rounded-full border px-4 py-2 text-sm font-medium transition " + (on ? ativoOn : ativoOff);
+      t.className = "galeria-tab shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition active:scale-[0.97] " + (on ? ativoOn : ativoOff);
       t.setAttribute("aria-selected", on ? "true" : "false");
     });
     itens.forEach((li) => {
@@ -218,28 +259,59 @@ const primeira = temas[0].id;
     carregarVisiveis();
   }
 
+  const aberto = () => !!lb?.hasAttribute("data-aberto");
+  const preCarregar = (i: number) => {
+    const b = visiveis[(i + visiveis.length) % visiveis.length];
+    if (b) new Image().src = b.dataset.full!;
+  };
+
+  // Troca foto, legenda e contador juntos, só quando a foto nova já está pronta
+  // (antes a legenda mudava e a foto antiga ficava na tela até a nova carregar).
   function mostrar(i: number) {
     atual = (i + visiveis.length) % visiveis.length;
+    const pedido = atual;
     const b = visiveis[atual];
-    lbImg.src = b.dataset.full!;
+    const src = b.dataset.full!;
     const alt = b.dataset.legenda ?? "";
-    lbImg.alt = alt;
-    if (legenda) legenda.textContent = alt;
-    if (contador) contador.textContent = `${atual + 1} / ${visiveis.length}`;
-  }
-  function abrir(i: number) {
-    mostrar(i);
-    lb?.classList.remove("hidden");
-    lb?.classList.add("flex");
-    document.body.style.overflow = "hidden";
-  }
-  function fechar() {
-    lb?.classList.add("hidden");
-    lb?.classList.remove("flex");
-    document.body.style.overflow = "";
+    const aplicar = () => {
+      if (pedido !== atual) return; // a pessoa já passou para outra foto
+      lbImg.src = src;
+      lbImg.alt = alt;
+      if (legenda) legenda.textContent = alt;
+      if (contador) contador.textContent = `${atual + 1} / ${visiveis.length}`;
+    };
+    const pre = new Image();
+    pre.src = src;
+    pre.decode().then(aplicar, aplicar);
+    preCarregar(atual + 1);
+    preCarregar(atual - 1);
   }
 
-  tabs.forEach((t) => t.addEventListener("click", () => selecionarTab(t.dataset.tab!)));
+  let focoAntes: HTMLElement | null = null;
+  function abrir(i: number) {
+    focoAntes = document.activeElement as HTMLElement | null;
+    lbImg.removeAttribute("src"); // não mostra a última foto da vez anterior
+    if (legenda) legenda.textContent = "";
+    if (contador) contador.textContent = "";
+    mostrar(i);
+    lb?.setAttribute("data-aberto", "");
+    document.body.style.overflow = "hidden";
+    document.getElementById("lb-fechar")?.focus({ preventScroll: true });
+  }
+  function fechar() {
+    lb?.removeAttribute("data-aberto");
+    document.body.style.overflow = "";
+    // devolve o foco à foto da grade correspondente à que estava aberta
+    (visiveis[atual] ?? focoAntes)?.focus({ preventScroll: true });
+  }
+
+  tabs.forEach((t) =>
+    t.addEventListener("click", () => {
+      selecionarTab(t.dataset.tab!);
+      // no celular, traz a aba escolhida para dentro da faixa
+      t.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" });
+    }),
+  );
   grid.addEventListener("click", (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-full]");
     if (btn && btn.dataset.pos !== undefined) abrir(Number(btn.dataset.pos));
@@ -251,7 +323,7 @@ const primeira = temas[0].id;
     if (e.target === lb) fechar();
   });
   document.addEventListener("keydown", (e) => {
-    if (lb?.classList.contains("hidden")) return;
+    if (!aberto()) return;
     if (e.key === "Escape") fechar();
     if (e.key === "ArrowRight") mostrar(atual + 1);
     if (e.key === "ArrowLeft") mostrar(atual - 1);
