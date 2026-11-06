@@ -1,0 +1,12 @@
+{
+  "_como_editar": "Tabela do simulador (aprovada pelo JV e pelo pai em 06/11/2026). Valores por pessoa por diária, aplicados ao grupo inteiro conforme a faixa. 'especial' vale para as noites de feriado/feriadão (ver feriados.json). Crianças de 6 a 13 anos contam como meia pessoa; até 5 anos não pagam. O total nunca cai ao passar de uma faixa para a seguinte, e a primeira faixa tem mínimo de ate x valor (10 x 140 = 1.400 por diária).",
+  "faixas": [
+    { "ate": 10, "comum": 140, "especial": 160 },
+    { "ate": 20, "comum": 130, "especial": 150 },
+    { "ate": 30, "comum": 125, "especial": 145 }
+  ],
+  "limpezaPorDiaria": 50,
+  "maxPessoas": 30,
+  "minDiariasPernoite": 2,
+  "adultosPadrao": 10
+}

@@ -1,0 +1,207 @@
+---
+// Simulador de preços: aparece abaixo do calendário depois que a pessoa escolhe
+// chegada e saída. Mostra a estimativa com a tabela cheia (sem descontos) e termina
+// no WhatsApp com datas, grupo e valor já escritos. Cálculo em src/lib/simulador.ts;
+// tabela em src/data/precos.json; feriados em src/data/feriados.json.
+import site from "../data/site.json";
+import precos from "../data/precos.json";
+import Icon from "./Icon.astro";
+
+const campos = [
+  { id: "adultos", nome: "Adultos", detalhe: "a partir de 14 anos", min: 1, valor: precos.adultosPadrao },
+  { id: "meia", nome: "Crianças de 6 a 13", detalhe: "pagam meia", min: 0, valor: 0 },
+  { id: "gratis", nome: "Crianças até 5 anos", detalhe: "não pagam", min: 0, valor: 0 },
+];
+const BTN =
+  "flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-mata ring-1 ring-mata/30 transition duration-150 hover:bg-mata hover:text-white active:scale-[0.94] disabled:pointer-events-none disabled:opacity-30";
+---
+
+<div
+  id="simulador"
+  class="mx-auto mt-10 hidden max-w-3xl scroll-mt-24 overflow-hidden rounded-2xl bg-white shadow-[0_18px_40px_-24px_rgba(30,63,39,0.45)] ring-1 ring-terra/10"
+  data-whatsapp={site.whatsapp}
+  data-max={precos.maxPessoas}
+  aria-labelledby="sim-titulo"
+>
+  <div class="grid md:grid-cols-[1fr_1.1fr]">
+    <!-- Grupo -->
+    <div class="p-6 sm:p-8">
+      <p class="text-xs font-medium uppercase tracking-[0.2em] text-terra">Simule o valor</p>
+      <h3 id="sim-titulo" class="mt-2 font-titulo text-2xl font-semibold text-mata-escura">Quem vem com você?</h3>
+      <p id="sim-datas" class="mt-1 text-sm text-tinta/70"></p>
+
+      <ul class="mt-6 space-y-4">
+        {
+          campos.map((c) => (
+            <li class="flex items-center justify-between gap-4">
+              <div>
+                <p class="font-medium text-mata-escura">{c.nome}</p>
+                <p class="text-xs text-tinta/65">{c.detalhe}</p>
+              </div>
+              <div class="flex items-center gap-3" data-campo={c.id} data-min={c.min} data-valor={c.valor}>
+                <button type="button" class={BTN} data-passo="-1" aria-label={`Menos ${c.nome.toLowerCase()}`}>−</button>
+                <output class="w-7 text-center text-lg font-semibold tabular-nums text-mata-escura" aria-live="polite">{c.valor}</output>
+                <button type="button" class={BTN} data-passo="1" aria-label={`Mais ${c.nome.toLowerCase()}`}>+</button>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <p id="sim-limite" class="mt-4 hidden text-xs text-terra">
+        O limite é de {precos.maxPessoas} pessoas para dormir, contando as crianças. Para mais gente
+        em day use, fale com a gente.
+      </p>
+    </div>
+
+    <!-- Resultado -->
+    <div class="flex flex-col bg-mata-escura p-6 text-areia sm:p-8">
+      <div id="sim-resultado">
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-areia/70">Estimativa</p>
+        <p id="sim-total" class="mt-2 font-titulo text-4xl font-semibold tabular-nums sm:text-5xl"></p>
+        <p id="sim-pp" class="mt-1 text-sm text-dourado"></p>
+        <dl id="sim-detalhe" class="mt-5 space-y-1.5 border-t border-white/10 pt-4 text-sm text-areia/80"></dl>
+      </div>
+      <div id="sim-dayuse" class="hidden">
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-areia/70">Day use</p>
+        <p class="mt-2 font-titulo text-2xl font-semibold">Valor sob consulta</p>
+        <p class="mt-2 text-sm leading-relaxed text-areia/80">
+          Para passar o dia, até o pôr do sol, a equipe monta o valor conforme o tamanho do grupo.
+        </p>
+      </div>
+      <p id="sim-aviso" class="mt-4 hidden rounded-lg bg-white/10 px-3 py-2 text-xs leading-relaxed text-areia/90"></p>
+
+      <a
+        id="sim-wa"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-zap px-6 py-3.5 font-semibold text-white shadow-lg transition active:scale-[0.97] hover:-translate-y-0.5 hover:bg-zap-escuro"
+      >
+        <Icon name="whatsapp" class="h-5 w-5" />
+        Pedir no WhatsApp
+      </a>
+      <p class="mt-4 text-xs leading-relaxed text-areia/60">
+        Estimativa pela tabela atual, com a taxa de limpeza. A equipe confirma o valor e a
+        disponibilidade no WhatsApp, e a data é garantida com o sinal via PIX.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { estimar, noitesEspeciais, reais, precos, type Grupo } from "../lib/simulador";
+
+  const box = document.getElementById("simulador")!;
+  const whatsapp = box.dataset.whatsapp ?? "";
+  const max = Number(box.dataset.max);
+  const especiais = noitesEspeciais();
+  const $ = (id: string) => document.getElementById(id)!;
+  const blocos = Array.from(box.querySelectorAll<HTMLElement>("[data-campo]"));
+  const grupo: Grupo = { adultos: precos.adultosPadrao, meia: 0, gratis: 0 };
+  let periodo: { inicio: string; fim: string } | null = null;
+
+  const br = (k: string) => k.split("-").reverse().join("/");
+  const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
+  const pessoas = () => grupo.adultos + grupo.meia + grupo.gratis;
+
+  function descreverGrupo() {
+    const partes = [plural(grupo.adultos, "adulto", "adultos")];
+    if (grupo.meia) partes.push(plural(grupo.meia, "criança de 6 a 13 anos", "crianças de 6 a 13 anos"));
+    if (grupo.gratis) partes.push(plural(grupo.gratis, "criança até 5 anos", "crianças até 5 anos"));
+    return partes.length > 1 ? partes.slice(0, -1).join(", ") + " e " + partes.at(-1) : partes[0];
+  }
+
+  function linha(rotulo: string, valor: string) {
+    const d = document.createElement("div");
+    d.className = "flex justify-between gap-4";
+    d.innerHTML = `<dt></dt><dd class="tabular-nums text-areia"></dd>`;
+    d.children[0].textContent = rotulo;
+    d.children[1].textContent = valor;
+    return d;
+  }
+
+  function atualizar() {
+    if (!periodo) return;
+    // steppers
+    blocos.forEach((b) => {
+      const campo = b.dataset.campo as keyof Grupo;
+      b.querySelector("output")!.textContent = String(grupo[campo]);
+      (b.querySelector('[data-passo="-1"]') as HTMLButtonElement).disabled = grupo[campo] <= Number(b.dataset.min);
+      (b.querySelector('[data-passo="1"]') as HTMLButtonElement).disabled = pessoas() >= max;
+    });
+    $("sim-limite").classList.toggle("hidden", pessoas() < max);
+
+    const { inicio, fim } = periodo;
+    const aviso = $("sim-aviso");
+    const notaBarra = document.getElementById("sel-nota");
+    let msg: string;
+
+    if (inicio === fim) {
+      // day use: sem preço no site
+      $("sim-datas").textContent = `Day use em ${br(inicio)}`;
+      $("sim-resultado").classList.add("hidden");
+      $("sim-dayuse").classList.remove("hidden");
+      aviso.classList.add("hidden");
+      msg = `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade para day use no dia ${br(inicio)}, para ${descreverGrupo()}.`;
+      if (notaBarra) notaBarra.textContent = "Day use: valor sob consulta no WhatsApp.";
+    } else {
+      const e = estimar(inicio, fim, grupo, especiais);
+      const diarias = plural(e.diarias, "diária", "diárias");
+      $("sim-datas").textContent = `${br(inicio)} a ${br(fim)} · ${diarias}`;
+      $("sim-resultado").classList.remove("hidden");
+      $("sim-dayuse").classList.add("hidden");
+      $("sim-total").textContent = reais(e.total);
+      $("sim-pp").textContent = `≈ ${reais(e.porPessoa)} por pessoa` + (grupo.meia ? " (criança de 6 a 13 conta como meia)" : "");
+
+      const det = $("sim-detalhe");
+      det.replaceChildren();
+      if (e.comuns) det.append(linha(`${plural(e.comuns, "diária", "diárias")} × ${reais(e.valorComum)}`, reais(e.comuns * e.valorComum)));
+      if (e.especiais)
+        det.append(linha(`${plural(e.especiais, "diária de feriado", "diárias de feriado")} × ${reais(e.valorEspecial)}`, reais(e.especiais * e.valorEspecial)));
+      det.append(linha(`Limpeza (${e.diarias} × ${reais(precos.limpezaPorDiaria)})`, reais(e.limpeza)));
+
+      const avisos: string[] = [];
+      if (e.diarias < precos.minDiariasPernoite)
+        avisos.push(`Para pernoite, o mínimo é de ${precos.minDiariasPernoite} diárias. Pergunte no WhatsApp se dá para fazer só uma.`);
+      if (e.especiais) avisos.push("Feriados e feriadões têm tarifa especial.");
+      aviso.textContent = avisos.join(" ");
+      aviso.classList.toggle("hidden", !avisos.length);
+
+      msg =
+        `Olá! Vi o site do Rancho Pica-Pau MG e quero consultar a disponibilidade de ${br(inicio)} (chegada) a ${br(fim)} (saída), ` +
+        `${diarias}, para ${descreverGrupo()}. A estimativa do site deu ${reais(e.total)}.`;
+      if (notaBarra) notaBarra.textContent = `Estimativa: ${reais(e.total)} para ${plural(pessoas(), "pessoa", "pessoas")}.`;
+    }
+
+    const href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
+    ($("sim-wa") as HTMLAnchorElement).href = href;
+    const waBarra = document.getElementById("sel-wa") as HTMLAnchorElement | null;
+    if (waBarra) waBarra.href = href;
+  }
+
+  blocos.forEach((b) =>
+    b.addEventListener("click", (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>("[data-passo]");
+      if (!btn || btn.disabled) return;
+      const campo = b.dataset.campo as keyof Grupo;
+      const passo = Number(btn.dataset.passo);
+      if (passo > 0 && pessoas() >= max) return;
+      grupo[campo] = Math.max(Number(b.dataset.min), grupo[campo] + passo);
+      atualizar();
+    }),
+  );
+
+  // O calendário avisa quando a seleção muda (fim = null enquanto falta a saída).
+  document.addEventListener("selecao", (ev) => {
+    const d = (ev as CustomEvent<{ inicio: string | null; fim: string | null }>).detail;
+    periodo = d.inicio && d.fim ? { inicio: d.inicio, fim: d.fim } : null;
+    box.classList.toggle("hidden", !periodo);
+    atualizar();
+  });
+
+  // Enquanto o simulador está na tela, a barra flutuante sai (o botão já está aqui).
+  new IntersectionObserver(
+    ([e]) => document.dispatchEvent(new CustomEvent("simulador-visivel", { detail: e.isIntersecting })),
+    { threshold: 0.25 },
+  ).observe(box);
+</script>

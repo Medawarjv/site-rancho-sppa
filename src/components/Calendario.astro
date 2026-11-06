@@ -2,6 +2,7 @@
 import site from "../data/site.json";
 import TituloSecao from "./TituloSecao.astro";
 import Icon from "./Icon.astro";
+import Simulador from "./Simulador.astro";
 ---
 
 <section id="disponibilidade" class="bg-areia py-14 sm:py-20">
@@ -28,6 +29,10 @@ import Icon from "./Icon.astro";
     <span class="flex items-center gap-2">
       <span class="inline-block h-4 w-4 rounded bg-mata"></span>
       Sua seleção
+    </span>
+    <span class="flex items-center gap-2">
+      <span class="inline-block h-1.5 w-1.5 rounded-full bg-mel" aria-hidden="true"></span>
+      Feriado (tarifa especial)
     </span>
   </div>
 
@@ -61,7 +66,10 @@ import Icon from "./Icon.astro";
   >
   </div>
 
-  <!-- Observação: o que confirma a reserva é o sinal (sem detalhar valores aqui) -->
+  <!-- Simulador de preços (aparece depois de escolher chegada e saída) -->
+  <Simulador />
+
+  <!-- Observação: o que confirma a reserva é o sinal -->
   <p class="mx-auto mt-8 flex w-fit max-w-xl items-center justify-center gap-2.5 rounded-xl bg-white/70 px-4 py-3 text-sm leading-relaxed text-terra ring-1 ring-terra/10">
     <Icon name="key" class="h-4 w-4 shrink-0 text-mata" />
     <strong class="font-semibold text-mata-escura">A reserva será confirmada por WhatsApp após o pagamento do sinal.</strong>
@@ -122,6 +130,8 @@ import Icon from "./Icon.astro";
 </section>
 
 <script>
+  import { noitesEspeciais } from "../lib/simulador";
+  const especiais = noitesEspeciais();
   const wrap = document.getElementById("calendario-meses")!;
   const loading = document.getElementById("calendario-loading")!;
   const legenda = document.getElementById("calendario-legenda")!;
@@ -213,7 +223,7 @@ import Icon from "./Icon.astro";
   }
 
   // h-11 no celular: 44 px, o mínimo confortável para o dedo.
-  const CLS_BASE = "flex h-11 items-center justify-center rounded-md text-sm transition duration-150 sm:h-9";
+  const CLS_BASE = "relative flex h-11 items-center justify-center rounded-md text-sm transition duration-150 sm:h-9";
   const CLS_LIVRE = `${CLS_BASE} bg-mata/15 font-semibold text-mata-escura ring-1 ring-mata/40 hover:bg-mata hover:text-white active:scale-[0.94]`;
   const CLS_PONTA = `${CLS_BASE} bg-mata font-semibold text-white ring-1 ring-mata active:scale-[0.94]`;
   const CLS_MEIO = `${CLS_BASE} bg-mata/35 font-semibold text-mata-escura active:scale-[0.94]`;
@@ -223,16 +233,26 @@ import Icon from "./Icon.astro";
   const secao = document.getElementById("disponibilidade")!;
   const BAR_FECHADA = ["opacity-0", "translate-y-3", "invisible", "duration-150", "ease-in"];
   const BAR_ABERTA = ["duration-200", "ease-out"];
+  // Enquanto o simulador está na tela, a barra sai (o simulador tem o próprio botão).
   let barAberta = false;
-  function mostrarBarra(abrir: boolean) {
+  let simVisivel = false;
+  function mostrarBarra(querAbrir: boolean) {
+    // a seleção ativa mantém o aviso de cookies fora da frente, com ou sem barra
+    document.dispatchEvent(new CustomEvent("sel-bar", { detail: { aberta: querAbrir } }));
+    const abrir = querAbrir && !simVisivel;
     if (abrir === barAberta) return;
     barAberta = abrir;
     bar.classList.remove(...(abrir ? BAR_FECHADA : BAR_ABERTA));
     bar.classList.add(...(abrir ? BAR_ABERTA : BAR_FECHADA));
     // no celular, folga no fim da seção pra barra não cobrir a última semana do mês
     secao.classList.toggle("max-sm:pb-44", abrir);
-    document.dispatchEvent(new CustomEvent("sel-bar", { detail: { aberta: abrir } }));
   }
+  document.addEventListener("simulador-visivel", (ev) => {
+    simVisivel = !!(ev as CustomEvent<boolean>).detail;
+    mostrarBarra(!!selIn);
+  });
+  const avisarSelecao = () =>
+    document.dispatchEvent(new CustomEvent("selecao", { detail: { inicio: selIn, fim: selOut } }));
 
   function render() {
     botoes.forEach((b, k) => {
@@ -244,6 +264,7 @@ import Icon from "./Icon.astro";
 
     if (!selIn) {
       mostrarBarra(false);
+      avisarSelecao();
       return;
     }
     mostrarBarra(true);
@@ -253,6 +274,7 @@ import Icon from "./Icon.astro";
       selNota.textContent = "Agora toque no dia de saída (ou no mesmo dia, para day use).";
       selWa.classList.add("hidden");
       selWa.classList.remove("inline-flex");
+      avisarSelecao();
       return;
     }
 
@@ -272,6 +294,8 @@ import Icon from "./Icon.astro";
     selWa.href = waLink(msg);
     selWa.classList.remove("hidden");
     selWa.classList.add("inline-flex");
+    // o simulador troca a nota e o link da barra pela estimativa com o grupo
+    avisarSelecao();
   }
 
   selLimpar.addEventListener("click", limpar);
@@ -376,7 +400,14 @@ import Icon from "./Icon.astro";
         b.className = CLS_LIVRE;
         b.textContent = String(dia);
         b.dataset.dia = k;
-        b.setAttribute("aria-label", `Dia ${br(k)}: disponível, selecionar`);
+        const feriado = especiais.has(k);
+        b.setAttribute("aria-label", `Dia ${br(k)}: disponível${feriado ? ", feriado com tarifa especial" : ""}, selecionar`);
+        if (feriado) {
+          const ponto = document.createElement("span");
+          ponto.className = "pointer-events-none absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-mel";
+          ponto.setAttribute("aria-hidden", "true");
+          b.appendChild(ponto);
+        }
         b.setAttribute("aria-pressed", "false");
         b.addEventListener("click", () => clicarDia(k));
         botoes.set(k, b);
