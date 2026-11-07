@@ -1,13 +1,14 @@
 {
-  "_como_editar": "Tabela do simulador. Valores por pessoa por diária, aplicados ao grupo inteiro conforme a faixa. 'especial' vale para as noites de feriado/feriadão (ver feriados.json). 'limpeza' é a taxa de faxina por diária, também pela faixa do grupo. Crianças de 6 a 14 anos contam como meia pessoa; até 5 anos não pagam; a partir de 15 anos paga como adulto. O total nunca cai ao passar de uma faixa para a seguinte, e a primeira faixa tem mínimo de ate x valor (10 x 140 = 1.400 por diária).",
+  "_como_editar": "Tabela do simulador. Valores por pessoa por diária, aplicados ao grupo inteiro conforme a faixa. 'especial' vale para as noites de feriado/feriadão (ver feriados.json). 'limpeza' é a taxa de faxina por diária, também pela faixa do grupo. Crianças de 6 a 14 anos contam como meia pessoa; até 5 anos não pagam; a partir de 15 anos paga como adulto. O total nunca cai ao passar de uma faixa para a seguinte, e a primeira faixa tem mínimo de ate x valor (10 x 130 = 1.300 por diária; em feriado, 10 x 140 = 1.400). Tabela revisada pelo pai do JV em 06/11/2026.",
   "faixas": [
-    { "ate": 10, "comum": 140, "especial": 160, "limpeza": 100 },
-    { "ate": 20, "comum": 130, "especial": 150, "limpeza": 150 },
-    { "ate": 30, "comum": 125, "especial": 145, "limpeza": 200 }
+    { "ate": 10, "comum": 130, "especial": 140, "limpeza": 100 },
+    { "ate": 20, "comum": 125, "especial": 135, "limpeza": 150 },
+    { "ate": 30, "comum": 120, "especial": 130, "limpeza": 200 }
   ],
   "idadeAdulto": 15,
   "maxPessoas": 30,
   "minDiariasPernoite": 2,
+  "minDiariasFeriadoSextaSegunda": 3,
   "adultosPadrao": 10,
 
   "_ultima_hora": "Desconto de última hora para fim de semana livre: vale para qualquer estadia que inclua a noite de sexta ou de sábado (chegar na quinta também vale). Os dias contam até a SEXTA desse fim de semana: 'de' e 'ate' são quantos dias faltam para essa sexta (0 = a própria sexta, -1 = sábado). 'limpezaGratis' tira a faxina; 'pct' é o desconto sobre as diárias (a faxina continua cobrada). As fases não se somam. Para desligar tudo: ativo = false.",

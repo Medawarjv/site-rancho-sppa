@@ -1,14 +1,15 @@
 {
-  "_como_editar": "Feriados que deixam a diária com tarifa especial. O site calcula sozinho o feriadão: junta o feriado ao fim de semana (feriado na quinta emenda a sexta; na terça, emenda a segunda) e cobra como especial as noites da véspera até a última noite antes de voltar ao trabalho. Feriado que cai no sábado ou domingo não muda nada, exceto os marcados com \"sempre\": true (Natal e Ano-Novo), em que a véspera e a noite do próprio dia são sempre especiais. Para marcar outras noites como especiais (a semana entre Natal e Ano-Novo já está aqui, pedido do JV em 06/11/2026), coloque as datas das noites em 'noitesExtras' no formato AAAA-MM-DD. Lista conferida em 06/11/2026; acrescentar 2029 até o fim de 2028.",
+  "_como_editar": "Feriados que deixam a diária com tarifa especial. O site calcula sozinho o feriadão: junta o feriado ao fim de semana (feriado na quinta emenda a sexta; na terça, emenda a segunda) e cobra como especial as noites da véspera até a última noite antes de voltar ao trabalho. Feriado que cai no sábado ou domingo não muda nada, exceto os marcados com \"sempre\": true (Natal e Ano-Novo), em que a véspera e a noite do próprio dia são sempre especiais. Para marcar outras noites como especiais (a semana entre Natal e Ano-Novo já está aqui, pedido do JV em 06/11/2026), coloque as datas das noites em 'noitesExtras' no formato AAAA-MM-DD. Mínimo de diárias (pedido do pai do JV em 06/11/2026): feriado na sexta ou na segunda = 3 diárias (precos.json); \"minimo\" no feriado vale para o feriadão inteiro (Carnaval 5, Natal e Ano-Novo 3; a Quarta de Cinzas entra como Carnaval para que a noite de terça conte). Lista conferida em 06/11/2026; acrescentar 2029 até o fim de 2028.",
   "feriados": [
     { "data": "2026-11-02", "nome": "Finados" },
     { "data": "2026-11-15", "nome": "Proclamação da República" },
     { "data": "2026-11-20", "nome": "Consciência Negra" },
-    { "data": "2026-12-25", "nome": "Natal", "sempre": true },
+    { "data": "2026-12-25", "nome": "Natal", "sempre": true, "minimo": 3 },
 
-    { "data": "2027-01-01", "nome": "Ano-Novo", "sempre": true },
-    { "data": "2027-02-08", "nome": "Carnaval" },
-    { "data": "2027-02-09", "nome": "Carnaval" },
+    { "data": "2027-01-01", "nome": "Ano-Novo", "sempre": true, "minimo": 3 },
+    { "data": "2027-02-08", "nome": "Carnaval", "minimo": 5 },
+    { "data": "2027-02-09", "nome": "Carnaval", "minimo": 5 },
+    { "data": "2027-02-10", "nome": "Carnaval", "minimo": 5 },
     { "data": "2027-03-26", "nome": "Sexta-feira Santa" },
     { "data": "2027-04-21", "nome": "Tiradentes" },
     { "data": "2027-05-01", "nome": "Dia do Trabalho" },
@@ -18,11 +19,12 @@
     { "data": "2027-11-02", "nome": "Finados" },
     { "data": "2027-11-15", "nome": "Proclamação da República" },
     { "data": "2027-11-20", "nome": "Consciência Negra" },
-    { "data": "2027-12-25", "nome": "Natal", "sempre": true },
+    { "data": "2027-12-25", "nome": "Natal", "sempre": true, "minimo": 3 },
 
-    { "data": "2028-01-01", "nome": "Ano-Novo", "sempre": true },
-    { "data": "2028-02-28", "nome": "Carnaval" },
-    { "data": "2028-02-29", "nome": "Carnaval" },
+    { "data": "2028-01-01", "nome": "Ano-Novo", "sempre": true, "minimo": 3 },
+    { "data": "2028-02-28", "nome": "Carnaval", "minimo": 5 },
+    { "data": "2028-02-29", "nome": "Carnaval", "minimo": 5 },
+    { "data": "2028-03-01", "nome": "Carnaval", "minimo": 5 },
     { "data": "2028-04-14", "nome": "Sexta-feira Santa" },
     { "data": "2028-04-21", "nome": "Tiradentes" },
     { "data": "2028-05-01", "nome": "Dia do Trabalho" },
@@ -32,8 +34,10 @@
     { "data": "2028-11-02", "nome": "Finados" },
     { "data": "2028-11-15", "nome": "Proclamação da República" },
     { "data": "2028-11-20", "nome": "Consciência Negra" },
-    { "data": "2028-12-25", "nome": "Natal", "sempre": true }
+    { "data": "2028-12-25", "nome": "Natal", "sempre": true, "minimo": 3 }
   ],
+  "minimoNoitesExtras": 3,
+  "nomeNoitesExtras": "Natal e Ano-Novo",
   "noitesExtras": [
     "2026-12-26",
     "2026-12-27",

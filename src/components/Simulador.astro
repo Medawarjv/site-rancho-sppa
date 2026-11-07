@@ -196,8 +196,12 @@ const BTN =
       );
 
       const avisos: string[] = [];
-      if (e.diarias < precos.minDiariasPernoite)
-        avisos.push(`Para pernoite, o mínimo é de ${precos.minDiariasPernoite} diárias. Pergunte no WhatsApp se dá para fazer só uma.`);
+      if (e.diarias < e.minimo)
+        avisos.push(
+          e.motivoMinimo
+            ? `No feriado de ${e.motivoMinimo}, o mínimo é de ${e.minimo} diárias. Aumente a estadia no calendário.`
+            : `Para pernoite, o mínimo é de ${e.minimo} diárias. Pergunte no WhatsApp se dá para fazer só uma.`,
+        );
       if (e.especiais) avisos.push("Feriados e feriadões têm tarifa especial.");
       aviso.textContent = avisos.join(" ");
       aviso.classList.toggle("hidden", !avisos.length);

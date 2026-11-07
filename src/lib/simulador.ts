@@ -24,6 +24,8 @@ export type Estimativa = {
   totalCheio: number; // sem oferta nenhuma
   total: number; // o que a pessoa paga
   oferta: Oferta | null;
+  minimo: number; // mínimo de diárias exigido por esta estadia (feriados pedem mais)
+  motivoMinimo: string | null; // nome do feriado que exige o mínimo maior
   porPessoa: number; // total ÷ pessoas equivalentes (criança de 6–14 = meia pessoa)
 };
 
@@ -42,18 +44,23 @@ export const hojeBrasilia = () => {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
 };
 
-/** Noites (pela data da noite) cobradas com tarifa especial: feriados + feriadões. */
-export function noitesEspeciais(): Set<string> {
+/** Regra de uma noite especial: mínimo de diárias exigido e o nome do feriado. */
+export type RegraNoite = { minimo: number; nome: string };
+
+/** Noites (pela data da noite) cobradas com tarifa especial — feriados + feriadões —,
+ *  cada uma com o mínimo de diárias do feriadão a que pertence. */
+export function noitesEspeciais(): Map<string, RegraNoite> {
+  type F = { data: string; nome: string; sempre?: boolean; minimo?: number };
+  const lista = feriados.feriados as F[];
+  const padrao = precos.minDiariasPernoite;
   const folgas = new Set<number>(); // dias sem trabalho por causa de feriado (inclui emendas)
-  const uteis: number[] = []; // feriados que caem de segunda a sexta
-  const sempre: number[] = []; // Natal e Ano-Novo: especiais mesmo no fim de semana
-  for (const f of feriados.feriados as { data: string; sempre?: boolean }[]) {
+  const uteis: { ms: number; f: F }[] = []; // feriados que caem de segunda a sexta
+  for (const f of lista) {
     const ms = paraMs(f.data);
     const d = diaSemana(ms);
-    if (f.sempre) sempre.push(ms);
-    if (d === 0 || d === 6) continue; // no fim de semana não muda nada
+    if (d === 0 || d === 6) continue; // no fim de semana não muda nada (salvo "sempre")
     folgas.add(ms);
-    uteis.push(ms);
+    uteis.push({ ms, f });
     if (d === 4) folgas.add(ms + DIA); // quinta → emenda a sexta
     if (d === 2) folgas.add(ms - DIA); // terça → emenda a segunda
   }
@@ -61,18 +68,30 @@ export function noitesEspeciais(): Set<string> {
     const d = diaSemana(ms);
     return d === 0 || d === 6 || folgas.has(ms);
   };
-  const noites = new Set<string>(feriados.noitesExtras as string[]);
-  for (const ms of sempre) {
-    noites.add(paraChave(ms - DIA)); // véspera (24/12, 31/12)
-    noites.add(paraChave(ms)); // a noite do próprio dia
+  const noites = new Map<string, RegraNoite>();
+  const marcar = (ms: number, minimo: number, nome: string) => {
+    const k = paraChave(ms);
+    const atual = noites.get(k);
+    if (!atual || minimo > atual.minimo) noites.set(k, { minimo, nome });
+  };
+  for (const k of feriados.noitesExtras as string[])
+    marcar(paraMs(k), feriados.minimoNoitesExtras ?? padrao, feriados.nomeNoitesExtras ?? "Feriado");
+  for (const f of lista) {
+    if (!f.sempre) continue;
+    const ms = paraMs(f.data);
+    marcar(ms - DIA, f.minimo ?? padrao, f.nome); // véspera (24/12, 31/12)
+    marcar(ms, f.minimo ?? padrao, f.nome); // a noite do próprio dia
   }
-  for (const ms of uteis) {
+  for (const { ms, f } of uteis) {
     let ini = ms;
     let fim = ms;
     while (livre(ini - DIA)) ini -= DIA;
     while (livre(fim + DIA)) fim += DIA;
+    // feriado na sexta ou na segunda: mínimo maior (pedido do pai do JV, 06/11/2026)
+    const d = diaSemana(ms);
+    const minimo = f.minimo ?? (d === 5 || d === 1 ? precos.minDiariasFeriadoSextaSegunda : padrao);
     // da véspera do 1º dia livre até a noite anterior ao último dia livre
-    for (let n = ini - DIA; n < fim; n += DIA) noites.add(paraChave(n));
+    for (let n = ini - DIA; n < fim; n += DIA) marcar(n, minimo, f.nome);
   }
   return noites;
 }
@@ -120,13 +139,21 @@ export function estimar(
   inicio: string,
   fim: string,
   g: Grupo,
-  especiais: Set<string>,
+  especiais: Map<string, RegraNoite>,
   hoje: string = hojeBrasilia(),
 ): Estimativa {
   const diarias = Math.round((paraMs(fim) - paraMs(inicio)) / DIA);
   let especiaisN = 0;
+  let minimo = precos.minDiariasPernoite;
+  let motivoMinimo: string | null = null;
   for (let i = 0; i < diarias; i++) {
-    if (especiais.has(paraChave(paraMs(inicio) + i * DIA))) especiaisN++;
+    const regra = especiais.get(paraChave(paraMs(inicio) + i * DIA));
+    if (!regra) continue;
+    especiaisN++;
+    if (regra.minimo > minimo) {
+      minimo = regra.minimo;
+      motivoMinimo = regra.nome;
+    }
   }
   const comuns = diarias - especiaisN;
   const eq = g.adultos + g.meia / 2;
@@ -155,6 +182,8 @@ export function estimar(
     totalCheio,
     total,
     oferta: oferta && total < totalCheio ? oferta : null,
+    minimo,
+    motivoMinimo,
     porPessoa: eq > 0 ? Math.round(total / eq) : total,
   };
 }
